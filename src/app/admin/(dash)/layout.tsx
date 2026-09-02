@@ -10,6 +10,7 @@ const NAV = [
   { href: "/admin/experiencia", label: "Experiencia" },
   { href: "/admin/accesos", label: "Accesos" },
   { href: "/admin/mensajes", label: "Mensajes" },
+  { href: "/admin/cuenta", label: "Cuenta" },
 ];
 
 export default async function DashLayout({
