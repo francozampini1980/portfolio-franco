@@ -22,6 +22,7 @@ export function RichTextEditor({ value, onChange, placeholder }: Props) {
     extensions: [
       StarterKit.configure({
         heading: { levels: [2, 3] },
+        link: false,
       }),
       Link.configure({ openOnClick: false, autolink: true }),
       Placeholder.configure({ placeholder: placeholder ?? "Escribí acá…" }),
