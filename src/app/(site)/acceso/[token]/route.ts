@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { ACCESS_COOKIE, clientMeta, encodeAccessCookie } from "@/lib/access";
+import { getSiteUrl } from "@/lib/site-url";
 
 const ONE_YEAR = 60 * 60 * 24 * 365;
 
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ token: string }> },
 ) {
   const { token } = await params;
   const supabase = createAdminClient();
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const base = new URL(req.url).origin || getSiteUrl();
 
   const { data: link } = await supabase
     .from("access_links")

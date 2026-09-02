@@ -7,6 +7,7 @@ import {
 } from "@/lib/admin-actions";
 import { Card, Label, TextInput } from "@/components/admin/ui";
 import { CopyButton } from "@/components/admin/CopyButton";
+import { getSiteUrl } from "@/lib/site-url";
 import type { AccessEvent, AccessLink } from "@/lib/types";
 
 export default async function AccesosPage() {
@@ -17,7 +18,7 @@ export default async function AccesosPage() {
     supabase.from("site_settings").select("access_password_hash, updated_at").eq("id", 1).single(),
   ]);
 
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const base = getSiteUrl();
   const hasPassword = !!settings?.access_password_hash;
 
   return (
