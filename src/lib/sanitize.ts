@@ -5,12 +5,16 @@ export function cleanRichText(dirty: string): string {
   return sanitizeHtml(dirty ?? "", {
     allowedTags: [
       "p", "br", "strong", "em", "u", "s", "a",
-      "ul", "ol", "li", "blockquote", "h2", "h3", "hr",
+      "ul", "ol", "li", "blockquote", "h2", "h3", "hr", "img",
     ],
     allowedAttributes: {
       a: ["href", "target", "rel"],
+      img: ["src", "alt"],
     },
     allowedSchemes: ["http", "https", "mailto"],
+    allowedSchemesByTag: {
+      img: ["http", "https", "inline"],
+    },
     transformTags: {
       a: sanitizeHtml.simpleTransform("a", {
         rel: "noopener noreferrer",

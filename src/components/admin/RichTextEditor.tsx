@@ -3,20 +3,36 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
+import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
+import {
+  createInlineImageUploadUrl,
+  signInlineImagePreview,
+} from "@/lib/admin-actions";
+import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 
 type Props = {
   value: string;
   onChange: (html: string) => void;
   placeholder?: string;
+  /** Storage folder for images inserted here (e.g. a case id, or "site"). */
+  imageScope?: string;
 };
 
 const btn =
   "rounded px-2 py-1 text-xs font-medium text-fg-muted hover:bg-surface-2 hover:text-fg data-[on=true]:bg-violet-600/30 data-[on=true]:text-violet-200";
 
-export function RichTextEditor({ value, onChange, placeholder }: Props) {
+export function RichTextEditor({
+  value,
+  onChange,
+  placeholder,
+  imageScope = "site",
+}: Props) {
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -25,6 +41,11 @@ export function RichTextEditor({ value, onChange, placeholder }: Props) {
         link: false,
       }),
       Link.configure({ openOnClick: false, autolink: true }),
+      Image.configure({
+        inline: false,
+        allowBase64: false,
+        HTMLAttributes: { class: "cms-inline-img" },
+      }),
       Placeholder.configure({ placeholder: placeholder ?? "Escribí acá…" }),
     ],
     content: value || "",
@@ -43,6 +64,38 @@ export function RichTextEditor({ value, onChange, placeholder }: Props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
+
+  const onPickImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file || !editor) return;
+    if (file.size > 10 * 1024 * 1024) {
+      window.alert("La imagen supera los 10 MB. Redimensionala o comprimila.");
+      return;
+    }
+    setUploading(true);
+    try {
+      const { path, token } = await createInlineImageUploadUrl(
+        imageScope,
+        file.name,
+      );
+      const supabase = createSupabaseBrowserClient();
+      const { error } = await supabase.storage
+        .from("case-images")
+        .uploadToSignedUrl(path, token, file, { contentType: file.type });
+      if (error) throw new Error(error.message);
+      const previewUrl = await signInlineImagePreview(path);
+      editor
+        .chain()
+        .focus()
+        .setImage({ src: previewUrl ?? `inline:${path}` })
+        .run();
+    } catch {
+      window.alert("No se pudo subir la imagen.");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   if (!editor) {
     return (
@@ -135,6 +188,21 @@ export function RichTextEditor({ value, onChange, placeholder }: Props) {
         >
           Enlace
         </button>
+        <button
+          type="button"
+          className={btn}
+          disabled={uploading}
+          onClick={() => fileRef.current?.click()}
+        >
+          {uploading ? "Subiendo…" : "Imagen"}
+        </button>
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/png,image/jpeg,image/webp,image/gif,image/avif"
+          hidden
+          onChange={onPickImage}
+        />
       </div>
       <EditorContent editor={editor} />
     </div>

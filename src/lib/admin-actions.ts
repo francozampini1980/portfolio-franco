@@ -5,6 +5,12 @@ import { nanoid } from "nanoid";
 import { getAdminUser } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { cleanRichText } from "@/lib/sanitize";
+import { packInlineImages } from "@/lib/inline-images";
+
+/** Sanitise + normalise inline image URLs for a rich-text field. */
+function cleanBody(html: string): string {
+  return packInlineImages(cleanRichText(html));
+}
 
 async function requireAdmin() {
   const user = await getAdminUser();
@@ -27,7 +33,7 @@ export async function saveSiteContent(key: string, data: Record<string, unknown>
   const clean: Record<string, unknown> = {};
   for (const [k, v] of Object.entries(data)) {
     clean[k] =
-      typeof v === "string" && /<[a-z][\s\S]*>/i.test(v) ? cleanRichText(v) : v;
+      typeof v === "string" && /<[a-z][\s\S]*>/i.test(v) ? cleanBody(v) : v;
   }
 
   const { error } = await supabase
@@ -84,7 +90,7 @@ export async function updateCase(id: string, patch: Record<string, unknown>) {
   ];
   const clean = { ...patch };
   for (const f of richFields) {
-    if (typeof clean[f] === "string") clean[f] = cleanRichText(clean[f] as string);
+    if (typeof clean[f] === "string") clean[f] = cleanBody(clean[f] as string);
   }
 
   const { error } = await supabase
@@ -144,6 +150,41 @@ export async function createCaseImageUploadUrl(caseId: string, filename: string)
     .createSignedUploadUrl(path);
   if (error) throw new Error(error.message);
   return { path, token: data.token };
+}
+
+/**
+ * Upload target for an image embedded *inside* rich text (not the gallery).
+ * Returns a signed preview URL to show in the editor immediately; the
+ * stored HTML keeps `inline:<path>` and is re-signed on every render.
+ */
+export async function createInlineImageUploadUrl(
+  scope: string,
+  filename: string,
+) {
+  await requireAdmin();
+  const ext = (filename.split(".").pop() ?? "").toLowerCase();
+  if (!IMAGE_EXTS.has(ext)) {
+    throw new Error("Formato no permitido. Usá PNG, JPG, WEBP, GIF o AVIF.");
+  }
+  const safeScope = /^[a-z0-9-]{1,64}$/i.test(scope) ? scope : "site";
+  const supabase = createAdminClient();
+  const path = `${safeScope}/inline/${nanoid(12)}.${ext}`;
+  const { data, error } = await supabase.storage
+    .from("case-images")
+    .createSignedUploadUrl(path);
+  if (error) throw new Error(error.message);
+  return { path, token: data.token };
+}
+
+/** Signed URL to display an already-uploaded inline image in the editor. */
+export async function signInlineImagePreview(path: string) {
+  await requireAdmin();
+  const supabase = createAdminClient();
+  const { data, error } = await supabase.storage
+    .from("case-images")
+    .createSignedUrl(path, 60 * 60);
+  if (error) throw new Error(error.message);
+  return data.signedUrl;
 }
 
 export async function registerCaseImage(
@@ -232,7 +273,7 @@ export async function updateExperience(id: string, patch: Record<string, unknown
   await requireAdmin();
   const supabase = createAdminClient();
   const clean = { ...patch };
-  if (typeof clean.body === "string") clean.body = cleanRichText(clean.body);
+  if (typeof clean.body === "string") clean.body = cleanBody(clean.body);
   const { error } = await supabase
     .from("experiences")
     .update({ ...clean, updated_at: new Date().toISOString() })

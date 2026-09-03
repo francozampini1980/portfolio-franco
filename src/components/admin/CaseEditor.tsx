@@ -182,6 +182,7 @@ export function CaseEditor({ study, images }: Props) {
             <Label>Contenido</Label>
             <RichTextEditor
               value={form[bk] as string}
+              imageScope={study.id}
               onChange={(html) =>
                 set({ [bk]: html } as Partial<CaseStudy>)
               }

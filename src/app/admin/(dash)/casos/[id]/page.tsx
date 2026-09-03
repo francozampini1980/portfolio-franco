@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { signImageUrls } from "@/lib/content";
+import { signBodies } from "@/lib/inline-images";
 import { CaseEditor } from "@/components/admin/CaseEditor";
 import type { CaseImage, CaseStudy } from "@/lib/types";
 
@@ -29,5 +30,12 @@ export default async function EditCasePage({
   const urls = await signImageUrls(list.map((i) => i.storage_path));
   const withUrls = list.map((img, i) => ({ ...img, previewUrl: urls[i] ?? "" }));
 
-  return <CaseEditor study={study as CaseStudy} images={withUrls} />;
+  const signedStudy = await signBodies(study as CaseStudy, [
+    "challenge_body",
+    "role_body",
+    "decisions_body",
+    "impact_body",
+  ]);
+
+  return <CaseEditor study={signedStudy} images={withUrls} />;
 }

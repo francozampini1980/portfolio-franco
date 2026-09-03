@@ -66,7 +66,11 @@ function Row({ exp, onMove, canUp, canDown }: {
       </div>
       <div className="mt-4">
         <Label>Descripción</Label>
-        <RichTextEditor value={form.body} onChange={(body) => set({ body })} />
+        <RichTextEditor
+          value={form.body}
+          imageScope="experiencia"
+          onChange={(body) => set({ body })}
+        />
       </div>
       <div className="mt-4">
         <button

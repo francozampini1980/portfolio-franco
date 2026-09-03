@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import { cleanRichText } from "@/lib/sanitize";
+import { signInlineImages } from "@/lib/inline-images";
 
 export function Container({
   className,
@@ -77,18 +78,19 @@ export function ButtonLink({
   );
 }
 
-/** Renders CMS rich text (sanitised server-side). */
-export function Prose({
+/** Renders CMS rich text: sanitised, with inline images re-signed. */
+export async function Prose({
   html,
   className,
 }: {
   html: string;
   className?: string;
 }) {
+  const safe = await signInlineImages(cleanRichText(html));
   return (
     <div
       className={cn("prose-cms", className)}
-      dangerouslySetInnerHTML={{ __html: cleanRichText(html) }}
+      dangerouslySetInnerHTML={{ __html: safe }}
     />
   );
 }

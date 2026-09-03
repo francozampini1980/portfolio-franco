@@ -163,6 +163,18 @@ body {
   color: var(--color-fg);
   font-style: italic;
 }
+.prose-cms img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 1.75em 0;
+  border-radius: 10px;
+  border: 1px solid var(--color-line);
+}
+.prose-cms img.ProseMirror-selectednode {
+  outline: 2px solid var(--color-violet-400);
+  outline-offset: 2px;
+}
 
 /* Focus ring */
 :where(a, button, input, textarea, select):focus-visible {
