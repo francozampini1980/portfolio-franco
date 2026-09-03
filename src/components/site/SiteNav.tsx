@@ -40,9 +40,10 @@ export function SiteNav() {
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link
           href="/"
-          className="font-serif text-lg font-black tracking-tight text-fg"
+          aria-label="Franco Zampini — inicio"
+          className="font-serif text-[1.35rem] font-black leading-none tracking-tight text-fg"
         >
-          Franco Zampini
+          F/.
         </Link>
 
         <button
