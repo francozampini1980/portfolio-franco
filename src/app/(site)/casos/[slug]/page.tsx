@@ -6,6 +6,9 @@ import { hasCaseAccess } from "@/lib/access";
 import { Container, Eyebrow, Prose, Section } from "@/components/site/ui";
 import { CaseGallery } from "@/components/site/CaseGallery";
 
+// Per-visitor gated + per-request signed image URLs — never cached.
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({
   params,
 }: {

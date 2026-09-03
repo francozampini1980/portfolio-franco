@@ -4,11 +4,9 @@ import { cn } from "@/lib/cn";
 
 export function CaseCard({
   study,
-  unlocked,
   className,
 }: {
   study: CaseStudy;
-  unlocked: boolean;
   className?: string;
 }) {
   return (
@@ -42,16 +40,9 @@ export function CaseCard({
       </div>
 
       <div className="relative mt-6 flex items-center gap-2 text-xs font-semibold text-fg-subtle">
-        <span
-          className={cn(
-            "inline-flex items-center gap-1.5 rounded-pill border px-2.5 py-1",
-            unlocked
-              ? "border-green-500/40 text-green-300"
-              : "border-line text-fg-subtle",
-          )}
-        >
-          <span aria-hidden>{unlocked ? "○" : "🔒"}</span>
-          {unlocked ? "Desbloqueado" : "Contenido protegido"}
+        <span className="inline-flex items-center gap-1.5 rounded-pill border border-line px-2.5 py-1 text-fg-subtle">
+          <span aria-hidden>🔒</span>
+          Contenido protegido
         </span>
         <span className="ml-auto transition-transform group-hover:translate-x-1">
           Ver caso →

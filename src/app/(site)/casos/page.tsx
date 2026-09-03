@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { getPublishedCases } from "@/lib/content";
-import { hasCaseAccess } from "@/lib/access";
 import { Container, Eyebrow, Section } from "@/components/site/ui";
 import { CaseCard } from "@/components/site/CaseCard";
+import { CaseAccessNotice } from "@/components/site/CaseAccessNotice";
 
 export const metadata: Metadata = {
   title: "Casos",
@@ -12,10 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function CasosPage() {
-  const [cases, unlocked] = await Promise.all([
-    getPublishedCases(),
-    hasCaseAccess(),
-  ]);
+  const cases = await getPublishedCases();
 
   return (
     <Section className="pt-16 sm:pt-24">
@@ -26,22 +22,12 @@ export default async function CasosPage() {
         </h1>
         <p className="mt-6 max-w-2xl text-lg text-fg-muted">
           Cada caso menciona información sensible de las empresas donde trabajé,
-          por eso están protegidos con contraseña.{" "}
-          {unlocked ? (
-            <span className="text-green-300">Tenés acceso habilitado.</span>
-          ) : (
-            <Link
-              href="/acceso"
-              className="font-semibold text-violet-300 hover:text-violet-200"
-            >
-              Ingresar contraseña →
-            </Link>
-          )}
+          por eso están protegidos con contraseña. <CaseAccessNotice />
         </p>
 
         <div className="mt-14 grid gap-5 sm:grid-cols-2">
           {cases.map((study) => (
-            <CaseCard key={study.id} study={study} unlocked={unlocked} />
+            <CaseCard key={study.id} study={study} />
           ))}
         </div>
 

@@ -2,7 +2,9 @@ import { SiteNav } from "@/components/site/SiteNav";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { getSiteContent } from "@/lib/content";
 
-export const dynamic = "force-dynamic";
+// Public pages are statically generated and revalidated hourly; the CMS
+// also revalidates on demand after every save.
+export const revalidate = 3600;
 
 export default async function SiteLayout({
   children,

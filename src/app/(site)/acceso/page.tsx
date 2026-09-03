@@ -15,6 +15,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+export const dynamic = "force-dynamic";
+
 const ONE_YEAR = 60 * 60 * 24 * 365;
 
 function safeNext(next?: string) {

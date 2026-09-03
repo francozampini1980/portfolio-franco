@@ -39,9 +39,12 @@ export async function signInlineImages(html: string): Promise<string> {
 
   const list = [...paths];
   const supabase = createAdminClient();
+  // 24h expiry: inline images live embedded in HTML that may be served from
+  // the ISR cache for up to an hour (plus stale-while-revalidate grace), so
+  // the URL must comfortably outlive the cached page.
   const { data } = await supabase.storage
     .from(BUCKET)
-    .createSignedUrls(list, 60 * 60);
+    .createSignedUrls(list, 60 * 60 * 24);
 
   const map = new Map<string, string>();
   (data ?? []).forEach((d, i) => {

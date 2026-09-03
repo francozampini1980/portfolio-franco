@@ -4,7 +4,6 @@ import {
   getExperiences,
   getPublishedCases,
 } from "@/lib/content";
-import { hasCaseAccess } from "@/lib/access";
 import {
   ButtonLink,
   Container,
@@ -16,11 +15,10 @@ import {
 import { CaseCard } from "@/components/site/CaseCard";
 
 export default async function HomePage() {
-  const [content, cases, experiences, unlocked] = await Promise.all([
+  const [content, cases, experiences] = await Promise.all([
     getAllSiteContent(),
     getPublishedCases(),
     getExperiences(),
-    hasCaseAccess(),
   ]);
   const { home_hero: hero, home_intro: intro, philosophy } = content;
 
@@ -74,7 +72,7 @@ export default async function HomePage() {
           </div>
           <div className="mt-12 grid gap-5 sm:grid-cols-2">
             {cases.map((study) => (
-              <CaseCard key={study.id} study={study} unlocked={unlocked} />
+              <CaseCard key={study.id} study={study} />
             ))}
           </div>
         </Container>
