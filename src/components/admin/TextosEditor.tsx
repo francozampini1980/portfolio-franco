@@ -1,10 +1,105 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import type { SiteContentMap } from "@/lib/types";
-import { saveSiteContent } from "@/lib/admin-actions";
+import {
+  createPublicAssetUploadUrl,
+  saveSiteContent,
+} from "@/lib/admin-actions";
+import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { Card, Label, inputClass } from "@/components/admin/ui";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
+
+function PortraitField({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (url: string) => void;
+}) {
+  const ref = useRef<HTMLInputElement>(null);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+
+  const pick = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) {
+      setErr("Máximo 10 MB.");
+      return;
+    }
+    setErr("");
+    setBusy(true);
+    try {
+      const { path, token, publicUrl } = await createPublicAssetUploadUrl(
+        "home",
+        file.name,
+      );
+      const supabase = createSupabaseBrowserClient();
+      const { error } = await supabase.storage
+        .from("public-assets")
+        .uploadToSignedUrl(path, token, file, { contentType: file.type });
+      if (error) throw new Error(error.message);
+      onChange(`${publicUrl}?v=${Date.now()}`);
+    } catch {
+      setErr("No se pudo subir la imagen.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div>
+      <Label>Foto (columna izquierda del encabezado)</Label>
+      <div className="flex items-start gap-4">
+        {value ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={value}
+            alt="Foto de la home"
+            className="h-24 w-20 rounded-lg border border-line object-cover"
+          />
+        ) : (
+          <div className="flex h-24 w-20 items-center justify-center rounded-lg border border-dashed border-line text-xs text-fg-subtle">
+            sin foto
+          </div>
+        )}
+        <div className="flex flex-col gap-2">
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => ref.current?.click()}
+            className="h-9 rounded-lg border border-line px-3 text-sm text-fg-muted hover:text-fg disabled:opacity-60"
+          >
+            {busy ? "Subiendo…" : value ? "Cambiar foto" : "Subir foto"}
+          </button>
+          {value ? (
+            <button
+              type="button"
+              onClick={() => onChange("")}
+              className="text-left text-xs text-red-400 hover:underline"
+            >
+              Quitar
+            </button>
+          ) : null}
+          <input
+            ref={ref}
+            type="file"
+            accept="image/png,image/jpeg,image/webp,image/avif"
+            hidden
+            onChange={pick}
+          />
+        </div>
+      </div>
+      {err ? <p className="mt-1 text-sm text-red-400">{err}</p> : null}
+      <p className="mt-1 text-xs text-fg-subtle">
+        Se muestra en formato vertical (~3:4). Si la dejás vacía, el título ocupa
+        todo el ancho.
+      </p>
+    </div>
+  );
+}
 
 function SaveButton({
   onClick,
@@ -83,6 +178,12 @@ export function TextosEditor({ content }: { content: SiteContentMap }) {
             className={inputClass}
             value={hero.value.subtitle}
             onChange={(e) => hero.set({ subtitle: e.target.value })}
+          />
+        </div>
+        <div className="mt-4">
+          <PortraitField
+            value={hero.value.portrait ?? ""}
+            onChange={(portrait) => hero.set({ portrait })}
           />
         </div>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">

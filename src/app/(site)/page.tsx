@@ -25,22 +25,49 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero */}
-      <Section className="pt-16 sm:pt-24">
+      <Section className="pt-12 sm:pt-20">
         <Container>
-          <Eyebrow>{hero.eyebrow}</Eyebrow>
-          <h1 className="display mt-6 text-6xl text-fg sm:text-7xl lg:text-8xl">
-            {hero.title}
-          </h1>
-          <p className="mt-8 max-w-2xl text-xl leading-relaxed text-fg-muted sm:text-2xl">
-            {hero.subtitle}
-          </p>
-          <div className="mt-10 flex flex-wrap gap-4">
-            <ButtonLink href={hero.primary_cta_href}>
-              {hero.primary_cta_label}
-            </ButtonLink>
-            <ButtonLink href={hero.secondary_cta_href} variant="outline">
-              {hero.secondary_cta_label}
-            </ButtonLink>
+          <div
+            className={
+              hero.portrait
+                ? "grid items-center gap-10 lg:grid-cols-[minmax(0,19rem)_1fr] lg:gap-16"
+                : ""
+            }
+          >
+            {hero.portrait ? (
+              <div className="relative mx-auto w-52 shrink-0 sm:w-60 lg:mx-0 lg:w-full">
+                <div
+                  aria-hidden
+                  className="absolute -inset-5 rounded-[2.5rem] bg-gradient-to-br from-violet-600/35 to-green-600/25 blur-2xl"
+                />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={hero.portrait}
+                  alt={hero.title}
+                  width={480}
+                  height={640}
+                  className="relative w-full rounded-3xl border border-line object-cover"
+                />
+              </div>
+            ) : null}
+
+            <div>
+              <Eyebrow>{hero.eyebrow}</Eyebrow>
+              <h1 className="display mt-6 text-5xl text-fg sm:text-6xl lg:text-7xl">
+                {hero.title}
+              </h1>
+              <p className="mt-8 max-w-2xl text-xl leading-relaxed text-fg-muted sm:text-2xl">
+                {hero.subtitle}
+              </p>
+              <div className="mt-10 flex flex-wrap gap-4">
+                <ButtonLink href={hero.primary_cta_href}>
+                  {hero.primary_cta_label}
+                </ButtonLink>
+                <ButtonLink href={hero.secondary_cta_href} variant="outline">
+                  {hero.secondary_cta_label}
+                </ButtonLink>
+              </div>
+            </div>
           </div>
         </Container>
       </Section>

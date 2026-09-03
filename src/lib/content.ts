@@ -16,6 +16,7 @@ const FALLBACK: SiteContentMap = {
     primary_cta_href: "/casos",
     secondary_cta_label: "Escribirme",
     secondary_cta_href: "/contacto",
+    portrait: "",
   },
   home_intro: { eyebrow: "SOBRE MÍ", title: "", body: "" },
   about: { eyebrow: "ACERCA DE", title: "Filosofía de liderazgo", body: "" },

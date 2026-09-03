@@ -79,6 +79,8 @@ export type HomeHero = {
   primary_cta_href: string;
   secondary_cta_label: string;
   secondary_cta_href: string;
+  /** Public URL of the portrait shown next to the hero text. */
+  portrait?: string;
 };
 
 export type RichBlock = { eyebrow: string; title: string; body: string };

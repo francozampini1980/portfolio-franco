@@ -187,6 +187,32 @@ export async function signInlineImagePreview(path: string) {
   return data.signedUrl;
 }
 
+/**
+ * Upload target for a non-sensitive public brand asset (e.g. the home
+ * portrait). Stored in a public bucket, so the returned URL is permanent.
+ */
+export async function createPublicAssetUploadUrl(
+  prefix: string,
+  filename: string,
+) {
+  await requireAdmin();
+  const ext = (filename.split(".").pop() ?? "").toLowerCase();
+  if (!IMAGE_EXTS.has(ext) && ext !== "svg") {
+    throw new Error("Formato no permitido.");
+  }
+  const safePrefix = /^[a-z0-9-]{1,32}$/i.test(prefix) ? prefix : "misc";
+  const supabase = createAdminClient();
+  const path = `${safePrefix}/${nanoid(10)}.${ext}`;
+  const { data, error } = await supabase.storage
+    .from("public-assets")
+    .createSignedUploadUrl(path);
+  if (error) throw new Error(error.message);
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from("public-assets").getPublicUrl(path);
+  return { path, token: data.token, publicUrl };
+}
+
 export async function registerCaseImage(
   caseId: string,
   path: string,
