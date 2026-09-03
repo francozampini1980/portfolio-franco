@@ -4,11 +4,13 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import type { CaseImage, CaseStudy } from "@/lib/types";
 import {
-  addCaseImage,
+  createCaseImageUploadUrl,
   deleteCaseImage,
+  registerCaseImage,
   reorderCaseImages,
   updateCase,
 } from "@/lib/admin-actions";
+import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { Card, Label, inputClass } from "@/components/admin/ui";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 
@@ -22,6 +24,8 @@ export function CaseEditor({ study, images }: Props) {
   const [form, setForm] = useState(study);
   const [pending, start] = useTransition();
   const [saved, setSaved] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
 
   const set = (patch: Partial<CaseStudy>) => {
     setForm((f) => ({ ...f, ...patch }));
@@ -56,6 +60,38 @@ export function CaseEditor({ study, images }: Props) {
     ["decisions_title", "decisions_body"],
     ["impact_title", "impact_body"],
   ];
+
+  const handleUpload = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formEl = e.currentTarget;
+    const fd = new FormData(formEl);
+    const file = fd.get("file") as File | null;
+    const alt = String(fd.get("alt") ?? "");
+    if (!file || file.size === 0) return;
+    if (file.size > 10 * 1024 * 1024) {
+      setUploadError("La imagen supera los 10 MB. Comprimila o redimensionala.");
+      return;
+    }
+    setUploadError("");
+    setUploading(true);
+    try {
+      const { path, token } = await createCaseImageUploadUrl(study.id, file.name);
+      const supabase = createSupabaseBrowserClient();
+      const { error } = await supabase.storage
+        .from("case-images")
+        .uploadToSignedUrl(path, token, file, { contentType: file.type });
+      if (error) throw new Error(error.message);
+      await registerCaseImage(study.id, path, alt);
+      formEl.reset();
+      router.refresh();
+    } catch (err) {
+      setUploadError(
+        err instanceof Error ? err.message : "No se pudo subir la imagen.",
+      );
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const moveImage = (i: number, dir: -1 | 1) => {
     const next = [...images];
@@ -155,20 +191,15 @@ export function CaseEditor({ study, images }: Props) {
       ))}
 
       <Card title="Galería de imágenes">
-        <form
-          action={async (fd) => {
-            await addCaseImage(study.id, fd);
-            router.refresh();
-          }}
-          className="flex flex-wrap items-end gap-3"
-        >
+        <form onSubmit={handleUpload} className="flex flex-wrap items-end gap-3">
           <div>
-            <Label>Imagen (máx 8 MB)</Label>
+            <Label>Imagen (JPG, PNG, WEBP · máx 10 MB)</Label>
             <input
               type="file"
               name="file"
-              accept="image/*"
+              accept="image/png,image/jpeg,image/webp,image/gif,image/avif"
               required
+              disabled={uploading}
               className="text-sm text-fg-muted file:mr-3 file:rounded-lg file:border-0 file:bg-surface-2 file:px-3 file:py-2 file:text-fg-muted"
             />
           </div>
@@ -176,10 +207,16 @@ export function CaseEditor({ study, images }: Props) {
             <Label>Texto alternativo (opcional)</Label>
             <input className={inputClass} name="alt" placeholder="Descripción para accesibilidad" />
           </div>
-          <button className="h-[42px] rounded-xl border border-line-strong px-4 text-sm font-semibold text-fg hover:bg-surface">
-            Subir
+          <button
+            disabled={uploading}
+            className="h-[42px] rounded-xl border border-line-strong px-4 text-sm font-semibold text-fg hover:bg-surface disabled:opacity-60"
+          >
+            {uploading ? "Subiendo…" : "Subir"}
           </button>
         </form>
+        {uploadError ? (
+          <p className="mt-2 text-sm text-red-400">{uploadError}</p>
+        ) : null}
 
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
           {images.map((img, i) => (

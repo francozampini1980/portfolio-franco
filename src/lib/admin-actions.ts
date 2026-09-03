@@ -125,21 +125,35 @@ export async function reorderCases(orderedIds: string[]) {
 }
 
 // ---------------------------------------------------------------
-// Case images
+// Case images — uploaded straight from the browser to Storage via a
+// short-lived signed URL, so we never route the file bytes through a
+// server action (1 MB) or the serverless function body (4.5 MB) limit.
 // ---------------------------------------------------------------
-export async function addCaseImage(caseId: string, formData: FormData) {
+const IMAGE_EXTS = new Set(["png", "jpg", "jpeg", "webp", "gif", "avif"]);
+
+export async function createCaseImageUploadUrl(caseId: string, filename: string) {
+  await requireAdmin();
+  const ext = (filename.split(".").pop() ?? "").toLowerCase();
+  if (!IMAGE_EXTS.has(ext)) {
+    throw new Error("Formato no permitido. Usá PNG, JPG, WEBP, GIF o AVIF.");
+  }
+  const supabase = createAdminClient();
+  const path = `${caseId}/${nanoid(12)}.${ext}`;
+  const { data, error } = await supabase.storage
+    .from("case-images")
+    .createSignedUploadUrl(path);
+  if (error) throw new Error(error.message);
+  return { path, token: data.token };
+}
+
+export async function registerCaseImage(
+  caseId: string,
+  path: string,
+  alt: string,
+) {
   await requireAdmin();
   const supabase = createAdminClient();
-  const file = formData.get("file") as File | null;
-  if (!file || file.size === 0) throw new Error("Archivo vacío.");
-  if (file.size > 8 * 1024 * 1024) throw new Error("Máximo 8 MB por imagen.");
-
-  const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
-  const path = `${caseId}/${nanoid(10)}.${ext}`;
-  const { error: upErr } = await supabase.storage
-    .from("case-images")
-    .upload(path, file, { contentType: file.type, upsert: false });
-  if (upErr) throw new Error(upErr.message);
+  if (!path.startsWith(`${caseId}/`)) throw new Error("Ruta inválida.");
 
   const { data: max } = await supabase
     .from("case_images")
@@ -152,7 +166,7 @@ export async function addCaseImage(caseId: string, formData: FormData) {
   const { error } = await supabase.from("case_images").insert({
     case_id: caseId,
     storage_path: path,
-    alt: String(formData.get("alt") ?? ""),
+    alt: alt.slice(0, 300),
     order_index: (max?.order_index ?? -1) + 1,
   });
   if (error) throw new Error(error.message);
