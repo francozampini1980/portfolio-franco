@@ -13,6 +13,12 @@ export default async function ExperienciaPage() {
     getSiteContent("cv_profile"),
   ]);
 
+  const cvHref = profile.cv_file_url
+    ? `${profile.cv_file_url}?download=${encodeURIComponent(
+        profile.cv_file_name || "CV.pdf",
+      )}`
+    : "/api/cv";
+
   return (
     <Section className="pt-16 sm:pt-24">
       <Container className="max-w-3xl">
@@ -23,7 +29,7 @@ export default async function ExperienciaPage() {
               Experiencia
             </h1>
           </div>
-          <ButtonLink href="/api/cv" variant="outline" className="mt-2">
+          <ButtonLink href={cvHref} variant="outline" className="mt-2">
             Descargar CV (PDF)
           </ButtonLink>
         </div>

@@ -213,6 +213,34 @@ export async function createPublicAssetUploadUrl(
   return { path, token: data.token, publicUrl };
 }
 
+/** Upload target for the downloadable CV PDF (public bucket, PDF only). */
+export async function createCvUploadUrl(filename: string) {
+  await requireAdmin();
+  const ext = (filename.split(".").pop() ?? "").toLowerCase();
+  if (ext !== "pdf") throw new Error("Solo se permiten archivos PDF.");
+  const supabase = createAdminClient();
+  const path = `cv/${nanoid(10)}.pdf`;
+  const { data, error } = await supabase.storage
+    .from("public-assets")
+    .createSignedUploadUrl(path);
+  if (error) throw new Error(error.message);
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from("public-assets").getPublicUrl(path);
+  return { path, token: data.token, publicUrl };
+}
+
+/** Removes a previously uploaded public-assets file, given its public URL. */
+export async function deletePublicAsset(publicUrl: string) {
+  await requireAdmin();
+  const marker = "/object/public/public-assets/";
+  const i = publicUrl.indexOf(marker);
+  if (i === -1) return;
+  const path = decodeURIComponent(publicUrl.slice(i + marker.length));
+  const supabase = createAdminClient();
+  await supabase.storage.from("public-assets").remove([path]);
+}
+
 export async function registerCaseImage(
   caseId: string,
   path: string,

@@ -106,6 +106,10 @@ export type CvProfile = {
   email: string;
   linkedin: string;
   location: string;
+  /** Public URL of the uploaded CV PDF (falls back to the auto-generated one). */
+  cv_file_url?: string;
+  /** Original filename, used for the downloaded file's name. */
+  cv_file_name?: string;
 };
 
 export type SiteContentMap = {

@@ -3,7 +3,9 @@
 import { useRef, useState, useTransition } from "react";
 import type { SiteContentMap } from "@/lib/types";
 import {
+  createCvUploadUrl,
   createPublicAssetUploadUrl,
+  deletePublicAsset,
   saveSiteContent,
 } from "@/lib/admin-actions";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
@@ -97,6 +99,101 @@ function PortraitField({
         Se muestra en formato vertical (~3:4). Si la dejás vacía, el título ocupa
         todo el ancho.
       </p>
+    </div>
+  );
+}
+
+function CvFileField({
+  url,
+  name,
+  onChange,
+}: {
+  url: string;
+  name: string;
+  onChange: (patch: { cv_file_url: string; cv_file_name: string }) => void;
+}) {
+  const ref = useRef<HTMLInputElement>(null);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+
+  const pick = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (file.type !== "application/pdf") {
+      setErr("Tiene que ser un archivo PDF.");
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      setErr("Máximo 10 MB.");
+      return;
+    }
+    setErr("");
+    setBusy(true);
+    try {
+      const { path, token, publicUrl } = await createCvUploadUrl(file.name);
+      const supabase = createSupabaseBrowserClient();
+      const { error } = await supabase.storage
+        .from("public-assets")
+        .uploadToSignedUrl(path, token, file, { contentType: "application/pdf" });
+      if (error) throw new Error(error.message);
+      const previousUrl = url;
+      onChange({ cv_file_url: publicUrl, cv_file_name: file.name });
+      if (previousUrl) deletePublicAsset(previousUrl).catch(() => {});
+    } catch {
+      setErr("No se pudo subir el archivo.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div>
+      <Label>Archivo del CV</Label>
+      <div className="flex flex-wrap items-center gap-3">
+        {url ? (
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-lg border border-line px-3 py-1.5 text-sm text-violet-300 hover:text-violet-200"
+          >
+            {name || "Ver PDF actual"}
+          </a>
+        ) : (
+          <span className="text-sm text-fg-subtle">
+            Sin archivo — el botón "Descargar CV" usa el PDF autogenerado.
+          </span>
+        )}
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => ref.current?.click()}
+          className="h-9 rounded-lg border border-line px-3 text-sm text-fg-muted hover:text-fg disabled:opacity-60"
+        >
+          {busy ? "Subiendo…" : url ? "Reemplazar PDF" : "Subir PDF"}
+        </button>
+        {url ? (
+          <button
+            type="button"
+            onClick={() => {
+              deletePublicAsset(url).catch(() => {});
+              onChange({ cv_file_url: "", cv_file_name: "" });
+            }}
+            className="text-sm text-red-400 hover:underline"
+          >
+            Quitar
+          </button>
+        ) : null}
+        <input
+          ref={ref}
+          type="file"
+          accept="application/pdf"
+          hidden
+          onChange={pick}
+        />
+      </div>
+      {err ? <p className="mt-1 text-sm text-red-400">{err}</p> : null}
     </div>
   );
 }
@@ -428,6 +525,13 @@ export function TextosEditor({ content }: { content: SiteContentMap }) {
             className={inputClass}
             value={cv.value.summary}
             onChange={(e) => cv.set({ summary: e.target.value })}
+          />
+        </div>
+        <div className="mt-4">
+          <CvFileField
+            url={cv.value.cv_file_url ?? ""}
+            name={cv.value.cv_file_name ?? ""}
+            onChange={(patch) => cv.set(patch)}
           />
         </div>
         <div className="mt-5">

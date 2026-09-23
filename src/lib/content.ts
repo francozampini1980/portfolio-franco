@@ -35,6 +35,8 @@ const FALLBACK: SiteContentMap = {
     email: "francozampini@gmail.com",
     linkedin: "https://www.linkedin.com/in/francozampini/",
     location: "Argentina",
+    cv_file_url: "",
+    cv_file_name: "",
   },
 };
 
