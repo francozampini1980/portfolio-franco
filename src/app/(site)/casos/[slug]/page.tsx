@@ -78,7 +78,7 @@ export default async function CasePage({
                     key={i}
                     className="rounded-2xl border border-violet-500/30 bg-gradient-to-br from-violet-600/20 via-surface to-green-600/10 px-4 py-4 sm:px-5"
                   >
-                    <p className="font-serif text-lg font-black leading-tight text-fg sm:text-xl">
+                    <p className="font-serif text-lg font-bold leading-tight text-fg sm:text-xl">
                       {h}
                     </p>
                   </div>
