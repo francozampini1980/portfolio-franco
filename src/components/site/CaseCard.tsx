@@ -32,11 +32,6 @@ export function CaseCard({
         <h3 className="mt-3 font-serif text-xl font-black leading-tight text-fg">
           {study.title}
         </h3>
-        {study.teaser ? (
-          <p className="mt-3 text-sm leading-relaxed text-fg-muted">
-            {study.teaser}
-          </p>
-        ) : null}
         {study.highlights.length > 0 ? (
           <div className="mt-4 flex flex-wrap gap-1.5">
             {study.highlights.slice(0, 3).map((h, i) => (

@@ -70,15 +70,20 @@ export default async function CasePage({
             <p className="mt-5 text-lg text-fg-muted">{study.teaser}</p>
           ) : null}
           {study.highlights.length > 0 ? (
-            <div className="mt-6 flex flex-wrap gap-2">
-              {study.highlights.map((h, i) => (
-                <span
-                  key={i}
-                  className="rounded-pill border border-violet-500/25 bg-gradient-to-r from-violet-600/15 to-green-600/15 px-3.5 py-1.5 text-sm font-semibold text-fg"
-                >
-                  {h}
-                </span>
-              ))}
+            <div className="mt-8">
+              <Eyebrow>Impacto</Eyebrow>
+              <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {study.highlights.map((h, i) => (
+                  <div
+                    key={i}
+                    className="rounded-2xl border border-violet-500/30 bg-gradient-to-br from-violet-600/20 via-surface to-green-600/10 px-4 py-4 sm:px-5"
+                  >
+                    <p className="font-serif text-lg font-black leading-tight text-fg sm:text-xl">
+                      {h}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           ) : null}
         </header>
