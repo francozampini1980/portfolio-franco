@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { nanoid } from "nanoid";
 import { getAdminUser } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { cleanRichText } from "@/lib/sanitize";
+import { cleanInlineText, cleanRichText } from "@/lib/sanitize";
 import { packInlineImages } from "@/lib/inline-images";
 
 /** Sanitise + normalise inline image URLs for a rich-text field. */
@@ -91,6 +91,12 @@ export async function updateCase(id: string, patch: Record<string, unknown>) {
   const clean = { ...patch };
   for (const f of richFields) {
     if (typeof clean[f] === "string") clean[f] = cleanBody(clean[f] as string);
+  }
+  if (Array.isArray(clean.highlights)) {
+    clean.highlights = clean.highlights
+      .filter((h): h is string => typeof h === "string")
+      .map((h) => cleanInlineText(h))
+      .filter(Boolean);
   }
 
   const { error } = await supabase

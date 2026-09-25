@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { CaseStudy } from "@/lib/types";
 import { cn } from "@/lib/cn";
+import { cleanInlineText } from "@/lib/sanitize";
 
 export function CaseCard({
   study,
@@ -37,10 +38,9 @@ export function CaseCard({
             {study.highlights.slice(0, 3).map((h, i) => (
               <span
                 key={i}
-                className="rounded-pill border border-violet-500/25 bg-gradient-to-r from-violet-600/15 to-green-600/15 px-2.5 py-1 text-xs font-semibold text-fg"
-              >
-                {h}
-              </span>
+                className="rounded-pill border border-violet-500/25 bg-gradient-to-r from-violet-600/15 to-green-600/15 px-2.5 py-1 font-sans text-xs font-semibold text-fg"
+                dangerouslySetInnerHTML={{ __html: cleanInlineText(h) }}
+              />
             ))}
           </div>
         ) : null}

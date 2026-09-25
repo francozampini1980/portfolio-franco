@@ -39,7 +39,7 @@ export function CaseEditor({ study, images }: Props) {
         slug: form.slug,
         client_label: form.client_label,
         teaser: form.teaser,
-        highlights: form.highlights.map((h) => h.trim()).filter(Boolean),
+        highlights: form.highlights,
         published: form.published,
         challenge_title: form.challenge_title,
         challenge_body: form.challenge_body,
@@ -177,17 +177,19 @@ export function CaseEditor({ study, images }: Props) {
           </Label>
           <div className="space-y-2">
             {form.highlights.map((h, i) => (
-              <div key={i} className="flex gap-2">
-                <input
-                  className={inputClass}
-                  value={h}
-                  placeholder="+40% conversión"
-                  onChange={(e) => {
-                    const highlights = [...form.highlights];
-                    highlights[i] = e.target.value;
-                    set({ highlights });
-                  }}
-                />
+              <div key={i} className="flex items-start gap-2">
+                <div className="grow">
+                  <RichTextEditor
+                    value={h}
+                    compact
+                    placeholder="+40% conversión"
+                    onChange={(html) => {
+                      const highlights = [...form.highlights];
+                      highlights[i] = html;
+                      set({ highlights });
+                    }}
+                  />
+                </div>
                 <button
                   type="button"
                   onClick={() =>
@@ -195,7 +197,7 @@ export function CaseEditor({ study, images }: Props) {
                       highlights: form.highlights.filter((_, x) => x !== i),
                     })
                   }
-                  className="rounded-lg border border-line px-2 text-xs text-red-400"
+                  className="mt-1 shrink-0 rounded-lg border border-line px-2 py-1 text-xs text-red-400"
                 >
                   Quitar
                 </button>

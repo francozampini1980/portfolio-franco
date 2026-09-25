@@ -23,3 +23,11 @@ export function cleanRichText(dirty: string): string {
     },
   });
 }
+
+/** Whitelist for short inline text (e.g. a case highlight pill): bold/italic only. */
+export function cleanInlineText(dirty: string): string {
+  return sanitizeHtml(dirty ?? "", {
+    allowedTags: ["strong", "em"],
+    allowedAttributes: {},
+  }).trim();
+}

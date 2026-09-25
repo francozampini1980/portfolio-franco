@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { getCaseBySlug, signImageUrls } from "@/lib/content";
 import { hasCaseAccess } from "@/lib/access";
+import { cleanInlineText } from "@/lib/sanitize";
 import { Container, Eyebrow, Prose, Section } from "@/components/site/ui";
 import { CaseGallery } from "@/components/site/CaseGallery";
 
@@ -78,9 +79,10 @@ export default async function CasePage({
                     key={i}
                     className="rounded-2xl border border-violet-500/30 bg-gradient-to-br from-violet-600/20 via-surface to-green-600/10 px-4 py-4 sm:px-5"
                   >
-                    <p className="font-serif text-lg font-bold leading-tight text-fg sm:text-xl">
-                      {h}
-                    </p>
+                    <p
+                      className="font-sans text-lg font-bold leading-tight text-fg sm:text-xl"
+                      dangerouslySetInnerHTML={{ __html: cleanInlineText(h) }}
+                    />
                   </div>
                 ))}
               </div>
