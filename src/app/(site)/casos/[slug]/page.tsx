@@ -77,10 +77,10 @@ export default async function CasePage({
                 {study.highlights.map((h, i) => (
                   <div
                     key={i}
-                    className="rounded-2xl border border-violet-500/30 bg-gradient-to-br from-violet-600/20 via-surface to-green-600/10 px-4 py-4 sm:px-5"
+                    className="flex items-center rounded-2xl border border-violet-500/30 bg-gradient-to-br from-violet-600/20 via-surface to-green-600/10 px-4 py-4 sm:px-5"
                   >
                     <p
-                      className="text-center font-sans text-lg font-normal leading-tight text-fg [&_em]:italic [&_strong]:font-bold sm:text-xl"
+                      className="text-left font-sans text-lg font-normal leading-tight text-fg [&_em]:italic [&_strong]:font-bold sm:text-xl"
                       dangerouslySetInnerHTML={{ __html: cleanInlineText(h) }}
                     />
                   </div>
