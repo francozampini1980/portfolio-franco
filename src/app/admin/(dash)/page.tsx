@@ -4,9 +4,10 @@ import { Card } from "@/components/admin/ui";
 
 async function counts() {
   const supabase = createAdminClient();
-  const [cases, exp, links, unread] = await Promise.all([
+  const [cases, exp, logos, links, unread] = await Promise.all([
     supabase.from("case_studies").select("id", { count: "exact", head: true }),
     supabase.from("experiences").select("id", { count: "exact", head: true }),
+    supabase.from("company_logos").select("id", { count: "exact", head: true }),
     supabase
       .from("access_links")
       .select("id", { count: "exact", head: true })
@@ -19,6 +20,7 @@ async function counts() {
   return {
     cases: cases.count ?? 0,
     exp: exp.count ?? 0,
+    logos: logos.count ?? 0,
     links: links.count ?? 0,
     unread: unread.count ?? 0,
   };
@@ -30,6 +32,7 @@ export default async function AdminHome() {
     { href: "/admin/textos", label: "Textos del sitio", meta: "Home · Sobre · Contacto" },
     { href: "/admin/casos", label: "Casos", meta: `${c.cases} cargados` },
     { href: "/admin/experiencia", label: "Experiencia", meta: `${c.exp} trabajos` },
+    { href: "/admin/empresas", label: "Empresas", meta: `${c.logos} logos` },
     { href: "/admin/accesos", label: "Accesos", meta: `${c.links} enlaces activos` },
     {
       href: "/admin/mensajes",

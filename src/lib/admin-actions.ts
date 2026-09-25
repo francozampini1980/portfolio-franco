@@ -356,6 +356,64 @@ export async function reorderExperiences(orderedIds: string[]) {
 }
 
 // ---------------------------------------------------------------
+// Company logos (home carousel)
+// ---------------------------------------------------------------
+export async function createLogo() {
+  await requireAdmin();
+  const supabase = createAdminClient();
+  const { data: max } = await supabase
+    .from("company_logos")
+    .select("order_index")
+    .order("order_index", { ascending: false })
+    .limit(1)
+    .single();
+  const { data, error } = await supabase
+    .from("company_logos")
+    .insert({ name: "Empresa", order_index: (max?.order_index ?? -1) + 1 })
+    .select("id")
+    .single();
+  if (error) throw new Error(error.message);
+  revalidateSite();
+  return data.id as string;
+}
+
+export async function updateLogo(id: string, patch: Record<string, unknown>) {
+  await requireAdmin();
+  const supabase = createAdminClient();
+  const { error } = await supabase
+    .from("company_logos")
+    .update({ ...patch, updated_at: new Date().toISOString() })
+    .eq("id", id);
+  if (error) throw new Error(error.message);
+  revalidateSite();
+}
+
+export async function deleteLogo(id: string) {
+  await requireAdmin();
+  const supabase = createAdminClient();
+  const { data: logo } = await supabase
+    .from("company_logos")
+    .select("logo_url")
+    .eq("id", id)
+    .single();
+  const { error } = await supabase.from("company_logos").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+  if (logo?.logo_url) await deletePublicAsset(logo.logo_url);
+  revalidateSite();
+}
+
+export async function reorderLogos(orderedIds: string[]) {
+  await requireAdmin();
+  const supabase = createAdminClient();
+  await Promise.all(
+    orderedIds.map((id, i) =>
+      supabase.from("company_logos").update({ order_index: i }).eq("id", id),
+    ),
+  );
+  revalidateSite();
+}
+
+// ---------------------------------------------------------------
 // Access: password + token links
 // ---------------------------------------------------------------
 export async function setCasePassword(formData: FormData) {

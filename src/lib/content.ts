@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import type {
   CaseImage,
   CaseStudy,
+  CompanyLogo,
   Experience,
   SiteContentMap,
 } from "@/lib/types";
@@ -107,6 +108,15 @@ export async function getExperiences(): Promise<Experience[]> {
     .select("*")
     .order("order_index", { ascending: true });
   return (data as Experience[]) ?? [];
+}
+
+export async function getCompanyLogos(): Promise<CompanyLogo[]> {
+  const supabase = createAdminClient();
+  const { data } = await supabase
+    .from("company_logos")
+    .select("*")
+    .order("order_index", { ascending: true });
+  return (data as CompanyLogo[]) ?? [];
 }
 
 /** Signed URLs for private case images (1h). */

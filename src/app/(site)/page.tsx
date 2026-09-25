@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   getAllSiteContent,
+  getCompanyLogos,
   getExperiences,
   getPublishedCases,
 } from "@/lib/content";
@@ -13,12 +14,14 @@ import {
   SectionHeading,
 } from "@/components/site/ui";
 import { CaseCard } from "@/components/site/CaseCard";
+import { LogoCarousel } from "@/components/site/LogoCarousel";
 
 export default async function HomePage() {
-  const [content, cases, experiences] = await Promise.all([
+  const [content, cases, experiences, logos] = await Promise.all([
     getAllSiteContent(),
     getPublishedCases(),
     getExperiences(),
+    getCompanyLogos(),
   ]);
   const { home_hero: hero, home_intro: intro, philosophy } = content;
 
@@ -71,6 +74,9 @@ export default async function HomePage() {
           </div>
         </Container>
       </Section>
+
+      {/* Empresas */}
+      <LogoCarousel logos={logos} />
 
       {/* Intro / Sobre mí */}
       {intro.body ? (
