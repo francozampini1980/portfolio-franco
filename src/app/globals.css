@@ -107,57 +107,23 @@ body {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Logo carousel (home, "empresas donde trabajé")                      */
+/*  Logo row (home, "empresas donde trabajé")                           */
 /* ------------------------------------------------------------------ */
-.logo-marquee {
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 8%,
-    black 92%,
-    transparent
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 8%,
-    black 92%,
-    transparent
-  );
-}
-
-.logo-marquee__track {
-  display: flex;
-  width: max-content;
-  align-items: center;
-  gap: 3rem;
-  animation: logo-marquee 24s linear infinite;
-}
-
-.logo-marquee:hover .logo-marquee__track {
-  animation-play-state: paused;
-}
-
-@keyframes logo-marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-.logo-marquee__item img {
+.logo-hover img {
   filter: grayscale(1);
   opacity: 0.6;
   transition: filter 300ms ease, opacity 300ms ease, transform 300ms ease;
 }
 
-.logo-marquee__item:hover img {
+.logo-hover:hover img {
   filter: grayscale(0);
   opacity: 1;
   transform: scale(1.08) translateY(-2px);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .logo-marquee__track { animation: none; }
+  .logo-hover img { transition: filter 300ms ease, opacity 300ms ease; }
+  .logo-hover:hover img { transform: none; }
 }
 
 /* ------------------------------------------------------------------ */
