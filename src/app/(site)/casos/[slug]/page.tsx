@@ -69,6 +69,18 @@ export default async function CasePage({
           {study.teaser ? (
             <p className="mt-5 text-lg text-fg-muted">{study.teaser}</p>
           ) : null}
+          {study.highlights.length > 0 ? (
+            <div className="mt-6 flex flex-wrap gap-2">
+              {study.highlights.map((h, i) => (
+                <span
+                  key={i}
+                  className="rounded-pill border border-violet-500/25 bg-gradient-to-r from-violet-600/15 to-green-600/15 px-3.5 py-1.5 text-sm font-semibold text-fg"
+                >
+                  {h}
+                </span>
+              ))}
+            </div>
+          ) : null}
         </header>
 
         <div className="mt-12 space-y-14">

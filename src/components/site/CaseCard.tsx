@@ -37,6 +37,18 @@ export function CaseCard({
             {study.teaser}
           </p>
         ) : null}
+        {study.highlights.length > 0 ? (
+          <div className="mt-4 flex flex-wrap gap-1.5">
+            {study.highlights.slice(0, 3).map((h, i) => (
+              <span
+                key={i}
+                className="rounded-pill border border-violet-500/25 bg-gradient-to-r from-violet-600/15 to-green-600/15 px-2.5 py-1 text-xs font-semibold text-fg"
+              >
+                {h}
+              </span>
+            ))}
+          </div>
+        ) : null}
       </div>
 
       <div className="relative mt-6 flex items-center gap-2 text-xs font-semibold text-fg-subtle">

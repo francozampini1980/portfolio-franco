@@ -39,6 +39,7 @@ export function CaseEditor({ study, images }: Props) {
         slug: form.slug,
         client_label: form.client_label,
         teaser: form.teaser,
+        highlights: form.highlights.map((h) => h.trim()).filter(Boolean),
         published: form.published,
         challenge_title: form.challenge_title,
         challenge_body: form.challenge_body,
@@ -166,6 +167,47 @@ export function CaseEditor({ study, images }: Props) {
               value={form.teaser ?? ""}
               onChange={(e) => set({ teaser: e.target.value })}
             />
+          </div>
+        </div>
+
+        <div className="mt-4">
+          <Label>
+            Highlights de impacto (píldoras debajo del teaser, ej. "+40%
+            conversión")
+          </Label>
+          <div className="space-y-2">
+            {form.highlights.map((h, i) => (
+              <div key={i} className="flex gap-2">
+                <input
+                  className={inputClass}
+                  value={h}
+                  placeholder="+40% conversión"
+                  onChange={(e) => {
+                    const highlights = [...form.highlights];
+                    highlights[i] = e.target.value;
+                    set({ highlights });
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    set({
+                      highlights: form.highlights.filter((_, x) => x !== i),
+                    })
+                  }
+                  className="rounded-lg border border-line px-2 text-xs text-red-400"
+                >
+                  Quitar
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => set({ highlights: [...form.highlights, ""] })}
+              className="rounded-lg border border-line px-3 py-1.5 text-xs text-fg-muted hover:text-fg"
+            >
+              + Agregar highlight
+            </button>
           </div>
         </div>
       </Card>

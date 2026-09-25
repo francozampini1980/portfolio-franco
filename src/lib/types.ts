@@ -4,6 +4,8 @@ export type CaseStudy = {
   title: string;
   client_label: string | null;
   teaser: string | null;
+  /** Short quantitative pills shown below the teaser, e.g. "+40% conversión". */
+  highlights: string[];
   order_index: number;
   published: boolean;
   challenge_title: string;
