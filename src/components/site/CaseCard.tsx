@@ -38,7 +38,7 @@ export function CaseCard({
             {study.highlights.slice(0, 3).map((h, i) => (
               <span
                 key={i}
-                className="rounded-pill border border-violet-500/25 bg-gradient-to-r from-violet-600/15 to-green-600/15 px-2.5 py-1 font-sans text-xs font-medium text-fg [&_em]:italic [&_strong]:font-bold"
+                className="rounded-pill border border-violet-500/25 bg-gradient-to-r from-violet-600/15 to-green-600/15 px-2.5 py-1 font-sans text-xs font-normal text-fg [&_em]:italic [&_strong]:font-bold"
                 dangerouslySetInnerHTML={{ __html: cleanInlineText(h) }}
               />
             ))}
