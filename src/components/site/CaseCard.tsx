@@ -1,60 +1,69 @@
-import Link from "next/link";
 import type { CaseStudy } from "@/lib/types";
 import { cn } from "@/lib/cn";
-import { cleanInlineText } from "@/lib/sanitize";
+import { readingTime } from "@/lib/reading-time";
+import { uiCopy } from "@/lib/ui-copy";
+import { MetricChip } from "@/components/site/MetricChip";
+import { TrackedLink } from "@/components/site/TrackedLink";
 
 export function CaseCard({
   study,
+  origin,
+  position,
   className,
 }: {
   study: CaseStudy;
+  origin: "home" | "casos";
+  /** Posición 1–4 dentro de la grilla, para el evento case_card_click. */
+  position: number;
   className?: string;
 }) {
+  const eyebrow = [study.client_label, uiCopy.cardCaso.lectura(readingTime(study))]
+    .filter(Boolean)
+    .join(" · ");
+  const metrics = study.highlights.slice(0, 2);
+  const titleId = `case-${study.slug}-title`;
+  const eyebrowId = `case-${study.slug}-eyebrow`;
+  const metricsId = `case-${study.slug}-metrics`;
+
   return (
-    <Link
+    <TrackedLink
       href={`/casos/${study.slug}`}
+      track={{
+        event: "case_card_click",
+        props: { case_slug: study.slug, origin, position },
+      }}
+      aria-labelledby={titleId}
+      aria-describedby={metrics.length > 0 ? `${eyebrowId} ${metricsId}` : eyebrowId}
       className={cn(
-        "group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-line bg-surface/60 p-7 transition-colors hover:border-line-strong hover:bg-surface",
+        "group flex flex-col gap-4 rounded-card border border-line bg-surface p-7 transition-colors hover:border-line-strong hover:bg-surface-2 focus-visible:border-line-strong focus-visible:bg-surface-2",
         className,
       )}
     >
-      <div
-        className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full opacity-40 blur-2xl transition-opacity group-hover:opacity-70"
-        style={{
-          background:
-            "radial-gradient(circle, var(--color-violet-600), transparent 70%)",
-        }}
-        aria-hidden
-      />
-      <div className="relative">
-        {study.client_label ? (
-          <p className="eyebrow">{study.client_label}</p>
-        ) : null}
-        <h3 className="mt-3 font-serif text-xl font-black leading-tight text-fg">
-          {study.title}
-        </h3>
-        {study.highlights.length > 0 ? (
-          <div className="mt-4 flex flex-wrap gap-1.5">
-            {study.highlights.slice(0, 3).map((h, i) => (
-              <span
-                key={i}
-                className="rounded-pill border border-violet-500/25 bg-gradient-to-r from-violet-600/15 to-green-600/15 px-2.5 py-1 font-sans text-[13px] font-normal text-fg [&_em]:italic [&_strong]:font-bold"
-                dangerouslySetInnerHTML={{ __html: cleanInlineText(h) }}
-              />
-            ))}
-          </div>
-        ) : null}
-      </div>
-
-      <div className="relative mt-6 flex items-center gap-2 text-xs font-semibold text-fg-subtle">
-        <span className="inline-flex items-center gap-1.5 rounded-pill border border-line px-2.5 py-1 text-fg-subtle">
-          <span aria-hidden>🔒</span>
-          Contenido protegido
+      <p id={eyebrowId} className="eyebrow">
+        {eyebrow}
+      </p>
+      <h3
+        id={titleId}
+        className="font-serif text-xl font-black leading-[26px] text-fg"
+      >
+        {study.title}
+      </h3>
+      {metrics.length > 0 ? (
+        <div id={metricsId} className="flex flex-wrap gap-2">
+          {metrics.map((h, i) => (
+            <MetricChip key={i} html={h} />
+          ))}
+        </div>
+      ) : null}
+      <span className="text-sm font-semibold text-violet-300">
+        {uiCopy.cardCaso.boton}{" "}
+        <span
+          aria-hidden
+          className="inline-block transition-transform motion-safe:group-hover:translate-x-1"
+        >
+          →
         </span>
-        <span className="ml-auto transition-transform group-hover:translate-x-1">
-          Ver caso →
-        </span>
-      </div>
-    </Link>
+      </span>
+    </TrackedLink>
   );
 }

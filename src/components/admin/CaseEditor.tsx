@@ -172,8 +172,8 @@ export function CaseEditor({ study, images }: Props) {
 
         <div className="mt-4">
           <Label>
-            Highlights de impacto (píldoras debajo del teaser, ej. "+40%
-            conversión")
+            Highlights de impacto (píldoras debajo del teaser, ej. &quot;+40%
+            conversión&quot;)
           </Label>
           <div className="space-y-2">
             {form.highlights.map((h, i) => (

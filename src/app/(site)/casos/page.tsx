@@ -26,8 +26,8 @@ export default async function CasosPage() {
         </p>
 
         <div className="mt-14 grid gap-5 sm:grid-cols-2">
-          {cases.map((study) => (
-            <CaseCard key={study.id} study={study} />
+          {cases.map((study, i) => (
+            <CaseCard key={study.id} study={study} origin="casos" position={i + 1} />
           ))}
         </div>
 

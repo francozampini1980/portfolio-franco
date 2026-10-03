@@ -1,40 +1,50 @@
+import { uiCopy } from "@/lib/ui-copy";
 import Link from "next/link";
+import { TrackedAnchor } from "@/components/site/TrackedLink";
 
 export function SiteFooter({
-  email = "francozampini@gmail.com",
+  email = uiCopy.footer.email,
   linkedin = "https://www.linkedin.com/in/francozampini/",
 }: {
   email?: string;
   linkedin?: string;
 }) {
+  const f = uiCopy.footer;
+  const link = "inline-flex min-h-11 items-center hover:text-fg";
   return (
-    <footer className="mt-32 border-t border-line">
-      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-12 sm:flex-row sm:items-end sm:justify-between">
+    <footer className="border-t border-line">
+      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10 md:flex-row md:items-center md:justify-between">
         <div>
-          <p className="font-serif text-xl font-black text-fg">Franco Zampini</p>
-          <p className="mt-1 text-sm text-fg-subtle">
-            UX Manager · Liderazgo de equipos de diseño
-          </p>
+          <p className="text-sm font-semibold leading-[22px] text-fg">{f.nombre}</p>
+          <p className="mt-1 text-xs leading-[18px] text-fg-subtle">{f.legal}</p>
         </div>
-        <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-fg-muted">
-          <a href={`mailto:${email}`} className="hover:text-fg">
+        <div className="flex flex-wrap items-center gap-x-6 text-sm text-fg-muted">
+          <TrackedAnchor
+            href={`mailto:${email}`}
+            track={{
+              event: "contact_channel_click",
+              props: { channel: "mail", location: "footer" },
+            }}
+            className={link}
+          >
             {email}
-          </a>
-          <a
+          </TrackedAnchor>
+          <TrackedAnchor
             href={linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-fg"
+            track={{
+              event: "contact_channel_click",
+              props: { channel: "linkedin", location: "footer" },
+            }}
+            className={link}
           >
-            LinkedIn
-          </a>
-          <Link href="/casos" className="hover:text-fg">
-            Casos
+            {f.linkedin}
+          </TrackedAnchor>
+          <Link href="/casos" className={link}>
+            {f.casos}
           </Link>
         </div>
-      </div>
-      <div className="mx-auto max-w-6xl px-6 pb-10 text-xs text-fg-subtle">
-        © {new Date().getFullYear()} Franco Zampini. Hecho con Next.js.
       </div>
     </footer>
   );

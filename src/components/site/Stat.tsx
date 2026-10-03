@@ -1,0 +1,31 @@
+import { cn } from "@/lib/cn";
+import type { CaseStat } from "@/lib/types";
+
+/** Número de impacto. Va dentro de un <dl> (ver StatGrid) para que valor y descripción se lean juntos. */
+export function Stat({ value, label }: CaseStat) {
+  return (
+    <div className="rounded-card border border-line bg-surface p-6">
+      <dt className="font-serif text-[40px] font-black leading-[44px] tracking-[-0.8px] text-violet-300">
+        {value}
+      </dt>
+      <dd className="mt-2 text-sm leading-[22px] text-fg-muted">{label}</dd>
+    </div>
+  );
+}
+
+export function StatGrid({
+  stats,
+  className,
+}: {
+  stats: CaseStat[];
+  className?: string;
+}) {
+  if (stats.length === 0) return null;
+  return (
+    <dl className={cn("grid gap-3 sm:gap-4", className)}>
+      {stats.map((s, i) => (
+        <Stat key={i} {...s} />
+      ))}
+    </dl>
+  );
+}

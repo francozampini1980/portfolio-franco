@@ -162,7 +162,7 @@ function CvFileField({
           </a>
         ) : (
           <span className="text-sm text-fg-subtle">
-            Sin archivo — el botón "Descargar CV" usa el PDF autogenerado.
+            Sin archivo — el botón &quot;Descargar CV&quot; usa el PDF autogenerado.
           </span>
         )}
         <button

@@ -1,8 +1,8 @@
-import Link from "next/link";
-import type { ComponentProps, ReactNode } from "react";
+import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import { cleanRichText } from "@/lib/sanitize";
 import { signInlineImages } from "@/lib/inline-images";
+export { ButtonLink, TextLink } from "@/components/site/buttons";
 
 export function Container({
   className,
@@ -22,13 +22,23 @@ export function Section({
   className,
   children,
   id,
+  tone = "default",
 }: {
   className?: string;
   children: ReactNode;
   id?: string;
+  /** "alt" alterna al fondo --color-ink-2 (semitransparente para dejar ver el aura). */
+  tone?: "default" | "alt";
 }) {
   return (
-    <section id={id} className={cn("py-20 sm:py-28", className)}>
+    <section
+      id={id}
+      className={cn(
+        "py-20 sm:py-28",
+        tone === "alt" && "bg-ink-2/80",
+        className,
+      )}
+    >
       {children}
     </section>
   );
@@ -52,29 +62,6 @@ export function SectionHeading({
       {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
       <h2 className="display mt-4 text-3xl text-fg sm:text-4xl">{title}</h2>
     </div>
-  );
-}
-
-type ButtonLinkProps = ComponentProps<typeof Link> & {
-  variant?: "solid" | "outline";
-};
-
-export function ButtonLink({
-  variant = "solid",
-  className,
-  ...props
-}: ButtonLinkProps) {
-  return (
-    <Link
-      {...props}
-      className={cn(
-        "inline-flex h-12 items-center justify-center rounded-pill px-6 text-sm font-semibold transition-colors",
-        variant === "solid"
-          ? "bg-gradient-to-r from-violet-500 to-green-500 text-ink hover:opacity-90"
-          : "border border-line-strong text-fg hover:bg-surface",
-        className,
-      )}
-    />
   );
 }
 

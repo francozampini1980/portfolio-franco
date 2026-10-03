@@ -104,8 +104,8 @@ export default async function HomePage() {
             </Link>
           </div>
           <div className="mt-12 grid gap-5 sm:grid-cols-2">
-            {cases.map((study) => (
-              <CaseCard key={study.id} study={study} />
+            {cases.map((study, i) => (
+              <CaseCard key={study.id} study={study} origin="home" position={i + 1} />
             ))}
           </div>
         </Container>
