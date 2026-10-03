@@ -1,0 +1,606 @@
+{
+  "_meta": {
+    "proyecto": "portfolio-mejoras",
+    "version": "1.0",
+    "fecha": "2026-10-03",
+    "fuente": "content/franco-zampini/trabajos/2026-10_portfolio-mejoras/03-textos-finales.md (v3, Agente de Content)",
+    "reglas": [
+      "Todo texto visible sale de este archivo. No reescribir, no abreviar, no traducir.",
+      "origen CONTENT = texto final de Content. origen DISEÑO = texto escrito en Figma que Content no definió: usar tal cual y queda para aprobación de Fran (ver 09-pendientes.md).",
+      "Los valores marcados con CONFIRMAR se usan como están y quedan en pendientes.",
+      "Los campos 'cms' se cargan en Supabase con la migración de datos (06-datos.md). Los campos 'ui' viven en el código (src/lib/ui-copy.ts).",
+      "Campos *_html: HTML simple (p, ul, li, strong) para el componente Prose existente.",
+      "Valores de ficha y resumen del caso (summary_*): la primera letra va en mayúscula porque se muestran como valor suelto, como en Figma; el resto del texto es el de Content."
+    ]
+  },
+  "meta": {
+    "_origen": "CONTENT",
+    "template_titulo": "%s · Franco Zampini",
+    "home": {
+      "title": "Franco Zampini · UX Manager",
+      "description": "Franco Zampini, UX Manager con 12 años liderando equipos de diseño. Casos de liderazgo, design systems y medición de experiencia."
+    },
+    "casos": {
+      "title": "Casos · Franco Zampini",
+      "description": "Cuatro casos de liderazgo en UX: medición de experiencia, design system, comunicaciones y gestión de equipo."
+    },
+    "sobre": {
+      "title": "Sobre mí · Franco Zampini",
+      "description": "Los principios con los que lidero equipos de UX, con ejemplos de mi trabajo."
+    },
+    "experiencia": {
+      "title": "Experiencia · Franco Zampini",
+      "description": "12 años liderando equipos de UX en Frávega, Payway, Mercado Pago y Despegar."
+    },
+    "contacto": {
+      "title": "Contacto · Franco Zampini",
+      "description": "Busco mi próximo rol como Head o Director de Diseño. Escribime."
+    },
+    "lab": {
+      "title": null,
+      "description": null,
+      "_nota": "Content no definió meta para Lab. Ver 09-pendientes.md (P-07)."
+    },
+    "caso": {
+      "title": "{título del caso}",
+      "description": "{summary_problem del caso}",
+      "_origen": "SUPUESTO: mismo patrón que hoy (título del caso y su resumen)."
+    }
+  },
+  "ui": {
+    "nav": {
+      "_origen": "CONTENT",
+      "logo_aria_label": "Franco Zampini — inicio",
+      "_logo_origen": "REPO (se mantiene el actual)",
+      "links": [
+        "Casos",
+        "Lab",
+        "Experiencia",
+        "Sobre",
+        "Contacto"
+      ],
+      "cta": "Escribime",
+      "menu_abrir_aria": "Abrir menú",
+      "menu_cerrar_aria": "Cerrar menú",
+      "_menu_origen": "DISEÑO (página Estados y peor caso)",
+      "_cta_origen": "DISEÑO (CTA del header en Figma), con el texto \"Escribime\" de Content"
+    },
+    "footer": {
+      "_origen": "CONTENT",
+      "nombre": "Franco Zampini · UX Manager",
+      "email": "francozampini@gmail.com",
+      "linkedin": "LinkedIn",
+      "casos": "Casos",
+      "legal": "© 2026 Franco Zampini. Hecho con Next.js."
+    },
+    "home": {
+      "hero": {
+        "_origen": "CONTENT",
+        "nombre_mobile": "Franco Zampini",
+        "_nombre_mobile_origen": "DISEÑO (avatar + nombre en mobile)"
+      },
+      "logos": {
+        "_origen": "CONTENT",
+        "etiqueta": "Lideré equipos de UX en"
+      },
+      "casos": {
+        "_origen": "CONTENT",
+        "eyebrow": "Casos de liderazgo",
+        "titulo": "Decisiones con resultados medibles",
+        "enlace": "Ver todos los casos"
+      },
+      "experiencia": {
+        "_origen": "CONTENT",
+        "eyebrow": "Trayectoria",
+        "titulo": "Experiencia",
+        "enlace": "Ver trayectoria completa",
+        "actualidad": "actualidad",
+        "_actualidad_origen": "DISEÑO"
+      },
+      "principios": {
+        "_origen": "CONTENT",
+        "eyebrow": "Cómo lidero",
+        "titulo": "Cuatro principios",
+        "enlace": "Ver los principios con ejemplos",
+        "_enlace_origen": "DISEÑO (Content no definió el texto del enlace de esta sección; ver P-03)"
+      },
+      "cierre": {
+        "_origen": "CONTENT",
+        "titulo": "Conversemos",
+        "boton": "Escribime",
+        "_texto": "usa cms.site_content.contact.body"
+      }
+    },
+    "card_caso": {
+      "_origen": "CONTENT",
+      "boton": "Ver caso",
+      "lectura": "{N} min",
+      "_lectura_regla": "N = palabras de todos los bloques del caso / 200, redondeado hacia arriba (CONTENT)."
+    },
+    "casos_listado": {
+      "_origen": "CONTENT",
+      "eyebrow": "Trabajo seleccionado",
+      "titulo": "Casos de liderazgo",
+      "bajada": "Cuatro decisiones de liderazgo con su contexto, mi rol y los resultados."
+    },
+    "caso": {
+      "volver": "← Todos los casos",
+      "lectura": "{N} min de lectura",
+      "_lectura_origen": "DISEÑO (encabezado del caso en desktop)",
+      "ficha": {
+        "_origen": "CONTENT",
+        "rol": "Rol",
+        "empresa": "Empresa",
+        "periodo": "Período",
+        "equipo": "Equipo"
+      },
+      "resumen": {
+        "_origen": "CONTENT",
+        "problema": "El problema",
+        "decision": "Lo que decidí",
+        "resultado": "El resultado"
+      },
+      "secciones": {
+        "_origen": "CONTENT",
+        "desafio": "El desafío",
+        "aporte": "Mi aporte",
+        "decisiones": "Decisiones clave",
+        "resultados": "Resultados",
+        "aprendizajes": "Aprendizajes"
+      },
+      "indice": {
+        "titulo": "En este caso",
+        "_origen": "DISEÑO"
+      },
+      "navegacion": {
+        "_origen": "CONTENT",
+        "anterior": "Caso anterior",
+        "siguiente": "Caso siguiente",
+        "_formato": "CONTENT: \"Caso anterior · {título}\" / \"Caso siguiente · {título}\". En pantalla el label va arriba (eyebrow) y el título debajo (DISEÑO 12:173); el nombre accesible del link es \"Caso anterior · {título}\"."
+      },
+      "galeria": {
+        "titulo": "Galería",
+        "_origen": "REPO (se mantiene)"
+      }
+    },
+    "experiencia": {
+      "_origen": "CONTENT",
+      "eyebrow": "Trayectoria",
+      "titulo": "Experiencia",
+      "bajada": "12 años liderando equipos de UX y 16 en productos digitales. Acá están mis últimos roles; la trayectoria completa está en LinkedIn.",
+      "cv": "Descargar CV (PDF)",
+      "linkedin": "Ver LinkedIn"
+    },
+    "contacto": {
+      "_origen": "CONTENT",
+      "eyebrow": "Contacto",
+      "titulo": "Conversemos",
+      "canales": [
+        "Mail",
+        "LinkedIn"
+      ],
+      "form": {
+        "nombre": "Nombre",
+        "correo": "Correo",
+        "mensaje": "Mensaje",
+        "boton": "Enviar mensaje",
+        "boton_enviando": "Enviando…",
+        "_boton_enviando_origen": "REPO (se mantiene; Content no lo definió)",
+        "error_vacio": "Completá tu {campo} para poder responderte.",
+        "error_vacio_campos": {
+          "nombre": "nombre",
+          "correo": "correo",
+          "mensaje": "mensaje"
+        },
+        "error_correo": "Revisá el correo: falta la @ o el dominio.",
+        "exito": "¡Gracias! Te respondo en las próximas 48 horas.",
+        "_exito_estado": "CONFIRMAR plazo de 48 horas (P-01)",
+        "error_envio": "No se pudo enviar. Probá de nuevo o escribime a francozampini@gmail.com.",
+        "error_limite": "Demasiados mensajes seguidos. Probá en un rato.",
+        "_error_limite_origen": "REPO (se mantiene; Content no lo definió, P-08)"
+      }
+    }
+  },
+  "cms": {
+    "site_content": {
+      "home_hero": {
+        "_origen": "CONTENT",
+        "eyebrow": "UX Manager · 12 años liderando equipos",
+        "title": "Lidero equipos de UX que mueven métricas de negocio.",
+        "subtitle": "Lideré equipos de UX en Frávega, Payway, Mercado Pago y Despegar. Hoy construyo agentes de IA para que la mejora continua sea un sistema, no un proyecto.",
+        "availability": "Busco mi próximo rol como Head o Director de Diseño, en la región o remoto.",
+        "primary_cta_label": "Ver casos",
+        "primary_cta_href": "/casos",
+        "secondary_cta_label": "Escribime",
+        "secondary_cta_href": "/contacto",
+        "portrait": "(se mantiene el valor actual)",
+        "portrait_alt": "Franco Zampini",
+        "_portrait_alt_origen": "SUPUESTO (hoy el alt es el título del hero)",
+        "stats": [
+          {
+            "value": "12 años",
+            "label": "liderando equipos de UX"
+          },
+          {
+            "value": "16 años",
+            "label": "en productos digitales"
+          },
+          {
+            "value": "-20%",
+            "label": "llamados al centro de atención tras rediseñar los mails transaccionales"
+          },
+          {
+            "value": "x2",
+            "label": "velocidad de los equipos de desarrollo con el design system"
+          }
+        ]
+      },
+      "home_lab": {
+        "eyebrow": "Lab",
+        "title": "Agentes de UX",
+        "body": "Construyo agentes de IA que hacen benchmark, research y content con el rigor de un equipo, en horas en lugar de semanas. Esta versión del portfolio se mejoró con ellos.",
+        "link_label": "Ver cómo funcionan",
+        "link_href": "/lab",
+        "_origen": "CONTENT",
+        "card_eyebrow": "Caso real: este portfolio",
+        "steps": [
+          {
+            "title": "Producto",
+            "body": "Armó la base y las métricas a medir"
+          },
+          {
+            "title": "Benchmark",
+            "body": "Comparó 5 portfolios de líderes"
+          },
+          {
+            "title": "Content",
+            "body": "Definió la voz y reescribió el sitio"
+          },
+          {
+            "title": "Design system",
+            "body": "Convirtió el sitio en tokens y componentes"
+          },
+          {
+            "title": "Diseño",
+            "body": "Esta propuesta"
+          }
+        ],
+        "_card_origen": "DISEÑO (Figma Home 5:63). Pendiente P-04: sumar Handoff y aprobar textos."
+      },
+      "lab_page": {
+        "eyebrow": "Lab",
+        "_eyebrow_origen": "DISEÑO (Figma Lab 14:161; Content no define eyebrow para Lab)",
+        "title": "Agentes de UX",
+        "subtitle": "Un set de agentes de IA que hacen benchmark, research, content, diseño y handoff con el rigor de un equipo, conectados entre sí.",
+        "_origen": "CONTENT",
+        "how_text_content": "Cada agente guía el proceso con preguntas, deja sus entregables en una carpeta compartida y le pasa el contexto al siguiente.",
+        "_how_text_content_nota": "Texto de Content (\"Cómo funciona\"). Figma lo reemplazó por las 3 tarjetas de \"how\". No se muestra mientras rija P-04; se usa si Fran prefiere el texto de Content.",
+        "case_text_content": "Esta versión del portfolio. Producto armó la base, Benchmark comparó 5 portfolios de líderes y Content definió la voz y los textos.",
+        "_case_text_content_nota": "Texto de Content (\"Caso real\"), escrito antes de Diseño y Handoff. Figma lo reemplazó por las tarjetas de agentes (P-04).",
+        "how": [
+          {
+            "title": "Guían con preguntas",
+            "body": "Cada agente pregunta lo necesario para hacer su tarea con método."
+          },
+          {
+            "title": "Dejan todo en una carpeta",
+            "body": "Los entregables quedan en Drive y Figma, con fuente y fecha."
+          },
+          {
+            "title": "Se pasan el contexto",
+            "body": "Cada agente retoma lo que hizo el anterior."
+          }
+        ],
+        "_how_origen": "DISEÑO, derivado del 'Cómo funciona' de Content (P-04)",
+        "case_eyebrow": "Caso real",
+        "case_title": "Esta versión del portfolio",
+        "agents": [
+          {
+            "number": "01",
+            "title": "Producto",
+            "body": "Armó la base del producto y la lista de métricas a medir.",
+            "status": "Hecho"
+          },
+          {
+            "number": "02",
+            "title": "Benchmark",
+            "body": "Comparó 5 portfolios de líderes de diseño.",
+            "status": "Hecho"
+          },
+          {
+            "number": "03",
+            "title": "Content",
+            "body": "Definió la voz y reescribió todos los textos del sitio.",
+            "status": "Hecho"
+          },
+          {
+            "number": "04",
+            "title": "Design system",
+            "body": "Convirtió el sitio en tokens y componentes en Figma.",
+            "status": "Hecho"
+          },
+          {
+            "number": "05",
+            "title": "Diseño",
+            "body": "Armó esta propuesta en desktop y mobile.",
+            "status": "Hecho"
+          },
+          {
+            "number": "06",
+            "title": "Handoff",
+            "body": "Paquete para construirlo con Claude Code.",
+            "status": "Próximo"
+          }
+        ],
+        "_agents_origen": "DISEÑO (Figma Lab 14:175). Estado de Handoff al publicar: P-04.",
+        "link_label": "Ver la presentación del benchmark",
+        "link_href": null,
+        "_link_estado": "CONTENT pide URL pública si Fran comparte la presentación. Sin URL, el enlace no se muestra (P-05)."
+      },
+      "philosophy": {
+        "_origen": "CONTENT",
+        "eyebrow": "Cómo lidero",
+        "title": "Cuatro principios",
+        "items": [
+          {
+            "title": "Design engineering",
+            "body": "Promuevo equipos donde diseño, desarrollo y producto trabajan con un lenguaje común y design systems en código. Menos handoffs, entregas más rápidas y más personas que pueden contribuir al diseño.",
+            "about_body": "Los límites entre las disciplinas que construyen productos son cada vez más difusos. Promuevo equipos donde diseño, desarrollo y producto trabajan con un lenguaje común y design systems en código. Menos handoffs, entregas más rápidas y más personas que pueden contribuir al diseño.",
+            "example": "En la práctica: Búmeran pasó de librería de Figma a estándar de código para todos los desarrollos nuevos."
+          },
+          {
+            "title": "Mejora continua automatizada",
+            "body": "La IA permite hacer benchmark, research, contenidos y validación en días. Construyo herramientas y agentes que convierten la mejora continua en un sistema permanente, sin bajar la calidad.",
+            "about_body": "La IA permite hacer benchmark, research, contenidos y validación con usuarios en días, no en semanas. Construyo herramientas y agentes que convierten la mejora continua en un sistema permanente, sin bajar la calidad.",
+            "example": "En la práctica: una herramienta de IA que audita el contenido de los mails transaccionales y los agentes de UX del Lab."
+          },
+          {
+            "title": "Diseño en toda la organización",
+            "body": "UX articula las necesidades del negocio, los tiempos de producto y las capacidades técnicas, y da el marco para que más personas diseñen con calidad.",
+            "about_body": "Toda la organización puede pensar y crear pantallas, flujos y productos con procesos colaborativos. UX articula las necesidades del negocio, los tiempos de producto y las capacidades técnicas, y da el marco para que más personas diseñen con calidad.",
+            "example": "En la práctica: en Búmeran cada integrante de UX construyó su propio set de organismos, con un circuito de calidad compartido."
+          },
+          {
+            "title": "Desarrollo de personas",
+            "body": "Los mejores productos salen de equipos motivados, diversos y escuchados. Doy dirección y visibilidad al trabajo del equipo y acompaño el crecimiento de cada persona.",
+            "about_body": "Los mejores productos salen de equipos motivados, diversos y escuchados. Doy dirección y visibilidad al trabajo del equipo, y acompaño el crecimiento de cada persona con mentoría y feedback continuo.",
+            "example": "En la práctica: acompañé a la líder de UI del design system en su primer rol de liderazgo."
+          }
+        ]
+      },
+      "about": {
+        "_origen": "CONTENT",
+        "eyebrow": "Filosofía de liderazgo",
+        "title": "Diseñar la experiencia también es diseñar el equipo.",
+        "body": "Lidero con cuatro principios. Cada uno tiene un ejemplo concreto de mi trabajo.",
+        "_nota": "Reemplaza el body actual (HTML con imagen inline). La imagen actual sale de Sobre (Sobre ya no tiene historia personal, decisión de Fran en Content v3)."
+      },
+      "home_intro": {
+        "_origen": "CONTENT",
+        "title": "De diseñar flujos a diseñar equipos",
+        "body_html": "<p><strong>Liderazgo:</strong> 12 años liderando equipos multidisciplinarios de UX, de hasta 24 personas: leads, product designers, content, research y design system. Acompaño a cada persona con dirección clara, mentoría y feedback continuo.</p><p><strong>Producto:</strong> 16 años resolviendo experiencias de punta a punta en e-commerce, pagos, cobros presenciales y digitales, y turismo.</p>",
+        "link_label": "Cómo lidero",
+        "_estado": "Content lo define como 'Cómo trabajo' en la home; el diseño de Figma no tiene esa sección. Decisión abierta P-02: no se muestra hasta que Fran decida."
+      },
+      "contact": {
+        "_origen": "CONTENT",
+        "eyebrow": "Contacto",
+        "title": "Conversemos",
+        "body": "Busco mi próximo rol como Head o Director de Diseño, en la región o remoto. Si tenés una búsqueda o estás armando un equipo de UX, escribime.",
+        "email": "francozampini@gmail.com",
+        "linkedin": "(se mantiene el valor actual)"
+      }
+    },
+    "case_studies": [
+      {
+        "_origen": "CONTENT",
+        "slug": "metricas-de-experiencia",
+        "order_index": 0,
+        "client_label": "E-commerce · Medición de experiencia",
+        "title": "La voz del cliente como criterio de priorización",
+        "highlights": [
+          "Datos de NPS, CSAT y CES en 14 discoveries",
+          "Más de 1 año de datos"
+        ],
+        "summary_role": "Owner del proyecto",
+        "summary_company": "Frávega",
+        "summary_period": "4 meses",
+        "summary_team": "Proyecto individual",
+        "summary_problem": "No había ninguna medición de la experiencia de compra y entrega; las decisiones se tomaban sobre supuestos.",
+        "summary_decision": "Medir con NPS, CSAT y CES en dos momentos clave, con herramientas propias e IA, sin esperar un equipo de desarrollo.",
+        "summary_result": "Los datos guiaron decisiones en 14 discoveries y hoy son un insumo formal para priorizar en Producto.",
+        "stats": [],
+        "_stats_estado": "Sin números definidos para el bloque de 3 números (P-06). Con stats vacío, el bloque no se muestra.",
+        "challenge_title": "El desafío",
+        "challenge_body_html": "<p>Antes de este proyecto, la única interacción medida con el cliente era la resolución de casos de atención, es decir, el contacto ante un problema. No había medición de la experiencia de compra y entrega, ni un reporte que mostrara su evolución.</p><p>Eso generaba dos problemas:</p><ul><li>Para UX y Producto: cada iniciativa necesitaba una encuesta o una entrevista desde cero, sin línea de base.</li><li>Para el resto de la organización: muchas decisiones se apoyaban en supuestos que nadie había validado.</li></ul><p>Había dos resistencias:</p><ul><li>Técnica: no había un equipo de desarrollo dedicado.</li><li>Cultural: Producto y Negocio no estaban acostumbrados a recibir críticas directas de los usuarios.</li></ul>",
+        "role_title": "Mi aporte",
+        "role_body_html": "<ul><li>Rol: owner directo, de la planificación y el diseño metodológico a la ejecución técnica. Lo hice solo.</li><li>Alcance: dos puntos de medición en producción, después de la compra y después de la entrega.</li><li>Impacto: el dato pasó a ser insumo formal de la priorización de Producto.</li></ul>",
+        "decisions_title": "Decisiones clave",
+        "decisions_body_html": "<ul><li>Elegí métricas estándar (NPS, CSAT y CES) para que todos las entendieran, y definí el resto de las preguntas con datos: durante el primer mes probamos distintos temas y nos quedamos con los más mencionados, más ejes clave del e-commerce como costos de envío, cupones y promociones.</li><li>Resolví la parte técnica con los recursos disponibles: generé con IA el módulo de encuesta en Next.js, con resultados en Google Sheets, y automaticé el análisis de los comentarios abiertos. La encuesta posterior a la compra se integra al sitio con Hotjar y la posterior a la entrega usa los mails existentes.</li><li>Definí el momento de cada encuesta según lo que vive el cliente: después de la compra, con el proceso de búsqueda y elección fresco; después de la entrega, cuando ya pasó la espera y el contacto con el transportista.</li><li>Armé un espacio para explicar la metodología, el origen de los datos y la frecuencia de los reportes. Eso convirtió la resistencia inicial en confianza en el proceso.</li></ul>",
+        "impact_title": "Resultados",
+        "impact_body_html": "<ul><li>Los datos de las encuestas guiaron decisiones en 14 discoveries, como el rediseño de la card de producto o la experiencia de carga de cupones.</li><li>Más de un año de datos de la encuesta posterior a la compra y 5 meses de la posterior a la entrega.</li><li>Las mejoras en el seguimiento del pedido en Postventa se reflejaron en una mejora de NPS y CSAT posteriores a la entrega.</li></ul>",
+        "learnings_title": "Aprendizajes",
+        "learnings_body_html": "<p>Aprendí a trabajar con grandes volúmenes de datos y a relacionarme con otros equipos desde la evidencia.</p><p>Si lo empezara hoy, apuntaría desde el inicio a un sistema integrado de voz del cliente que cubra todo el ciclo de vida.</p><p>Próximo paso: llevar la medición a la experiencia en sucursales.</p>"
+      },
+      {
+        "_origen": "CONTENT",
+        "slug": "design-system",
+        "order_index": 1,
+        "client_label": "Design system · Consistencia",
+        "title": "Búmeran: de librería de Figma a estándar de código",
+        "highlights": [
+          "x2 velocidad de desarrollo",
+          "-35% errores de front",
+          "39 organismos en uso"
+        ],
+        "_highlights_nota": "La card muestra los 2 primeros (DISEÑO: máximo 2 chips). El tercero aparece en el bloque de números del caso.",
+        "summary_role": "Líder del proceso, coordinando UX, design system, ingeniería y producto",
+        "summary_company": "Frávega",
+        "summary_period": "1 año",
+        "summary_team": "4 product designers, 1 líder de UI y 2 diseñadoras UI",
+        "summary_problem": "Interfaz inconsistente y componentes que se codificaban varias veces.",
+        "summary_decision": "Usar un refactor técnico como oportunidad para que Búmeran fuera el estándar de todos los desarrollos nuevos.",
+        "summary_result": "Velocidad x2 en desarrollo, -35% de errores de front y 39 organismos en uso.",
+        "stats": [
+          {
+            "value": "x2",
+            "label": "velocidad de los equipos de desarrollo"
+          },
+          {
+            "value": "-35%",
+            "label": "errores de front"
+          },
+          {
+            "value": "39",
+            "label": "organismos en uso en el e-commerce"
+          }
+        ],
+        "_stats_origen": "DISEÑO (Figma 11:137), con valores de CONTENT",
+        "challenge_title": "El desafío",
+        "challenge_body_html": "<ul><li>Inconsistencia: la interfaz era visualmente inconsistente y desactualizada, y eso afectaba la percepción de la marca y la usabilidad.</li><li>Retrabajo: sin componentes centralizados, el mismo componente se diseñaba y codificaba varias veces.</li><li>Oportunidad: un refactor técnico planificado abría una ventana corta para adoptar el design system de forma obligatoria y rápida.</li></ul>",
+        "role_title": "Mi aporte",
+        "role_body_html": "<ul><li>Rol: lideré la transformación y acompañé a la líder de UI en su primer rol de liderazgo, ayudándola a decidir cuándo delegar y cuándo no.</li><li>Alcance: todos los desarrollos nuevos del e-commerce.</li></ul>",
+        "decisions_title": "Decisiones clave",
+        "decisions_body_html": "<ul><li>Cambié el alcance de \"componente primitivo\" a \"organismo orientado a tareas\": por ejemplo, una sola card de producto que se adapta a listado, destacado, ficha, vitrina o carrito, en lugar de una versión por pantalla.</li><li>Tracé el límite entre desarrollos nuevos y evolutivos: Búmeran es estándar solo para los nuevos, porque en los evolutivos, ya en producción y con plazos cortos, construir componentes desde cero hubiera encarecido el trabajo.</li><li>Organicé al equipo de UX para construir en paralelo: documentación estándar, un set de organismos por integrante, un espacio semanal de dudas y un circuito de calidad donde Búmeran diseña, desarrollo construye el componente en código y UX audita la implementación.</li><li>Negocié con arquitectura y desarrollo los tokens y la estructura técnica, con prioridad en calidad, consistencia y accesibilidad, y sumé al equipo de SEO para que los componentes también mejoraran ese frente.</li></ul>",
+        "impact_title": "Resultados",
+        "impact_body_html": "<ul><li>39 organismos en uso en la home, el listado y la ficha de producto, y las landings del CMS. Header y footer impactan en todos los flujos.</li><li>Velocidad x2 en los equipos de desarrollo y -35% de errores de front.</li><li>Todos los componentes cumplen nivel AA de accesibilidad y respetan la estructura SEO.</li><li>Otros equipos, como Postventa, ya reutilizan componentes, y un canal de ayuda sostiene la adopción con calidad.</li></ul>",
+        "learnings_title": "Aprendizajes",
+        "learnings_body_html": "<p>Cuando lidero a través de alguien con más expertise técnico que yo, mi rol es organizar y priorizar: destrabar conflictos, negociar entre equipos y dar espacio para que esa persona lidere con su criterio.</p><p>Si lo empezara hoy, acordaría entregables concretos desde el principio y definiría mejor el rol de cada disciplina.</p><p>Próximo paso: extender Búmeran a las aplicaciones.</p>"
+      },
+      {
+        "_origen": "CONTENT",
+        "slug": "comunicaciones",
+        "order_index": 2,
+        "client_label": "Comunicaciones · Journey map",
+        "title": "Mails que explican el envío y bajan los llamados",
+        "highlights": [
+          "-20% llamados al centro de atención en 2 meses",
+          "-5% menciones negativas sobre la atención"
+        ],
+        "summary_role": "Líder del diseño, con ownership del contenido y la implementación",
+        "summary_company": "Frávega",
+        "summary_period": "4 meses",
+        "summary_team": "1 product designer y 1 UI designer",
+        "summary_problem": "Los mails de una misma secuencia se contradecían y generaban llamados para preguntar por el envío.",
+        "summary_decision": "Mapear todo el journey, definir una estructura única para los mails y priorizar por grupos.",
+        "summary_result": "-20% de llamados al centro de atención en 2 meses.",
+        "stats": [],
+        "_stats_estado": "P-06",
+        "challenge_title": "El desafío",
+        "challenge_body_html": "<p>Cada equipo cargaba sus propios mails y disparadores en la plataforma de comunicaciones, sin ver el resto del journey. No había mails duplicados, pero sí inconsistencias: un mail decía una cosa y el siguiente la contradecía.</p><p>Atención al Cliente detectó que una parte importante de los llamados era para saber cuándo llegaba el pedido o si ya se podía retirar.</p><p>Mapear fue más complejo de lo previsto: sin documentación ni un responsable único del journey, el equipo dio el relevamiento por terminado tres veces y cada vez aparecieron casos nuevos.</p>",
+        "role_title": "Mi aporte",
+        "role_body_html": "<ul><li>Rol: lideré el diseño con ownership directo del contenido y su implementación.</li><li>Alcance: todo el journey de comunicaciones del e-commerce, coordinado con Atención al Cliente y Shipping.</li></ul>",
+        "decisions_title": "Decisiones clave",
+        "decisions_body_html": "<ul><li>Mapeé el journey como un árbol de decisión, con una rama por situación: pago, confirmación, despacho, retiro en sucursal, entrega a domicilio, demoras, devoluciones y garantías. Así aparecieron dependencias que una lista no mostraba.</li><li>Construí una herramienta de IA para auditar contenido y diseño, entrenada con el manual de voz y tono, el glosario de la marca y buenas prácticas de contenido. Revisa un mail en su contexto dentro del journey y devuelve feedback con una propuesta concreta.</li><li>Definí una estructura para todo mail transaccional: la novedad, la acción, un momento de empatía, el acceso a postventa y el footer.</li><li>Negocié con Shipping que priorizara la iniciativa el trimestre siguiente, con el ahorro proyectado en llamados como argumento.</li><li>Implementamos por grupos de mails y no uno por uno: primero el flujo estándar, de la confirmación a la entrega, y después reprogramaciones, errores de pago y gestiones.</li></ul>",
+        "impact_title": "Resultados",
+        "impact_body_html": "<ul><li>-15% de llamados al centro de atención el primer mes y -20% acumulado al segundo.</li><li>-5% de menciones negativas sobre la atención en las encuestas de satisfacción.</li><li>2 mails redundantes menos y el 100% de las comunicaciones mapeadas implementadas.</li></ul>",
+        "learnings_title": "Aprendizajes",
+        "learnings_body_html": "<p>No hay que subestimar la complejidad: lo que parecía un template terminó requiriendo tres relevamientos y coordinación con los sistemas de Shipping. La IA resolvió una tarea clave, el contenido, en un equipo sin especialistas dedicados.</p><p>Si lo empezara hoy, convocaría desde el inicio a todos los equipos involucrados para descubrir las dependencias antes.</p>"
+      },
+      {
+        "_origen": "CONTENT",
+        "slug": "gestion-crisis-equipo-upskill",
+        "_slug_nota": "Se mantiene el slug actual para no romper enlaces (SUPUESTO). Cambiarlo es decisión de Fran (P-09).",
+        "order_index": 3,
+        "client_label": "Gestión de equipo · Upskilling",
+        "title": "Sostener el discovery con un equipo más chico",
+        "highlights": [
+          "8 product designers con habilidades de research"
+        ],
+        "summary_role": "UX Manager",
+        "summary_company": null,
+        "_summary_company_nota": "Sin empresa a propósito (CONTENT V-09, confidencialidad). La ficha oculta el campo.",
+        "summary_period": "Mediados de 2025",
+        "summary_team": "8 personas",
+        "summary_problem": "Una reducción del equipo ponía en riesgo la capacidad de entrega y la moral.",
+        "summary_decision": "Formar a los product designers en research, automatizar parte del contenido con IA y aplanar la estructura.",
+        "summary_result": "El equipo sostuvo la operación y el discovery con 8 personas.",
+        "stats": [],
+        "_stats_estado": "P-06",
+        "challenge_title": "El desafío",
+        "challenge_body_html": "<p>El equipo de UX se redujo y perdió roles especializados, entre ellos research y content. Había dos riesgos: no poder sostener las entregas y que se resintiera la moral del equipo que quedaba.</p>",
+        "role_title": "Mi aporte",
+        "role_body_html": "<ul><li>Rol: redefiní roles y estructura, y sostuve al equipo durante la transición.</li><li>Alcance: todo el equipo de UX.</li></ul>",
+        "decisions_title": "Decisiones clave",
+        "decisions_body_html": "<ul><li>Formé a los product designers en research para que llevaran los discoveries de punta a punta. Elegí perfiles más completos antes que la especialización pura, para que la voz del usuario siguiera presente sin un equipo de research dedicado.</li><li>Implementé una IA basada en el manual de voz y tono para revisar el contenido de interfaz. Cubrió parte del trabajo de content y aceleró el plan de sistematizar los contenidos como ya hacíamos con los componentes.</li><li>Armé una estructura más plana, con menos jerarquías y personas senior capaces de moverse entre proyectos, para decidir más rápido sin perder calidad.</li></ul>",
+        "impact_title": "Resultados",
+        "impact_body_html": "<ul><li>El equipo sostuvo la operación y la capacidad de discovery.</li><li>8 product designers con habilidades de research que gestionan el discovery de principio a fin.</li><li>Contenido de interfaz revisado con IA.</li></ul>",
+        "learnings_title": "Aprendizajes",
+        "learnings_body_html": "<p>En una crisis, el equipo necesita claridad antes que soluciones: qué cambia, qué se mantiene y qué se espera de cada persona.</p><p>Si lo volviera a vivir, comunicaría la nueva estructura y los roles desde el primer día, y le pondría objetivos y plazos concretos a la formación en research, en lugar de ajustarla sobre la marcha.</p>",
+        "_learnings_estado": "Borrador de Content que Fran puede ajustar (Content v3)."
+      }
+    ],
+    "experiences": [
+      {
+        "_origen": "CONTENT",
+        "order_index": 0,
+        "company": "Frávega Tech",
+        "role": "UX Manager",
+        "date_from": "Enero 2025",
+        "date_to": "actualidad",
+        "team_label": "Equipo de hasta 14 personas.",
+        "body_html": "<p>Una de las cadenas de retail de electrodomésticos, tecnología y hogar más grandes de Argentina.</p><p>Lidero el equipo de UX (leads, product designers, content, research y design system) y coordino la experiencia de cuatro áreas: e-commerce, marketplace, Frávega Pay (billetera y créditos) y la app de sucursales.</p><ul><li>Reconstruir el rol de UX y su articulación con el resto de la empresa.</li><li>Hacer crecer al equipo y su madurez.</li><li>Llevar al equipo el foco y los programas estratégicos de la empresa.</li></ul>"
+      },
+      {
+        "_origen": "CONTENT",
+        "order_index": 1,
+        "company": "Payway",
+        "role": "UX Manager",
+        "date_from": "Diciembre 2021",
+        "date_to": "Enero 2025",
+        "team_label": "Equipo de hasta 24 personas.",
+        "body_html": "<p>Soluciones de cobro para comercios de todos los tamaños, en canales digitales y presenciales.</p><p>Lideré el equipo de UX (leads, product designers, content, research y design system) y coordiné la experiencia de cuatro factories: Merchant Services, Online Payments, Instore Payments y Financial Services.</p><ul><li>Definir los ejes estratégicos de UX y sus disciplinas.</li><li>Armar roadmaps de largo plazo.</li><li>Hacer crecer al equipo y su madurez.</li><li>Llevar al equipo el foco y los programas estratégicos de Prisma.</li><li>Coordinar actividades de team building.</li><li>Coordinar research generativo y propuestas de valor de nuevos productos para los equipos de negocio.</li><li>Coordinar con los heads de las factories los esfuerzos de los equipos.</li><li>Reportar al directorio el estado de los ejes estratégicos.</li></ul>"
+      },
+      {
+        "_origen": "CONTENT",
+        "order_index": 2,
+        "company": "Mercado Pago",
+        "role": "UX Design Supervisor",
+        "date_from": "Abril 2020",
+        "date_to": "Diciembre 2021",
+        "team_label": "Equipo de hasta 4 personas.",
+        "body_html": "<p>Plataforma de pagos líder en Latinoamérica.</p><p>Lideré el equipo de UX de Growth Tooling: programas de rewards, flujo de donaciones y cupones de descuento, con foco en retención y adquisición de usuarios.</p><ul><li>Liderar equipos de diseño y contenido.</li><li>Cuidar la calidad y los tiempos de las entregas.</li><li>Promover la cultura de la empresa.</li><li>Acompañar el desarrollo del equipo.</li><li>Entregar experiencias de punta a punta con diseño centrado en las personas.</li><li>Planificar y entregar productos junto a desarrollo y producto.</li></ul>"
+      },
+      {
+        "_origen": "CONTENT",
+        "order_index": 3,
+        "company": "Despegar.com",
+        "role": "UX Lead",
+        "date_from": "Marzo 2017",
+        "date_to": "Abril 2020",
+        "team_label": "Equipo de hasta 5 personas.",
+        "body_html": "<p>Principal agencia de viajes online de Latinoamérica.</p><p>Trabajé con los equipos de hoteles, checkout y venta de productos combinados.</p><ul><li>Liderar equipos de diseño, research y contenido.</li><li>Entregar experiencias de punta a punta con diseño centrado en las personas.</li><li>Planificar y entregar productos junto a desarrollo y producto.</li></ul>"
+      },
+      {
+        "_origen": "CONTENT",
+        "order_index": 4,
+        "company": "Despegar.com",
+        "role": "UX Senior Designer",
+        "date_from": "Septiembre 2014",
+        "date_to": "Marzo 2017",
+        "team_label": null,
+        "body_html": "<ul><li>Coordinar workshops y dinámicas de diseño colaborativo.</li><li>Prototipar y diseñar flujos.</li><li>Hacer tests de usabilidad.</li></ul>"
+      },
+      {
+        "_origen": "CONTENT",
+        "order_index": 5,
+        "company": "Insite LATAM",
+        "role": "Director de arte",
+        "date_from": "Diciembre 2012",
+        "date_to": "Agosto 2014",
+        "team_label": null,
+        "body_html": "<p>Agencia de contenidos digitales para empresas como Mercado Libre, Cablevisión, HP y Fox.</p><p>Campañas con sitios, juegos online, landings, banners y mails.</p><ul><li>Crear campañas.</li><li>Coordinar a los equipos de diseño.</li></ul>"
+      }
+    ],
+    "company_logos": {
+      "_origen": "CONTENT",
+      "alt": [
+        "Despegar",
+        "Mercado Pago",
+        "Payway",
+        "Frávega"
+      ],
+      "_nota": "Se mantienen los registros y archivos actuales; el alt es el campo name."
+    }
+  }
+}

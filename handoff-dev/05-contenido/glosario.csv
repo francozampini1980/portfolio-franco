@@ -1,0 +1,13 @@
+termino,definicion,uso,variantes_a_evitar,contexto,ejemplo,responsable,fecha,estado
+Design system,Sistema de componentes de diseño y código compartido,preferido,DS (sin desarrollar); design System,Casos y home,"Búmeran, el design system de Frávega",Fran,2026-10-03,PROPUESTO
+Búmeran,Nombre propio del design system de Frávega,preferido,Bumeran (sin tilde),Caso Design System,Búmeran,Fran,2026-10-03,PROPUESTO
+Discovery,Etapa de investigación y definición del problema,permitido,discoveries datos,Casos,"14 discoveries",Fran,2026-10-03,PROPUESTO
+Encuestas de satisfacción,"NPS, CSAT y CES en conjunto",preferido,ux metrics; UX Metrics,Caso Métricas,"encuestas de satisfacción (NPS, CSAT y CES)",Fran,2026-10-03,PROPUESTO
+Centro de atención,Atención al cliente por teléfono y chat,preferido,call center (mezclado con español),Caso Comunicaciones,"llamados al centro de atención",Fran,2026-10-03,PROPUESTO
+Product designer,Rol de diseño de producto,permitido,Product Designers (mayúsculas),Casos,"product designers",Fran,2026-10-03,PROPUESTO
+T-shaped,Perfil con una especialidad y conocimientos amplios,permitido (explicar la primera vez),T-shaped sin explicación,Caso Upskilling,"perfiles T-shaped: especialistas con base amplia",Fran,2026-10-03,PROPUESTO
+Design engineering,Perfil que une diseño y desarrollo,permitido,Design Engineer (como título de principio),Home y Sobre,"perfiles de design engineering",Fran,2026-10-03,PROPUESTO
+Caso,Caso de estudio del portfolio,preferido,proyecto (en el listado),Navegación,"Ver caso",Fran,2026-10-03,PROPUESTO
+Agentes de UX,Set de agentes de IA para tareas de UX construido por Fran,preferido,herramientas de IA (genérico),Home / Lab,"Agentes de UX: benchmark, research y content con IA",Fran,2026-10-03,PROPUESTO
+Qualtrics,Proveedor de encuestas,nombre propio,Qualitrics,Caso Métricas,Qualtrics,Fran,2026-10-03,PROPUESTO
+Medallia,Proveedor de experiencia del cliente,nombre propio,Medalia,Caso Métricas,Medallia,Fran,2026-10-03,PROPUESTO
