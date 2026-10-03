@@ -18,7 +18,7 @@
   /* Text */
   --color-fg: #ece9f1;
   --color-fg-muted: #a89fbd;
-  --color-fg-subtle: #6f6786;
+  --color-fg-subtle: #8a82a0;
 
   /* Violet */
   --color-violet-300: #c4b5fd;
@@ -33,7 +33,15 @@
   --color-green-500: #10b981;
   --color-green-600: #059669;
 
+  /* Red */
+  --color-red-400: #f87171;
+  --color-red-500: #ef4444;
+
+  /* Neutral */
+  --color-white: #ffffff;
+
   --radius-pill: 999px;
+  --radius-card: 16px;
 }
 
 /* ------------------------------------------------------------------ */
@@ -137,9 +145,10 @@ body {
 }
 
 .eyebrow {
-  font-size: 0.72rem;
+  font-size: 12px;
+  line-height: 18px;
   font-weight: 700;
-  letter-spacing: 0.22em;
+  letter-spacing: 2.5px;
   text-transform: uppercase;
   color: var(--color-fg-subtle);
 }
@@ -196,9 +205,8 @@ body {
   outline-offset: 2px;
 }
 
-/* Focus ring */
-:where(a, button, input, textarea, select):focus-visible {
-  outline: 2px solid var(--color-violet-400);
+/* Focus ring: 3px, outside the element, follows the element's own radius */
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 3px solid var(--color-violet-300);
   outline-offset: 2px;
-  border-radius: 4px;
 }
