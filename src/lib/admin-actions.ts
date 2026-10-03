@@ -87,6 +87,7 @@ export async function updateCase(id: string, patch: Record<string, unknown>) {
     "role_body",
     "decisions_body",
     "impact_body",
+    "learnings_body",
   ];
   const clean = { ...patch };
   for (const f of richFields) {
@@ -97,6 +98,23 @@ export async function updateCase(id: string, patch: Record<string, unknown>) {
       .filter((h): h is string => typeof h === "string")
       .map((h) => cleanInlineText(h))
       .filter(Boolean);
+  }
+
+  if (Array.isArray(clean.stats)) {
+    clean.stats = clean.stats
+      .filter(
+        (s): s is { value: unknown; label: unknown } =>
+          !!s && typeof s === "object",
+      )
+      .map((s) => ({
+        value: String(s.value ?? "").trim(),
+        label: String(s.label ?? "").trim(),
+      }))
+      .filter((s) => s.value && s.label)
+      .slice(0, 3);
+  }
+  if (typeof clean.summary_company === "string" && !clean.summary_company.trim()) {
+    clean.summary_company = null;
   }
 
   const { error } = await supabase
@@ -334,6 +352,9 @@ export async function updateExperience(id: string, patch: Record<string, unknown
   const supabase = createAdminClient();
   const clean = { ...patch };
   if (typeof clean.body === "string") clean.body = cleanBody(clean.body);
+  if (typeof clean.team_label === "string" && !clean.team_label.trim()) {
+    clean.team_label = null;
+  }
   const { error } = await supabase
     .from("experiences")
     .update({ ...clean, updated_at: new Date().toISOString() })

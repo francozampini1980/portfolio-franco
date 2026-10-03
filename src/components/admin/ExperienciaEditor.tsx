@@ -65,6 +65,14 @@ function Row({ exp, onMove, canUp, canDown }: {
         </div>
       </div>
       <div className="mt-4">
+        <Label>Tamaño de equipo (ej. &quot;Equipo de hasta 14 personas.&quot;; vacío = no se muestra)</Label>
+        <input
+          className={inputClass}
+          value={form.team_label ?? ""}
+          onChange={(e) => set({ team_label: e.target.value })}
+        />
+      </div>
+      <div className="mt-4">
         <Label>Descripción</Label>
         <RichTextEditor
           value={form.body}
@@ -81,6 +89,7 @@ function Row({ exp, onMove, canUp, canDown }: {
                 date_to: form.date_to || null,
                 company: form.company,
                 role: form.role,
+                team_label: form.team_label?.trim() ? form.team_label : null,
                 body: form.body,
               });
               setSaved(true);

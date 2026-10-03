@@ -49,6 +49,16 @@ export function CaseEditor({ study, images }: Props) {
         decisions_body: form.decisions_body,
         impact_title: form.impact_title,
         impact_body: form.impact_body,
+        summary_role: form.summary_role,
+        summary_company: form.summary_company?.trim() ? form.summary_company : null,
+        summary_period: form.summary_period,
+        summary_team: form.summary_team,
+        summary_problem: form.summary_problem,
+        summary_decision: form.summary_decision,
+        summary_result: form.summary_result,
+        stats: form.stats,
+        learnings_title: form.learnings_title,
+        learnings_body: form.learnings_body,
       });
       setSaved(true);
       router.refresh();
@@ -60,6 +70,7 @@ export function CaseEditor({ study, images }: Props) {
     ["role_title", "role_body"],
     ["decisions_title", "decisions_body"],
     ["impact_title", "impact_body"],
+    ["learnings_title", "learnings_body"],
   ];
 
   const handleUpload = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -161,7 +172,7 @@ export function CaseEditor({ study, images }: Props) {
             />
           </div>
           <div>
-            <Label>Frase teaser (visible en la tarjeta bloqueada)</Label>
+            <Label>Frase teaser (la plantilla actual del caso ya no la muestra)</Label>
             <input
               className={inputClass}
               value={form.teaser ?? ""}
@@ -172,8 +183,8 @@ export function CaseEditor({ study, images }: Props) {
 
         <div className="mt-4">
           <Label>
-            Highlights de impacto (píldoras debajo del teaser, ej. &quot;+40%
-            conversión&quot;)
+            Métricas de la tarjeta (píldoras; la tarjeta muestra las 2 primeras,
+            ej. &quot;+40% conversión&quot;)
           </Label>
           <div className="space-y-2">
             {form.highlights.map((h, i) => (
@@ -208,9 +219,129 @@ export function CaseEditor({ study, images }: Props) {
               onClick={() => set({ highlights: [...form.highlights, ""] })}
               className="rounded-lg border border-line px-3 py-1.5 text-xs text-fg-muted hover:text-fg"
             >
-              + Agregar highlight
+              + Agregar métrica
             </button>
           </div>
+        </div>
+      </Card>
+
+      <Card title="Ficha y resumen del caso">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <Label>Rol</Label>
+            <input
+              className={inputClass}
+              value={form.summary_role}
+              onChange={(e) => set({ summary_role: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label>Empresa (vacío = no se muestra)</Label>
+            <input
+              className={inputClass}
+              value={form.summary_company ?? ""}
+              onChange={(e) => set({ summary_company: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label>Período</Label>
+            <input
+              className={inputClass}
+              value={form.summary_period}
+              onChange={(e) => set({ summary_period: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label>Equipo</Label>
+            <input
+              className={inputClass}
+              value={form.summary_team}
+              onChange={(e) => set({ summary_team: e.target.value })}
+            />
+          </div>
+        </div>
+        <div className="mt-4 grid gap-4 sm:grid-cols-3">
+          <div>
+            <Label>El problema</Label>
+            <textarea
+              rows={4}
+              className={inputClass}
+              value={form.summary_problem}
+              onChange={(e) => set({ summary_problem: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label>Lo que decidí</Label>
+            <textarea
+              rows={4}
+              className={inputClass}
+              value={form.summary_decision}
+              onChange={(e) => set({ summary_decision: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label>El resultado</Label>
+            <textarea
+              rows={4}
+              className={inputClass}
+              value={form.summary_result}
+              onChange={(e) => set({ summary_result: e.target.value })}
+            />
+          </div>
+        </div>
+      </Card>
+
+      <Card title="Números del encabezado (hasta 3, solo desktop)">
+        <div className="space-y-2">
+          {form.stats.map((s, i) => (
+            <div key={i} className="flex items-start gap-2">
+              <input
+                className={`${inputClass} max-w-[9rem]`}
+                placeholder="x2"
+                value={s.value}
+                onChange={(e) => {
+                  const stats = [...form.stats];
+                  stats[i] = { ...stats[i], value: e.target.value };
+                  set({ stats });
+                }}
+              />
+              <input
+                className={inputClass}
+                placeholder="velocidad de los equipos de desarrollo"
+                value={s.label}
+                onChange={(e) => {
+                  const stats = [...form.stats];
+                  stats[i] = { ...stats[i], label: e.target.value };
+                  set({ stats });
+                }}
+              />
+              <button
+                type="button"
+                onClick={() =>
+                  set({ stats: form.stats.filter((_, x) => x !== i) })
+                }
+                className="mt-1 shrink-0 rounded-lg border border-line px-2 py-1 text-xs text-red-400"
+              >
+                Quitar
+              </button>
+            </div>
+          ))}
+          {form.stats.length < 3 ? (
+            <button
+              type="button"
+              onClick={() =>
+                set({ stats: [...form.stats, { value: "", label: "" }] })
+              }
+              className="rounded-lg border border-line px-3 py-1.5 text-xs text-fg-muted hover:text-fg"
+            >
+              + Agregar número
+            </button>
+          ) : null}
+          {form.stats.length === 0 ? (
+            <p className="text-xs text-fg-subtle">
+              Sin números: la fila no se muestra en el caso.
+            </p>
+          ) : null}
         </div>
       </Card>
 

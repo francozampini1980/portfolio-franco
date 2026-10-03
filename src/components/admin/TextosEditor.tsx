@@ -219,6 +219,99 @@ function SaveButton({
   );
 }
 
+function ListEditor<T>({
+  label,
+  items,
+  onChange,
+  make,
+  max,
+  addLabel,
+  children,
+}: {
+  label: string;
+  items: T[];
+  onChange: (items: T[]) => void;
+  make: () => T;
+  max?: number;
+  addLabel: string;
+  children: (item: T, update: (patch: Partial<T>) => void, i: number) => React.ReactNode;
+}) {
+  return (
+    <div>
+      <Label>{label}</Label>
+      <div className="space-y-3">
+        {items.map((item, i) => (
+          <div key={i} className="rounded-xl border border-line bg-ink/30 p-3">
+            <div className="space-y-2">
+              {children(
+                item,
+                (patch) => {
+                  const next = [...items];
+                  next[i] = { ...next[i], ...patch };
+                  onChange(next);
+                },
+                i,
+              )}
+            </div>
+            <button
+              type="button"
+              onClick={() => onChange(items.filter((_, x) => x !== i))}
+              className="mt-2 rounded-lg border border-line px-2 py-1 text-xs text-red-400"
+            >
+              Quitar
+            </button>
+          </div>
+        ))}
+        {max === undefined || items.length < max ? (
+          <button
+            type="button"
+            onClick={() => onChange([...items, make()])}
+            className="rounded-lg border border-line px-3 py-1.5 text-xs text-fg-muted hover:text-fg"
+          >
+            {addLabel}
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+function TextField({
+  label,
+  value,
+  onChange,
+  placeholder,
+  rows,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  rows?: number;
+}) {
+  return (
+    <div>
+      <Label>{label}</Label>
+      {rows ? (
+        <textarea
+          rows={rows}
+          className={inputClass}
+          value={value}
+          placeholder={placeholder}
+          onChange={(e) => onChange(e.target.value)}
+        />
+      ) : (
+        <input
+          className={inputClass}
+          value={value}
+          placeholder={placeholder}
+          onChange={(e) => onChange(e.target.value)}
+        />
+      )}
+    </div>
+  );
+}
+
 function useBlock<T>(key: keyof SiteContentMap, initial: T) {
   const [value, setValue] = useState<T>(initial);
   const [pending, start] = useTransition();
@@ -239,6 +332,8 @@ function useBlock<T>(key: keyof SiteContentMap, initial: T) {
 export function TextosEditor({ content }: { content: SiteContentMap }) {
   const hero = useBlock("home_hero", content.home_hero);
   const intro = useBlock("home_intro", content.home_intro);
+  const homeLab = useBlock("home_lab", content.home_lab);
+  const labPage = useBlock("lab_page", content.lab_page);
   const about = useBlock("about", content.about);
   const philo = useBlock("philosophy", content.philosophy);
   const contact = useBlock("contact", content.contact);
@@ -276,6 +371,40 @@ export function TextosEditor({ content }: { content: SiteContentMap }) {
             value={hero.value.subtitle}
             onChange={(e) => hero.set({ subtitle: e.target.value })}
           />
+        </div>
+        <div className="mt-4">
+          <TextField
+            label="Disponibilidad (píldora debajo de la bajada)"
+            value={hero.value.availability}
+            onChange={(availability) => hero.set({ availability })}
+          />
+        </div>
+        <div className="mt-4">
+          <ListEditor
+            label="Números del encabezado (hasta 4)"
+            items={hero.value.stats}
+            max={4}
+            addLabel="+ Agregar número"
+            make={() => ({ value: "", label: "" })}
+            onChange={(stats) => hero.set({ stats })}
+          >
+            {(s, update) => (
+              <>
+                <input
+                  className={inputClass}
+                  placeholder="12 años"
+                  value={s.value}
+                  onChange={(e) => update({ value: e.target.value })}
+                />
+                <input
+                  className={inputClass}
+                  placeholder="liderando equipos de UX"
+                  value={s.label}
+                  onChange={(e) => update({ label: e.target.value })}
+                />
+              </>
+            )}
+          </ListEditor>
         </div>
         <div className="mt-4">
           <PortraitField
@@ -326,9 +455,200 @@ export function TextosEditor({ content }: { content: SiteContentMap }) {
         </div>
       </Card>
 
+      {/* HOME LAB */}
+      <Card title="Home · Sección Lab">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <TextField
+            label="Bajada superior"
+            value={homeLab.value.eyebrow}
+            onChange={(eyebrow) => homeLab.set({ eyebrow })}
+          />
+          <TextField
+            label="Título"
+            value={homeLab.value.title}
+            onChange={(title) => homeLab.set({ title })}
+          />
+          <TextField
+            label="Enlace · texto"
+            value={homeLab.value.link_label}
+            onChange={(link_label) => homeLab.set({ link_label })}
+          />
+          <TextField
+            label="Enlace · destino"
+            value={homeLab.value.link_href}
+            onChange={(link_href) => homeLab.set({ link_href })}
+          />
+        </div>
+        <div className="mt-4">
+          <TextField
+            label="Texto"
+            rows={3}
+            value={homeLab.value.body}
+            onChange={(body) => homeLab.set({ body })}
+          />
+        </div>
+        <div className="mt-4">
+          <TextField
+            label="Caja de pasos · título"
+            value={homeLab.value.card_eyebrow}
+            onChange={(card_eyebrow) => homeLab.set({ card_eyebrow })}
+          />
+        </div>
+        <div className="mt-4">
+          <ListEditor
+            label="Pasos"
+            items={homeLab.value.steps}
+            addLabel="+ Agregar paso"
+            make={() => ({ title: "", body: "" })}
+            onChange={(steps) => homeLab.set({ steps })}
+          >
+            {(s, update) => (
+              <>
+                <input
+                  className={inputClass}
+                  placeholder="Título del paso"
+                  value={s.title}
+                  onChange={(e) => update({ title: e.target.value })}
+                />
+                <input
+                  className={inputClass}
+                  placeholder="Descripción"
+                  value={s.body}
+                  onChange={(e) => update({ body: e.target.value })}
+                />
+              </>
+            )}
+          </ListEditor>
+        </div>
+        <div className="mt-5">
+          <SaveButton onClick={homeLab.save} pending={homeLab.pending} saved={homeLab.saved} />
+        </div>
+      </Card>
+
+      {/* LAB PAGE */}
+      <Card title="Página Lab">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <TextField
+            label="Bajada superior"
+            value={labPage.value.eyebrow}
+            onChange={(eyebrow) => labPage.set({ eyebrow })}
+          />
+          <TextField
+            label="Título"
+            value={labPage.value.title}
+            onChange={(title) => labPage.set({ title })}
+          />
+        </div>
+        <div className="mt-4">
+          <TextField
+            label="Bajada"
+            rows={2}
+            value={labPage.value.subtitle}
+            onChange={(subtitle) => labPage.set({ subtitle })}
+          />
+        </div>
+        <div className="mt-4">
+          <ListEditor
+            label="Cómo funciona (tarjetas)"
+            items={labPage.value.how}
+            addLabel="+ Agregar tarjeta"
+            make={() => ({ title: "", body: "" })}
+            onChange={(how) => labPage.set({ how })}
+          >
+            {(h, update) => (
+              <>
+                <input
+                  className={inputClass}
+                  placeholder="Título"
+                  value={h.title}
+                  onChange={(e) => update({ title: e.target.value })}
+                />
+                <input
+                  className={inputClass}
+                  placeholder="Texto"
+                  value={h.body}
+                  onChange={(e) => update({ body: e.target.value })}
+                />
+              </>
+            )}
+          </ListEditor>
+        </div>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <TextField
+            label="Caso real · bajada superior"
+            value={labPage.value.case_eyebrow}
+            onChange={(case_eyebrow) => labPage.set({ case_eyebrow })}
+          />
+          <TextField
+            label="Caso real · título"
+            value={labPage.value.case_title}
+            onChange={(case_title) => labPage.set({ case_title })}
+          />
+        </div>
+        <div className="mt-4">
+          <ListEditor
+            label="Agentes"
+            items={labPage.value.agents}
+            addLabel="+ Agregar agente"
+            make={() => ({ number: "", title: "", body: "", status: "Próximo" as const })}
+            onChange={(agents) => labPage.set({ agents })}
+          >
+            {(a, update) => (
+              <>
+                <div className="flex gap-2">
+                  <input
+                    className={`${inputClass} max-w-[5rem]`}
+                    placeholder="01"
+                    value={a.number}
+                    onChange={(e) => update({ number: e.target.value })}
+                  />
+                  <input
+                    className={inputClass}
+                    placeholder="Título"
+                    value={a.title}
+                    onChange={(e) => update({ title: e.target.value })}
+                  />
+                  <select
+                    className={`${inputClass} max-w-[9rem]`}
+                    value={a.status}
+                    onChange={(e) =>
+                      update({ status: e.target.value as "Hecho" | "Próximo" })
+                    }
+                  >
+                    <option value="Hecho">Hecho</option>
+                    <option value="Próximo">Próximo</option>
+                  </select>
+                </div>
+                <input
+                  className={inputClass}
+                  placeholder="Descripción"
+                  value={a.body}
+                  onChange={(e) => update({ body: e.target.value })}
+                />
+              </>
+            )}
+          </ListEditor>
+        </div>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <TextField
+            label="Enlace a la presentación · texto"
+            value={labPage.value.link_label}
+            onChange={(link_label) => labPage.set({ link_label })}
+          />
+          <TextField
+            label="Enlace a la presentación · URL (vacío = no se muestra)"
+            value={labPage.value.link_href ?? ""}
+            onChange={(link_href) => labPage.set({ link_href: link_href.trim() ? link_href : null })}
+          />
+        </div>
+        <div className="mt-5">
+          <SaveButton onClick={labPage.save} pending={labPage.pending} saved={labPage.saved} />
+        </div>
+      </Card>
+
       {/* INTRO */}
       <RichBlockCard
-        title="Home · Introducción / Sobre mí"
+        title="Home · Introducción (hoy no se muestra en el sitio)"
         block={intro}
       />
 
@@ -387,11 +707,32 @@ export function TextosEditor({ content }: { content: SiteContentMap }) {
               <textarea
                 rows={2}
                 className={`${inputClass} mt-2`}
-                placeholder="Descripción"
+                placeholder="Descripción corta (home)"
                 value={item.body}
                 onChange={(e) => {
                   const items = [...philo.value.items];
                   items[i] = { ...items[i], body: e.target.value };
+                  philo.set({ items });
+                }}
+              />
+              <textarea
+                rows={3}
+                className={`${inputClass} mt-2`}
+                placeholder="Texto completo (página Sobre)"
+                value={item.about_body ?? ""}
+                onChange={(e) => {
+                  const items = [...philo.value.items];
+                  items[i] = { ...items[i], about_body: e.target.value };
+                  philo.set({ items });
+                }}
+              />
+              <input
+                className={`${inputClass} mt-2`}
+                placeholder="En la práctica: ejemplo (página Sobre)"
+                value={item.example ?? ""}
+                onChange={(e) => {
+                  const items = [...philo.value.items];
+                  items[i] = { ...items[i], example: e.target.value };
                   philo.set({ items });
                 }}
               />

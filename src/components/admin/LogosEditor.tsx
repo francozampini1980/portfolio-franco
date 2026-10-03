@@ -211,7 +211,7 @@ export function LogosEditor({ items }: { items: CompanyLogo[] }) {
         <div>
           <h1 className="font-serif text-2xl font-black text-fg">Empresas</h1>
           <p className="mt-1 text-sm text-fg-subtle">
-            Carrousel de logos que se muestra en la home, arriba de &quot;Sobre mí&quot;.
+            Logos de las empresas que se muestran en la home como tiles, en este orden.
           </p>
         </div>
         <button
