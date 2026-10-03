@@ -76,14 +76,11 @@ export function SiteNav() {
         open && "max-md:bg-ink",
       )}
     >
-      <nav
-        aria-label="Principal"
-        className="mx-auto flex h-[72px] max-w-6xl items-center justify-between px-6"
-      >
+      <nav className="mx-auto flex h-[72px] max-w-6xl items-center justify-between px-6">
         <Link
           href="/"
           aria-label={nav.logoAriaLabel}
-          className="font-serif text-[1.35rem] font-black leading-none tracking-tight text-fg"
+          className="inline-flex min-h-11 min-w-11 items-center font-serif text-[1.35rem] font-black leading-none tracking-tight text-fg"
         >
           F/.
         </Link>
