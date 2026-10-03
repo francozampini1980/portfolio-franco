@@ -1,3 +1,5 @@
+export type CaseStat = { value: string; label: string };
+
 export type CaseStudy = {
   id: string;
   slug: string;
@@ -16,6 +18,18 @@ export type CaseStudy = {
   decisions_body: string;
   impact_title: string;
   impact_body: string;
+  summary_role: string;
+  /** null = the fact sheet hides the company (e.g. confidential case). */
+  summary_company: string | null;
+  summary_period: string;
+  summary_team: string;
+  summary_problem: string;
+  summary_decision: string;
+  summary_result: string;
+  /** Up to 3 headline numbers shown in the case header. */
+  stats: CaseStat[];
+  learnings_title: string;
+  learnings_body: string;
   created_at: string;
   updated_at: string;
 };
@@ -46,6 +60,8 @@ export type Experience = {
   company: string;
   role: string;
   body: string;
+  /** e.g. "Equipo de hasta 14 personas." */
+  team_label: string | null;
   order_index: number;
   created_at: string;
   updated_at: string;
@@ -91,16 +107,57 @@ export type HomeHero = {
   primary_cta_href: string;
   secondary_cta_label: string;
   secondary_cta_href: string;
+  availability: string;
+  stats: CaseStat[];
   /** Public URL of the portrait shown next to the hero text. */
   portrait?: string;
+  portrait_alt?: string;
 };
 
 export type RichBlock = { eyebrow: string; title: string; body: string };
 
+export type HomeIntro = RichBlock & { link_label?: string };
+
+export type HomeLab = {
+  eyebrow: string;
+  title: string;
+  body: string;
+  link_label: string;
+  link_href: string;
+  card_eyebrow: string;
+  steps: { title: string; body: string }[];
+};
+
+export type LabAgent = {
+  number: string;
+  title: string;
+  body: string;
+  status: "Hecho" | "Próximo";
+};
+
+export type LabPage = {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  how: { title: string; body: string }[];
+  case_eyebrow: string;
+  case_title: string;
+  agents: LabAgent[];
+  link_label: string;
+  link_href: string | null;
+};
+
+export type PhilosophyItem = {
+  title: string;
+  body: string;
+  about_body?: string;
+  example?: string;
+};
+
 export type PhilosophyBlock = {
   eyebrow: string;
   title: string;
-  items: { title: string; body: string }[];
+  items: PhilosophyItem[];
 };
 
 export type ContactBlock = {
@@ -126,7 +183,9 @@ export type CvProfile = {
 
 export type SiteContentMap = {
   home_hero: HomeHero;
-  home_intro: RichBlock;
+  home_intro: HomeIntro;
+  home_lab: HomeLab;
+  lab_page: LabPage;
   about: RichBlock;
   philosophy: PhilosophyBlock;
   contact: ContactBlock;
