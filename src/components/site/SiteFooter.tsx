@@ -10,7 +10,7 @@ export function SiteFooter({
   linkedin?: string;
 }) {
   const f = uiCopy.footer;
-  const link = "inline-flex min-h-11 items-center hover:text-fg";
+  const link = "inline-flex min-h-11 min-w-11 items-center hover:text-fg";
   return (
     <footer className="border-t border-line">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10 md:flex-row md:items-center md:justify-between">

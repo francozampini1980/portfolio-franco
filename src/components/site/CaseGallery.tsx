@@ -44,7 +44,7 @@ export function CaseGallery({ images }: { images: Img[] }) {
           <button
             type="button"
             aria-label="Cerrar"
-            className="absolute right-5 top-5 flex h-10 w-10 items-center justify-center rounded-full border border-line-strong text-fg"
+            className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full border border-line-strong text-fg"
           >
             ×
           </button>
