@@ -5,7 +5,7 @@ import type { CaseStat } from "@/lib/types";
 export function Stat({ value, label }: CaseStat) {
   return (
     <div className="rounded-card border border-line bg-surface p-6">
-      <dt className="font-serif text-[40px] font-black leading-[44px] tracking-[-0.8px] text-violet-300">
+      <dt className="font-serif text-[32px] font-black leading-[36px] tracking-[-0.64px] text-violet-300 sm:text-[40px] sm:leading-[44px] sm:tracking-[-0.8px]">
         {value}
       </dt>
       <dd className="mt-2 text-sm leading-[22px] text-fg-muted">{label}</dd>
