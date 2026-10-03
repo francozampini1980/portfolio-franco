@@ -1,38 +1,33 @@
 import type { Metadata } from "next";
 import { getPublishedCases } from "@/lib/content";
+import { metaCopy, uiCopy } from "@/lib/ui-copy";
 import { Container, Eyebrow, Section } from "@/components/site/ui";
 import { CaseCard } from "@/components/site/CaseCard";
-import { CaseAccessNotice } from "@/components/site/CaseAccessNotice";
 
 export const metadata: Metadata = {
-  title: "Casos",
-  description:
-    "Casos de liderazgo de UX: decisiones estratégicas, desarrollo de equipo e impacto de negocio.",
+  title: metaCopy.casos.title,
+  description: metaCopy.casos.description,
 };
 
 export default async function CasosPage() {
   const cases = await getPublishedCases();
+  const copy = uiCopy.casosListado;
 
   return (
-    <Section className="pt-16 sm:pt-24">
+    <Section className="pt-12 sm:pt-20">
       <Container>
-        <Eyebrow>Trabajo seleccionado</Eyebrow>
-        <h1 className="display mt-6 text-5xl text-fg sm:text-6xl">
-          Casos de liderazgo
-        </h1>
-        <p className="mt-6 max-w-2xl text-lg text-fg-muted">
-          Cada caso menciona información sensible de las empresas donde trabajé,
-          por eso están protegidos con contraseña. <CaseAccessNotice />
-        </p>
+        <Eyebrow>{copy.eyebrow}</Eyebrow>
+        <h1 className="type-page mt-4 text-fg">{copy.titulo}</h1>
+        <p className="type-lead mt-6 max-w-3xl text-fg-muted">{copy.bajada}</p>
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-2">
+        <div className="mt-12 grid gap-4 md:grid-cols-2 md:gap-6">
           {cases.map((study, i) => (
             <CaseCard key={study.id} study={study} origin="casos" position={i + 1} />
           ))}
         </div>
 
         {cases.length === 0 ? (
-          <p className="mt-14 text-fg-subtle">Todavía no hay casos publicados.</p>
+          <p className="mt-12 text-fg-subtle">Todavía no hay casos publicados.</p>
         ) : null}
       </Container>
     </Section>

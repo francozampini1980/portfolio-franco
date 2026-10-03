@@ -153,6 +153,42 @@ body {
   color: var(--color-fg-subtle);
 }
 
+/* Text styles del DS (02-tokens/tokens.json > text_styles). Prefijo "type-" para que tailwind-merge no los confunda con utilidades de color/tamaño. */
+.type-hero {
+  font-family: var(--font-serif);
+  font-weight: 900;
+  font-size: 48px;
+  line-height: 47px;
+  letter-spacing: -0.96px;
+}
+.type-page {
+  font-family: var(--font-serif);
+  font-weight: 900;
+  font-size: 48px;
+  line-height: 47px;
+  letter-spacing: -0.96px;
+}
+.type-section {
+  font-family: var(--font-serif);
+  font-weight: 900;
+  font-size: 30px;
+  line-height: 34px;
+  letter-spacing: -0.6px;
+}
+.type-lead {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 32px;
+}
+@media (min-width: 640px) {
+  .type-page { line-height: 52px; }
+  .type-section { font-size: 36px; line-height: 40px; letter-spacing: -0.72px; }
+  .type-lead { font-size: 24px; line-height: 39px; }
+}
+@media (min-width: 1024px) {
+  .type-hero { font-size: 72px; line-height: 70px; letter-spacing: -1.44px; }
+}
+
 /* Rich-text output from the CMS */
 .prose-cms {
   color: var(--color-fg-muted);
@@ -204,6 +240,11 @@ body {
   outline: 2px solid var(--color-violet-400);
   outline-offset: 2px;
 }
+
+/* Cuerpo de las secciones del caso: Body/Base en mobile, Body/Large en desktop */
+.prose-case { font-size: 16px; line-height: 26px; }
+@media (min-width: 768px) { .prose-case { font-size: 20px; line-height: 32px; } }
+@media (min-width: 1024px) { .prose-case { font-size: 24px; line-height: 39px; } }
 
 /* Focus ring: 3px, outside the element, follows the element's own radius */
 :where(a, button, input, textarea, select, [tabindex]):focus-visible {

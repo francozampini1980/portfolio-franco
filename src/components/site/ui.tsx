@@ -60,7 +60,7 @@ export function SectionHeading({
   return (
     <div className={cn("max-w-2xl", className)}>
       {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-      <h2 className="display mt-4 text-3xl text-fg sm:text-4xl">{title}</h2>
+      <h2 className="type-section mt-4 text-fg">{title}</h2>
     </div>
   );
 }

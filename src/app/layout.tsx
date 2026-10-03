@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Merriweather, Plus_Jakarta_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { getSiteUrl } from "@/lib/site-url";
+import { metaCopy } from "@/lib/ui-copy";
 import "./globals.css";
 
 const GA_MEASUREMENT_ID = "G-9VJNFLH7WE";
@@ -27,17 +28,15 @@ const SITE_URL = getSiteUrl();
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Franco Zampini — UX Manager",
-    template: "%s — Franco Zampini",
+    default: metaCopy.home.title,
+    template: metaCopy.templateTitulo,
   },
-  description:
-    "Portfolio de Franco Zampini. Liderazgo de equipos de UX, toma de decisiones de diseño e impacto de negocio, con más de 10 años de experiencia.",
+  description: metaCopy.home.description,
   openGraph: {
     type: "website",
     locale: "es_AR",
-    title: "Franco Zampini — UX Manager",
-    description:
-      "Liderazgo de equipos de UX, toma de decisiones de diseño e impacto de negocio.",
+    title: metaCopy.home.title,
+    description: metaCopy.home.description,
     url: SITE_URL,
   },
   robots: { index: true, follow: true },

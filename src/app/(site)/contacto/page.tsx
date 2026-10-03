@@ -1,47 +1,66 @@
 import type { Metadata } from "next";
 import { getSiteContent } from "@/lib/content";
+import { metaCopy, uiCopy } from "@/lib/ui-copy";
 import { Container, Eyebrow, Section } from "@/components/site/ui";
 import { ContactForm } from "@/components/site/ContactForm";
+import { TrackedAnchor } from "@/components/site/TrackedLink";
 
 export const metadata: Metadata = {
-  title: "Contacto",
-  description: "Escribile a Franco Zampini para hablar de equipos de UX.",
+  title: metaCopy.contacto.title,
+  description: metaCopy.contacto.description,
 };
+
+function linkedinHandle(url: string): string {
+  try {
+    return new URL(url).pathname.replace(/\/$/, "");
+  } catch {
+    return url;
+  }
+}
 
 export default async function ContactoPage() {
   const contact = await getSiteContent("contact");
+  const canales = uiCopy.contacto.canales;
+  const row =
+    "flex min-h-11 items-center gap-3 text-fg-muted hover:text-fg";
 
   return (
-    <Section className="pt-16 sm:pt-24">
-      <Container className="grid gap-14 lg:grid-cols-2">
+    <Section className="pt-12 sm:pt-20">
+      <Container className="grid gap-12 lg:grid-cols-2 lg:gap-14">
         <div>
           <Eyebrow>{contact.eyebrow}</Eyebrow>
-          <h1 className="display mt-6 text-5xl text-fg sm:text-6xl">
-            {contact.title}
-          </h1>
-          <p className="mt-6 max-w-md text-lg text-fg-muted">{contact.body}</p>
+          <h1 className="type-page mt-4 text-fg">{contact.title}</h1>
+          <p className="type-lead mt-6 max-w-md text-fg-muted">{contact.body}</p>
 
-          <div className="mt-10 space-y-3 text-sm">
-            <a
+          <div className="mt-8 text-sm">
+            <TrackedAnchor
               href={`mailto:${contact.email}`}
-              className="flex items-center gap-3 text-fg-muted hover:text-fg"
+              track={{
+                event: "contact_channel_click",
+                props: { channel: "mail", location: "contacto" },
+              }}
+              className={row}
             >
-              <span className="text-fg-subtle">Mail</span>
+              <span className="w-16 text-fg-subtle">{canales.mail}</span>
               {contact.email}
-            </a>
-            <a
+            </TrackedAnchor>
+            <TrackedAnchor
               href={contact.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 text-fg-muted hover:text-fg"
+              track={{
+                event: "contact_channel_click",
+                props: { channel: "linkedin", location: "contacto" },
+              }}
+              className={row}
             >
-              <span className="text-fg-subtle">LinkedIn</span>
-              /in/francozampini
-            </a>
+              <span className="w-16 text-fg-subtle">{canales.linkedin}</span>
+              {linkedinHandle(contact.linkedin)}
+            </TrackedAnchor>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-line bg-surface/50 p-7">
+        <div className="rounded-card border border-line bg-surface p-6 sm:p-7">
           <ContactForm />
         </div>
       </Container>

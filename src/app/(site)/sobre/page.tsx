@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { getSiteContent } from "@/lib/content";
+import { metaCopy } from "@/lib/ui-copy";
 import { Container, Eyebrow, Prose, Section } from "@/components/site/ui";
 
 export const metadata: Metadata = {
-  title: "Sobre",
-  description: "Filosofía de liderazgo de Franco Zampini, UX Manager.",
+  title: metaCopy.sobre.title,
+  description: metaCopy.sobre.description,
 };
+
+const hasTags = (s: string) => /<[a-z][\s\S]*>/i.test(s);
 
 export default async function SobrePage() {
   const [about, philosophy] = await Promise.all([
@@ -14,37 +17,34 @@ export default async function SobrePage() {
   ]);
 
   return (
-    <Section className="pt-16 sm:pt-24">
+    <Section className="pt-12 sm:pt-20">
       <Container className="max-w-3xl">
         <Eyebrow>{about.eyebrow}</Eyebrow>
-        <h1 className="display mt-6 text-5xl text-fg sm:text-6xl">
-          {about.title}
-        </h1>
-        <Prose html={about.body} className="mt-10" />
-      </Container>
+        <h1 className="type-page mt-4 text-fg">{about.title}</h1>
+        {about.body ? (
+          hasTags(about.body) ? (
+            <Prose html={about.body} className="mt-6" />
+          ) : (
+            <p className="type-lead mt-6 text-fg-muted">{about.body}</p>
+          )
+        ) : null}
 
-      {philosophy.items.length > 0 ? (
-        <Container className="mt-20 max-w-3xl">
-          <h2 className="font-serif text-2xl font-black text-fg">
-            {philosophy.title}
-          </h2>
-          <div className="mt-8 grid gap-5 sm:grid-cols-2">
-            {philosophy.items.map((item) => (
-              <div
-                key={item.title}
-                className="rounded-2xl border border-line bg-surface/40 p-6"
-              >
-                <p className="font-serif text-lg font-black text-fg">
-                  {item.title}
+        <div className="mt-16 space-y-14 sm:mt-20">
+          {philosophy.items.map((item) => (
+            <section key={item.title}>
+              <h2 className="type-section text-fg">{item.title}</h2>
+              <p className="type-lead mt-4 text-fg-muted">
+                {item.about_body || item.body}
+              </p>
+              {item.example ? (
+                <p className="mt-6 border-l-2 border-violet-500 pl-5 text-base leading-[26px] text-fg">
+                  {item.example}
                 </p>
-                <p className="mt-2 text-sm leading-relaxed text-fg-muted">
-                  {item.body}
-                </p>
-              </div>
-            ))}
-          </div>
-        </Container>
-      ) : null}
+              ) : null}
+            </section>
+          ))}
+        </div>
+      </Container>
     </Section>
   );
 }
