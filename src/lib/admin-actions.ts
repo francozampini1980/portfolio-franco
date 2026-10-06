@@ -6,6 +6,12 @@ import { getAdminUser } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { cleanInlineText, cleanRichText } from "@/lib/sanitize";
 import { packInlineImages } from "@/lib/inline-images";
+import {
+  THUMB_BUCKET,
+  THUMB_EXTS,
+  THUMB_MAX_BYTES,
+  THUMB_PATH_RE,
+} from "@/lib/thumbs";
 
 /** Sanitise + normalise inline image URLs for a rich-text field. */
 function cleanBody(html: string): string {
@@ -116,6 +122,13 @@ export async function updateCase(id: string, patch: Record<string, unknown>) {
   if (typeof clean.summary_company === "string" && !clean.summary_company.trim()) {
     clean.summary_company = null;
   }
+  // Vista previa de la card: solo una ruta con el formato que genera createCaseThumbUploadUrl, o null.
+  if ("thumb_path" in clean) {
+    const tp = clean.thumb_path;
+    if (tp !== null && !(typeof tp === "string" && THUMB_PATH_RE.test(tp))) {
+      throw new Error("Ruta de imagen no válida.");
+    }
+  }
 
   const { error } = await supabase
     .from("case_studies")
@@ -171,6 +184,34 @@ export async function createCaseImageUploadUrl(caseId: string, filename: string)
   const path = `${caseId}/${nanoid(12)}.${ext}`;
   const { data, error } = await supabase.storage
     .from("case-images")
+    .createSignedUploadUrl(path);
+  if (error) throw new Error(error.message);
+  return { path, token: data.token };
+}
+
+/**
+ * Upload target for the card preview image (public bucket `case-thumbs`).
+ * Names are unique per upload, so replacing an image never serves a stale cache.
+ * Removing or replacing an image does NOT delete the old file from the bucket.
+ */
+export async function createCaseThumbUploadUrl(
+  caseId: string,
+  filename: string,
+  size: number,
+) {
+  await requireAdmin();
+  const ext = (filename.split(".").pop() ?? "").toLowerCase();
+  if (!(THUMB_EXTS as readonly string[]).includes(ext)) {
+    throw new Error("Formato no permitido. Usá JPG, PNG o WEBP.");
+  }
+  if (!Number.isFinite(size) || size <= 0 || size > THUMB_MAX_BYTES) {
+    throw new Error("La imagen supera los 2 MB. Comprimila o redimensionala.");
+  }
+  if (!/^[A-Za-z0-9-]{1,64}$/.test(caseId)) throw new Error("Caso no válido.");
+  const supabase = createAdminClient();
+  const path = `${caseId}/${nanoid(12)}.${ext}`;
+  const { data, error } = await supabase.storage
+    .from(THUMB_BUCKET)
     .createSignedUploadUrl(path);
   if (error) throw new Error(error.message);
   return { path, token: data.token };

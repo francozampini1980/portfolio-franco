@@ -5,12 +5,15 @@ import { useState, useTransition } from "react";
 import type { CaseImage, CaseStudy } from "@/lib/types";
 import {
   createCaseImageUploadUrl,
+  createCaseThumbUploadUrl,
   deleteCaseImage,
   registerCaseImage,
   reorderCaseImages,
   updateCase,
 } from "@/lib/admin-actions";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
+import { THUMB_BUCKET, THUMB_EXTS, THUMB_MAX_BYTES, thumbUrl } from "@/lib/thumbs";
+import { adminCopy } from "@/lib/ui-copy";
 import { Card, Label, inputClass } from "@/components/admin/ui";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 
@@ -26,6 +29,44 @@ export function CaseEditor({ study, images }: Props) {
   const [saved, setSaved] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
+  // Vista previa de la card: la imagen elegida se sube recién al guardar.
+  const [thumbFile, setThumbFile] = useState<File | null>(null);
+  const [thumbPreview, setThumbPreview] = useState<string | null>(null);
+  const [thumbRemoved, setThumbRemoved] = useState(false);
+  const [thumbError, setThumbError] = useState("");
+  const thumbCopy = adminCopy.vistaPrevia;
+  const thumbShown =
+    thumbPreview ?? (thumbRemoved ? null : thumbUrl(form.thumb_path));
+
+  const pickThumb = (file: File | null) => {
+    setThumbError("");
+    if (!file) return;
+    const ext = (file.name.split(".").pop() ?? "").toLowerCase();
+    if (!(THUMB_EXTS as readonly string[]).includes(ext)) {
+      setThumbError("Formato no permitido. Usá JPG, PNG o WEBP.");
+      return;
+    }
+    if (file.size > THUMB_MAX_BYTES) {
+      setThumbError("La imagen supera los 2 MB. Comprimila o redimensionala.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setThumbFile(file);
+      setThumbPreview(String(reader.result));
+      setThumbRemoved(false);
+      setSaved(false);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const removeThumb = () => {
+    setThumbFile(null);
+    setThumbPreview(null);
+    setThumbRemoved(true);
+    setThumbError("");
+    setSaved(false);
+  };
 
   const set = (patch: Partial<CaseStudy>) => {
     setForm((f) => ({ ...f, ...patch }));
@@ -34,7 +75,34 @@ export function CaseEditor({ study, images }: Props) {
 
   const save = () =>
     start(async () => {
+      // thumb_path solo viaja si cambió: así guardar no depende de la columna cuando no se toca la imagen.
+      let thumbPatch: { thumb_path: string | null } | Record<string, never> = {};
+      if (thumbFile) {
+        try {
+          const { path, token } = await createCaseThumbUploadUrl(
+            study.id,
+            thumbFile.name,
+            thumbFile.size,
+          );
+          const supabase = createSupabaseBrowserClient();
+          const { error } = await supabase.storage
+            .from(THUMB_BUCKET)
+            .uploadToSignedUrl(path, token, thumbFile, {
+              contentType: thumbFile.type,
+            });
+          if (error) throw new Error(error.message);
+          thumbPatch = { thumb_path: path };
+        } catch (err) {
+          setThumbError(
+            err instanceof Error ? err.message : "No se pudo subir la imagen.",
+          );
+          return;
+        }
+      } else if (thumbRemoved) {
+        thumbPatch = { thumb_path: null };
+      }
       await updateCase(study.id, {
+        ...thumbPatch,
         title: form.title,
         slug: form.slug,
         client_label: form.client_label,
@@ -60,6 +128,12 @@ export function CaseEditor({ study, images }: Props) {
         learnings_title: form.learnings_title,
         learnings_body: form.learnings_body,
       });
+      if ("thumb_path" in thumbPatch) {
+        setForm((f) => ({ ...f, thumb_path: thumbPatch.thumb_path ?? null }));
+        setThumbFile(null);
+        setThumbPreview(null);
+        setThumbRemoved(false);
+      }
       setSaved(true);
       router.refresh();
       setTimeout(() => setSaved(false), 2000);
@@ -223,6 +297,60 @@ export function CaseEditor({ study, images }: Props) {
             </button>
           </div>
         </div>
+      </Card>
+
+      <Card title={thumbCopy.label}>
+        <p className="text-sm text-fg-muted">{thumbCopy.ayuda}</p>
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <input
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            onChange={(e) => {
+              pickThumb(e.target.files?.[0] ?? null);
+              e.target.value = "";
+            }}
+            aria-label={thumbCopy.label}
+            className="text-sm text-fg-muted file:mr-3 file:rounded-lg file:border-0 file:bg-surface-2 file:px-3 file:py-2 file:text-fg-muted"
+          />
+          {thumbShown ? (
+            <button
+              type="button"
+              onClick={removeThumb}
+              className="rounded-lg border border-line px-3 py-1.5 text-xs text-red-400"
+            >
+              {thumbCopy.quitar}
+            </button>
+          ) : null}
+        </div>
+        <p className="mt-2 text-xs text-fg-subtle">JPG, PNG o WEBP · máx 2 MB</p>
+        {thumbError ? (
+          <p role="alert" className="mt-2 text-sm text-red-400">
+            {thumbError}
+          </p>
+        ) : null}
+        {thumbShown ? (
+          <div className="mt-5 flex flex-wrap items-start gap-6">
+            {[
+              { name: "Desktop", width: 508 },
+              { name: "Mobile", width: 286 },
+            ].map((v) => (
+              <figure key={v.name} className="max-w-full">
+                <figcaption className="mb-2 text-xs text-fg-subtle">{v.name}</figcaption>
+                <div
+                  style={{ width: v.width }}
+                  className="h-[180px] max-w-full overflow-hidden rounded-t-xl border border-b-0 border-line-strong"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={thumbShown}
+                    alt=""
+                    className="h-full w-full object-cover object-top"
+                  />
+                </div>
+              </figure>
+            ))}
+          </div>
+        ) : null}
       </Card>
 
       <Card title="Ficha y resumen del caso">

@@ -143,3 +143,13 @@ export const metaCopy = {
   // P-07 (pendiente): título "Lab" con el template; descripción = lab_page.subtitle.
   lab: { title: "Lab" },
 } as const;
+
+/** Textos de ayuda del admin (solo los ve Fran). Origen: copy.json > ui.admin_vista_previa. */
+export const adminCopy = {
+  vistaPrevia: {
+    label: "Imagen de vista previa",
+    ayuda:
+      "Recomendado 1600 × 900, con lo importante en la mitad de arriba. Revisá que la imagen no muestre datos internos o de terceros.",
+    quitar: "Quitar imagen",
+  },
+} as const;
