@@ -20,7 +20,7 @@ export default async function CasosPage() {
         <h1 className="type-page mt-4 text-fg">{copy.titulo}</h1>
         <p className="type-lead mt-6 max-w-3xl text-fg-muted">{copy.bajada}</p>
 
-        <div className="mt-12 grid gap-4 md:grid-cols-2 md:gap-6">
+        <div className="mt-12 grid items-start gap-4 md:grid-cols-2 md:gap-6">
           {cases.map((study, i) => (
             <CaseCard key={study.id} study={study} origin="casos" position={i + 1} />
           ))}

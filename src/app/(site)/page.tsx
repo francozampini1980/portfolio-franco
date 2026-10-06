@@ -135,7 +135,7 @@ export default async function HomePage() {
               />
               <TextLink href="/casos">{copy.casos.enlace} →</TextLink>
             </div>
-            <div className="mt-10 grid gap-4 sm:mt-12 md:grid-cols-2 md:gap-6">
+            <div className="mt-10 grid items-start gap-4 sm:mt-12 md:grid-cols-2 md:gap-6">
               {cases.map((study, i) => (
                 <CaseCard key={study.id} study={study} origin="home" position={i + 1} />
               ))}
