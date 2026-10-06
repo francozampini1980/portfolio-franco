@@ -30,6 +30,8 @@ export type CaseStudy = {
   stats: CaseStat[];
   learnings_title: string;
   learnings_body: string;
+  /** Ruta en el bucket público `case-thumbs`; null = la card se ve solo con texto. */
+  thumb_path: string | null;
   created_at: string;
   updated_at: string;
 };
