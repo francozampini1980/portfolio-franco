@@ -52,8 +52,12 @@
   color-scheme: dark;
 }
 
-* {
-  border-color: var(--color-line);
+/* En @layer base: sin capa, esta regla le gana a las utilidades de borde de Tailwind
+   (border-violet-500/40, border-line-strong, border-red-*), que quedaban sin efecto. */
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
 }
 
 html {
