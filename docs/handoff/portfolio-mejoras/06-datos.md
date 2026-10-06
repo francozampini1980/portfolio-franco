@@ -23,6 +23,10 @@ alter table public.case_studies
   add column if not exists learnings_title  text not null default 'Aprendizajes',
   add column if not exists learnings_body   text not null default '';
 
+-- case_studies: vista previa de la card (v1.1)  [DISEÑO Dirección C]
+alter table public.case_studies
+  add column if not exists thumb_path text;   -- ruta en el bucket público case-thumbs; null = card sin imagen
+
 -- experiences: tamaño de equipo  [CONTENT decisión A] [DISEÑO Anot. 7]
 alter table public.experiences
   add column if not exists team_label text;
@@ -76,12 +80,19 @@ No cambia el esquema: cambian los tipos en `types.ts` y los `FALLBACK` en `conte
 | Contenido del sitio (site_content, case_studies publicados, experiences, company_logos) | Sí, renderizado en el servidor | Solo el admin: Supabase Auth con `ADMIN_EMAIL` en `/admin` [REPO] |
 | case_studies no publicados | No (404) | Admin |
 | case_images | Sí, con URL firmada de 1 h (bucket privado `case-images`) | Admin |
+| Vista previa de la card (`thumb_path`) | Sí, URL pública (bucket **público** `case-thumbs`, nuevo): la home se cachea 1 h y una URL firmada de 1 h podría vencer antes [SUPUESTO] | Admin |
 | contact_messages | No | Inserta `/api/contact`; lee el admin |
 | access_links, access_events, site_settings | No | Admin (sin uso nuevo; P-12) |
 
 ## 6. Admin (CMS)
 Sumar a los editores existentes, con el mismo patrón de UI (`src/components/admin/ui.tsx`):
 - **`CaseEditor`:**
+  - Imagen de vista previa (v1.1):
+    - Subir, reemplazar y quitar.
+    - JPG, PNG o WebP de hasta 2 MB. Recomendado: 1600 × 900 (16:9), con lo importante en la mitad de arriba.
+    - Antes de guardar, mostrar el recorte tal como queda en la card (desktop y mobile).
+    - Quitar la imagen deja `thumb_path` en null. El archivo no se borra del bucket sin confirmación.
+    - Ayuda en el editor: "Revisá que la imagen no muestre datos internos o de terceros" (P-11).
   - Campos `summary_*` (texto corto) y `stats` (lista de valor y descripción, máximo 3).
   - `learnings_title` y `learnings_body`, con el editor de texto enriquecido.
 - **`ExperienciaEditor`:** `team_label`.

@@ -18,7 +18,7 @@
 | 2 | Hero [3:123] | 2 columnas: texto a la izquierda (eyebrow, h1 Title/Hero, bajada Body/Large, píldora, 2 botones) y retrato a la derecha (~264 px de ancho, radio 16, borde) | Avatar redondo de 56 px + "Franco Zampini" + eyebrow en una fila; después h1 (Title/Hero Mobile), bajada (Body/Large Mobile), píldora y 2 botones a ancho completo, uno al lado del otro | `home_hero.*` | [DISEÑO] Anot. 1 y 3 · [CONTENT] |
 | 3 | Números [3:137] | 4 `Stat` en fila | Grilla 2×2 | `home_hero.stats` | [DISEÑO] Anot. 2 |
 | 4 | Logos [8:67] | Etiqueta en `.eyebrow` centrada + 4 `LogoTile` en fila | 2×2 | `ui.home.logos.etiqueta`, `company_logos` | [DISEÑO] Anot. 4 |
-| 5 | Casos [4:50] | Eyebrow + h2 a la izquierda, "Ver todos los casos →" a la derecha; 4 `CaseCard` en grilla 2×2 | Encabezado arriba y el enlace debajo; cards apiladas | `ui.home.casos`, `case_studies` publicados | [DISEÑO] Anot. 5 |
+| 5 | Casos [4:50] | Eyebrow + h2 a la izquierda, "Ver todos los casos →" a la derecha; 4 `CaseCard` en grilla 2×2, con vista previa si el caso tiene imagen (v1.1) | Encabezado arriba y el enlace debajo; cards apiladas, vista previa de 180 px | `ui.home.casos`, `case_studies` publicados | [DISEÑO] Anot. 5 |
 | 6 | Lab [5:63] | 2 columnas: texto (eyebrow, h2, párrafo Body/Large, enlace "Ver cómo funcionan →") y `LabSteps` | Texto + chips de pasos | `home_lab` | [DISEÑO] Anot. 6 |
 | 7 | Experiencia [5:101] | Encabezado + enlace "Ver trayectoria completa →"; lista de los primeros 4 roles en filas con borde: años (izquierda), empresa en serif y rol (centro), "Equipo de hasta N personas" (derecha) | Empresa, debajo "rol · años · equipo" en una línea que pasa a la siguiente si no entra | `experiences` (4 primeros), `ui.home.experiencia` | [DISEÑO] Anot. 7 |
 | 8 | Principios [6:61] | Eyebrow + h2; 4 `InfoCard` en fila con número "01–04" en `.eyebrow`, título y texto; enlace "Ver los principios con ejemplos →" hacia `/sobre` | Lista: número + título, sin texto | `philosophy`, `ui.home.principios` | [DISEÑO] Anot. 8 · P-03 |
@@ -85,7 +85,7 @@
 Se usan los mismos componentes que la home. [SUPUESTO: Figma no tiene frame del listado]
 
 - Encabezado: eyebrow "Trabajo seleccionado", h1 "Casos de liderazgo" y la bajada (`ui.casos_listado`).
-- Grilla de 4 `CaseCard`: 2×2 en desktop y apiladas en mobile.
+- Grilla de 4 `CaseCard`, con vista previa si el caso tiene imagen: 2×2 en desktop y apiladas en mobile.
 - La metadata sale de `meta.casos`.
 
 ---

@@ -1,7 +1,7 @@
 {
   "_meta": {
     "proyecto": "portfolio-mejoras",
-    "version": "1.0",
+    "version": "1.1",
     "fecha": "2026-10-03",
     "fuente": "content/franco-zampini/trabajos/2026-10_portfolio-mejoras/03-textos-finales.md (v3, Agente de Content)",
     "reglas": [
@@ -199,6 +199,12 @@
         "error_limite": "Demasiados mensajes seguidos. Probá en un rato.",
         "_error_limite_origen": "REPO (se mantiene; Content no lo definió, P-08)"
       }
+    },
+    "admin_vista_previa": {
+      "_origen": "SUPUESTO (texto de ayuda del admin; solo lo ve Fran)",
+      "label": "Imagen de vista previa",
+      "ayuda": "Recomendado 1600 × 900, con lo importante en la mitad de arriba. Revisá que la imagen no muestre datos internos o de terceros.",
+      "quitar": "Quitar imagen"
     }
   },
   "cms": {

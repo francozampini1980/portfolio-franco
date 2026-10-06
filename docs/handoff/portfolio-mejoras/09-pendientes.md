@@ -19,7 +19,10 @@ Regla para Claude Code: **no completar nada de esta lista por su cuenta**. La co
 | P-13 | Los eventos personalizados de Vercel Web Analytics requieren el plan Pro | Fran | Enviar a Vercel y a GA4 (08-medicion.md) |
 | P-14 | Confirmar que Web Analytics mide y tomar una semana de datos "antes" del deploy | Fran / Producto | Construir en una rama con preview; sin merge a `main` hasta su OK |
 | P-15 | Glosario en estado PROPUESTO | Fran | Respetar los términos preferidos |
-| P-16 | Componentes nuevos sin componente en la librería (píldora, ficha, resumen, índice, navegación, tarjeta de agente) | Design System (v1.3) | Construir en código según 03-componentes.md; después se suman a Figma |
+| P-16 | Componentes nuevos sin componente en la librería (píldora, ficha, resumen, índice, navegación, tarjeta de agente) | Design System (v1.4) | Construir en código según 03-componentes.md; después se suman a Figma |
 | P-17 | En las capturas de Figma los chips se ven violeta sólido por un problema de render | — | Vale el spec de la librería: fondo violeta al 18% y borde al 40% |
 | P-18 | Versión en inglés (H3) y test de 5 segundos (H2) | Research | Fuera de esta etapa |
 | P-19 | `cv_profile` y el CV en PDF no se revisaron en Content | Content | Sin cambios |
+| P-20 | El chip de métricas **no fue actualizado en producción** con el violeta nuevo: el sitio sigue con el gradiente violeta → verde | Claude Code | Reemplazarlo por `MetricChip` (03-componentes.md §2) y verificar CC-05 |
+| P-21 | Imágenes de vista previa de los 4 casos | Fran (subirlas desde el admin) | Sin imagen la card se ve solo con texto (CC-07); las de Figma son ilustraciones de ejemplo |
+| P-22 | Bucket público `case-thumbs` para las vistas previas | Fran (OK para crearlo) | Mostrar el SQL o los pasos y esperar su OK antes de crearlo |

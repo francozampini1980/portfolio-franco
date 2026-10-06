@@ -1,6 +1,6 @@
 # Handoff a desarrollo · portfolio-mejoras
 
-**Versión 1.0 · 2026-10-03 · Agente de Handoff**
+**Versión 1.1 · 2026-10-06 · Agente de Handoff** (cambios en `10-cambios-v1.1.md`)
 **Repositorio:** github.com/francozampini1980/portfolio-franco (Next.js 16 · Tailwind v4 · Supabase · Vercel).
 **Destino en el repo:** `docs/handoff/portfolio-mejoras/`.
 
@@ -42,6 +42,7 @@ Todo lo que no está definido está en `09-pendientes.md`.
 | assets.md | Imágenes y recursos |
 | assets/figma/ | Capturas reales de Figma, para comparar contra lo construido |
 | PROMPT-CLAUDE-CODE.md | Mensaje inicial para pegar en Claude Code |
+| 10-cambios-v1.1.md | Qué cambió en la versión 1.1 y qué archivos tocar |
 
 ## Orden de construcción
 
@@ -64,7 +65,7 @@ Todo lo que no está definido está en `09-pendientes.md`.
 ## Fuentes
 
 - **Figma, diseño:** https://www.figma.com/design/72yC6iJxG47dGYZIaLVqJN (páginas Propuesta, Estados y peor caso, Anotaciones).
-- **Figma, librería v1.2:** https://www.figma.com/design/wz5vgHzvFh9pCpZTAkYUE4
+- **Figma, librería v1.3:** https://www.figma.com/design/wz5vgHzvFh9pCpZTAkYUE4
 - **Drive** (carpeta UX-agentes):
   - producto/portfolio-francozampini
   - benchmarks/2026-10_portfolio-mejoras
@@ -78,3 +79,4 @@ Nota de Drive: las capturas de `assets/figma/` viajan solo en el .zip del paquet
 ## Cambios
 
 - **1.0 (2026-10-03):** primera versión.
+- **1.1 (2026-10-06):** vista previa con imagen en la card de caso (Dirección C, librería v1.3) y el chip de métricas, que no fue actualizado en producción (P-20). Detalle en `10-cambios-v1.1.md`.

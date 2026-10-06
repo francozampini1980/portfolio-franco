@@ -34,3 +34,13 @@ Están en `assets/figma/`. Se exportaron de los archivos de Figma el 2026-10-03.
 | 17-ds-color.png | Paleta de la librería | recorte de DS 1:146 |
 
 Los chips se ven en violeta sólido en estas capturas; el spec correcto está en 03-componentes.md (P-17).
+
+### Agregadas en v1.1 (2026-10-06)
+| Archivo | Qué muestra | Nodo |
+|---|---|---|
+| 18-home-desktop-casos-con-imagen.png | Sección Casos con la card v1.3 y vista previa | 4:50 |
+| 19-home-mobile-casos-con-imagen.png | Sección Casos en mobile con vista previa | 10:91 |
+| 20-estados-card-con-imagen.png | Card con imagen: default, hover, sin imagen y peor caso | 50:318 |
+| 21-exploracion-thumbs-3-direcciones.png | Las 3 direcciones exploradas (elegida: C) | 36:160 |
+
+Las imágenes dentro de las cards son ilustraciones de ejemplo; las reales las sube Fran (P-21).

@@ -47,6 +47,11 @@ Formato: dado / cuando / entonces · [origen].
 - **CC-02.** Dado una card, entonces el eyebrow dice `client_label · {N} min`, con N = `ceil(palabras/200)`. [CONTENT]
 - **CC-03.** Dado hover o foco, entonces el fondo pasa a `--color-surface-2` y el borde a `--color-line-strong`. [DISEÑO 16:160]
 - **CC-04.** Dado un título de 3 líneas y 2 métricas largas, entonces el texto no se corta y los chips pasan a una segunda línea sin salir de la card (ancho máximo del chip: 304 px). [DS v1.2] [DISEÑO 16:160]
+- **CC-05.** Dado cualquier métrica de un caso (card o caso), entonces el chip tiene fondo `--color-violet-500` al 18% y borde `--color-violet-500` al 40%, sin el gradiente violeta → verde de producción. [DS v1.2] (P-20)
+- **CC-06.** Dado un caso con `thumb_path`, entonces la card muestra la vista previa debajo del contenido, con 28 px de margen lateral, pegada al borde inferior, recortada desde arriba (`object-position: top`) y con `alt=""`. [DISEÑO Dirección C] [NORMA 1.1.1]
+- **CC-07.** Dado un caso sin `thumb_path`, entonces la card se ve solo con texto, sin espacio vacío ni placeholder. [DISEÑO]
+- **CC-08.** Dado hover o foco en una card con imagen, entonces la vista previa sube 8 px; con "reducir movimiento" no se mueve. [DISEÑO] [NORMA 2.3.3]
+- **CC-09.** Dado el admin, cuando Fran sube una imagen de vista previa, entonces ve el recorte en desktop y mobile antes de guardar y la card de la home la muestra tras la revalidación. [SUPUESTO]
 
 ## Caso
 - **CA-01.** Dado un visitante sin cookie de acceso, cuando abre `/casos/design-system`, entonces ve el caso completo, sin redirección a `/acceso`. [PRODUCTO]

@@ -33,6 +33,7 @@ Estados que aplican a todos los componentes interactivos:
 - **Ancho máximo:** 304 px. El texto pasa a una segunda línea, nunca se corta con elipsis. [DS v1.2]
 - **Contenido:** `highlights[i]` del caso, pasado por `cleanInlineText` (permite `<strong>` y `<em>`). [REPO]
 - **Nota:** las capturas de Figma muestran el chip en violeta sólido por un problema de render. Vale el spec de arriba, que es el de la librería (P-17).
+- **Producción no está actualizada (v1.1, P-20):** el sitio publicado todavía usa el chip anterior, con gradiente violeta → verde al 15% y borde violeta al 25% (`CaseCard.tsx`), y las cajas de "Impacto" del caso con el mismo gradiente. Hay que reemplazarlos por este `MetricChip` violeta, en la card y en cualquier lugar donde se muestren métricas.
 
 ## 3. Stat · `Stat` (nuevo)
 - **Figma:** [Stat 1:102](https://www.figma.com/design/wz5vgHzvFh9pCpZTAkYUE4?node-id=1-102).
@@ -56,22 +57,32 @@ Estados que aplican a todos los componentes interactivos:
 - **Layout:** fila centrada de 4 en desktop; grilla 2×2 en mobile. Sin carrusel ni animación. [DISEÑO 8:67, 9:108]
 - `LogoCarousel` queda en el repo sin uso. No se borra (P-12).
 
-## 5. Card de caso · `CaseCard` (existe, se rehace)
-- **Figma:** [Card/Caso 1:125](https://www.figma.com/design/wz5vgHzvFh9pCpZTAkYUE4?node-id=1-125). Estados en [Estados y peor caso 16:160](https://www.figma.com/design/72yC6iJxG47dGYZIaLVqJN?node-id=16-160).
-- **Anatomía** (columna con padding 28, separación 16, radio 16, fondo `--color-surface`, borde `--color-line`):
-  1. Eyebrow: `client_label · {N} min`, en `.eyebrow`. N sale de `readingTime(caso)`, ver 06-datos.md.
-  2. Título, en Heading/Card (Merriweather 900, 20/26). Hasta 3 líneas.
-  3. Métricas: `highlights.slice(0, 2)` como `MetricChip`, en fila con salto de línea.
-  4. "Ver caso →" (`ui.card_caso.boton`), en `--color-violet-300`.
+## 5. Card de caso · `CaseCard` (existe, se rehace) · v1.3 con vista previa
+- **Figma:** [Card/Caso 1:125](https://www.figma.com/design/wz5vgHzvFh9pCpZTAkYUE4?node-id=1-125) (v1.3, propiedad `Imagen`). Exploración elegida: [Dirección C 39:172](https://www.figma.com/design/72yC6iJxG47dGYZIaLVqJN?node-id=39-172). Estados en [Estados y peor caso 16:160](https://www.figma.com/design/72yC6iJxG47dGYZIaLVqJN?node-id=16-160).
+- **Anatomía** (columna sin padding, radio 16, fondo `--color-surface`, borde `--color-line`, `overflow: hidden`):
+  - **Contenido** (padding 28, separación 16):
+    1. Eyebrow: `client_label · {N} min`, en `.eyebrow`. N sale de `readingTime(caso)`, ver 06-datos.md.
+    2. Título, en Heading/Card (Merriweather 900, 20/26). Hasta 3 líneas.
+    3. Métricas: `highlights.slice(0, 2)` como `MetricChip`, en fila con salto de línea.
+    4. "Ver caso →" (`ui.card_caso.boton`), en `--color-violet-300`.
+  - **Vista previa** (solo si el caso tiene `thumb_path`) [DISEÑO Dirección C]:
+    - Va debajo del contenido, con 28 px de margen a los costados y pegada al borde inferior de la card.
+    - Imagen con radio 12 solo arriba, borde de 1 px `--color-line-strong` (sin borde abajo), `object-fit: cover` y `object-position: top`: se ve la parte de arriba y la de abajo queda recortada por el borde de la card.
+    - Alto fijo de 180 px en todos los tamaños (Card/Caso v1.3); el ancho es el de la card menos 56 px.
+    - Es decorativa: `alt=""`. El nombre accesible de la card sigue siendo el título [NORMA 1.1.1].
+    - `next/image` con `sizes="(min-width: 640px) 512px, 100vw"` y carga diferida, salvo las dos primeras cards de la home.
+  - **Sin imagen:** la card queda solo con el contenido, igual que la versión sin vista previa. No hay placeholder vacío.
 - **Se quita:** el indicador "🔒 Contenido protegido" y el halo radial decorativo. [PRODUCTO] [DISEÑO]
 - **Estados:**
   - Default.
-  - Hover: fondo `--color-surface-2`, borde `--color-line-strong` y flecha que se desplaza 4 px.
+  - Hover: fondo `--color-surface-2`, borde `--color-line-strong`, flecha que se desplaza 4 px y la vista previa sube 8 px (`translateY(-8px)`, 200 ms, sin animación con `prefers-reduced-motion`).
   - Focus: anillo de 3 px sobre toda la card. [DISEÑO]
 - **Peor caso:**
   - Título de 3 líneas.
   - 2 métricas largas que pasan a una segunda línea.
   - 1 sola métrica. [DISEÑO 16:160]
+  - Con y sin imagen en la misma fila: las cards se alinean arriba (`items-start`), no se estiran para igualar alturas.
+  - Imagen vertical o muy chica: `cover` + `object-position: top` la recorta igual; el admin muestra el recorte antes de guardar.
 - **Accesibilidad:** toda la card es un único `<Link>`. Nombre accesible = título del caso. "Ver caso" es parte del contenido, no un segundo link. [DISEÑO] [NORMA]
 
 ## 6. Header · `SiteNav` (existe, se ajusta)
