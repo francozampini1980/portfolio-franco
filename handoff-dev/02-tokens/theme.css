@@ -1,0 +1,67 @@
+/*
+ * Tokens · franco-zampini · librería v1.2 (Figma wz5vgHzvFh9pCpZTAkYUE4)
+ * Formato: Tailwind CSS v4 (@theme), igual que src/app/globals.css.
+ * Los nombres de variable coinciden con el "code syntax" (WEB) de cada variable de Figma.
+ *
+ * QUÉ CAMBIA respecto del globals.css actual (único cambio de valor):
+ *   --color-fg-subtle: #6f6786  →  #8a82a0   [DS] ajuste de contraste AA (5,5:1 sobre --color-ink; antes 3,8:1)
+ * QUÉ SE SUMA (tokens usados por la librería que el sitio no declara):
+ *   --color-red-400, --color-red-500   [DS] estados de error del formulario
+ *   --color-white                      [DS] fondo de Logo tile al 90%
+ *   --radius-card                      [DS] alias de --radius-2xl (16px) para cards
+ * Espaciado, radios lg/xl/2xl/3xl y --container-6xl ya existen en Tailwind v4: NO redefinir.
+ * Reemplazar solo el bloque @theme del globals.css por este (manteniendo el resto del archivo).
+ */
+@theme {
+  --font-serif: var(--font-merriweather), ui-serif, Georgia, serif;
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+
+  /* Base / surfaces (dark only) — Figma: Primitives/Ink, Surface · Color/Background/Default/* */
+  --color-ink: #0a0710;        /* Background/Default/Default */
+  --color-ink-2: #0f0b17;      /* Background/Default/Secondary */
+  --color-surface: #17121f;    /* Background/Default/Tertiary (cards) */
+  --color-surface-2: #1e1830;  /* Background/Default/Default Hover (card hover) */
+  --color-line: rgba(255, 255, 255, 0.09);        /* Border/Default/Default (#ffffff17) */
+  --color-line-strong: rgba(255, 255, 255, 0.16); /* Border/Default/Secondary (#ffffff29) */
+
+  /* Text — Color/Text/Default/* */
+  --color-fg: #ece9f1;         /* Text/Default/Default */
+  --color-fg-muted: #a89fbd;   /* Text/Default/Secondary */
+  --color-fg-subtle: #8a82a0;  /* Text/Default/Tertiary · CAMBIO [DS] */
+
+  /* Violet — Text/Brand/Default = 300 · Background/Brand/Default y Border/Brand/Default = 500 */
+  --color-violet-300: #c4b5fd;
+  --color-violet-400: #a78bfa;
+  --color-violet-500: #8b5cf6;
+  --color-violet-600: #7c3aed;
+  --color-violet-700: #6d28d9;
+
+  /* Green — Background/Brand/Secondary = 500 · Text/Positive/Default = 400 */
+  --color-green-300: #6ee7b7;
+  --color-green-400: #34d399;
+  --color-green-500: #10b981;
+  --color-green-600: #059669;
+
+  /* Red — Text/Danger y Border/Danger = 400 · Background/Danger = 500 · NUEVO */
+  --color-red-400: #f87171;
+  --color-red-500: #ef4444;
+
+  /* Neutral — Background/Neutral/Logo = white al 90% · NUEVO */
+  --color-white: #ffffff;
+
+  /* Radius — Size/Radius/* (lg 8, xl 12, 2xl 16, 3xl 24 vienen de Tailwind) */
+  --radius-pill: 999px;        /* Radius/Full */
+  --radius-card: 16px;         /* = Radius/400, alias para cards · NUEVO */
+}
+
+/*
+ * Reglas de componente que dependen de tokens (aplicar en globals.css):
+ *
+ * .eyebrow  [DS] Label/Eyebrow: 12px / 18px, Bold, letter-spacing 2.5px, uppercase, color --color-fg-subtle
+ *           (hoy 0.72rem = 11,5px: sube a 12px mínimo).
+ *
+ * Foco      [DS v1.2] anillo de 3px por fuera, color --color-violet-300 (Text/Brand/Default):
+ *           :where(a, button, input, textarea, select, [tabindex]):focus-visible {
+ *             outline: 3px solid var(--color-violet-300); outline-offset: 2px; }
+ *           (hoy 2px --color-violet-400). En botones pill el outline respeta el radio (border-radius heredado).
+ */
