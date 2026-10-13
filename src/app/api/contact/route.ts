@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { Resend } from "resend";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { clientMeta } from "@/lib/access";
+import { clientMeta } from "@/lib/client-meta";
 
 const schema = z.object({
   name: z.string().trim().min(1).max(120),
