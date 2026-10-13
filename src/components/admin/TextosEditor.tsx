@@ -657,25 +657,7 @@ export function TextosEditor({ content }: { content: SiteContentMap }) {
 
       {/* PHILOSOPHY */}
       <Card title="Principios de liderazgo">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div>
-            <Label>Bajada superior</Label>
-            <input
-              className={inputClass}
-              value={philo.value.eyebrow}
-              onChange={(e) => philo.set({ eyebrow: e.target.value })}
-            />
-          </div>
-          <div>
-            <Label>Título</Label>
-            <input
-              className={inputClass}
-              value={philo.value.title}
-              onChange={(e) => philo.set({ title: e.target.value })}
-            />
-          </div>
-        </div>
-        <div className="mt-4 space-y-3">
+        <div className="space-y-3">
           {philo.value.items.map((item, i) => (
             <div
               key={i}

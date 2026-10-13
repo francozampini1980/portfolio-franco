@@ -106,7 +106,6 @@ export function CaseEditor({ study, images }: Props) {
         title: form.title,
         slug: form.slug,
         client_label: form.client_label,
-        teaser: form.teaser,
         highlights: form.highlights,
         published: form.published,
         challenge_title: form.challenge_title,
@@ -243,14 +242,6 @@ export function CaseEditor({ study, images }: Props) {
               value={form.client_label ?? ""}
               onChange={(e) => set({ client_label: e.target.value })}
               placeholder="FINTECH · EQUIPO DE 8"
-            />
-          </div>
-          <div>
-            <Label>Frase teaser (la plantilla actual del caso ya no la muestra)</Label>
-            <input
-              className={inputClass}
-              value={form.teaser ?? ""}
-              onChange={(e) => set({ teaser: e.target.value })}
             />
           </div>
         </div>
