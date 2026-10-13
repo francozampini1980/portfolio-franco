@@ -21,7 +21,6 @@ const FALLBACK: SiteContentMap = {
     stats: [],
     portrait: "",
   },
-  home_intro: { eyebrow: "SOBRE MÍ", title: "", body: "" },
   home_lab: {
     eyebrow: "",
     title: "",

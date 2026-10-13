@@ -331,7 +331,6 @@ function useBlock<T>(key: keyof SiteContentMap, initial: T) {
 
 export function TextosEditor({ content }: { content: SiteContentMap }) {
   const hero = useBlock("home_hero", content.home_hero);
-  const intro = useBlock("home_intro", content.home_intro);
   const homeLab = useBlock("home_lab", content.home_lab);
   const labPage = useBlock("lab_page", content.lab_page);
   const about = useBlock("about", content.about);
@@ -645,12 +644,6 @@ export function TextosEditor({ content }: { content: SiteContentMap }) {
           <SaveButton onClick={labPage.save} pending={labPage.pending} saved={labPage.saved} />
         </div>
       </Card>
-
-      {/* INTRO */}
-      <RichBlockCard
-        title="Home · Introducción (hoy no se muestra en el sitio)"
-        block={intro}
-      />
 
       {/* ABOUT */}
       <RichBlockCard title="Página Sobre · Filosofía de liderazgo" block={about} />

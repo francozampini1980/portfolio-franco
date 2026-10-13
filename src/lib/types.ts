@@ -117,8 +117,6 @@ export type HomeHero = {
 
 export type RichBlock = { eyebrow: string; title: string; body: string };
 
-export type HomeIntro = RichBlock & { link_label?: string };
-
 export type HomeLab = {
   eyebrow: string;
   title: string;
@@ -184,7 +182,6 @@ export type CvProfile = {
 
 export type SiteContentMap = {
   home_hero: HomeHero;
-  home_intro: HomeIntro;
   home_lab: HomeLab;
   lab_page: LabPage;
   about: RichBlock;
