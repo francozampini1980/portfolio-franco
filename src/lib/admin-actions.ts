@@ -482,52 +482,6 @@ export async function reorderLogos(orderedIds: string[]) {
 }
 
 // ---------------------------------------------------------------
-// Access: password + token links
-// ---------------------------------------------------------------
-export async function setCasePassword(formData: FormData) {
-  await requireAdmin();
-  const password = String(formData.get("password") ?? "");
-  if (password.length < 6) throw new Error("Mínimo 6 caracteres.");
-  const supabase = createAdminClient();
-  const { error } = await supabase.rpc("set_access_password", {
-    new_password: password,
-  });
-  if (error) throw new Error(error.message);
-  revalidatePath("/admin/accesos");
-}
-
-export async function createAccessLink(formData: FormData) {
-  await requireAdmin();
-  const label = String(formData.get("label") ?? "").trim();
-  if (!label) throw new Error("Poné una etiqueta (ej. la empresa).");
-  const supabase = createAdminClient();
-  const { error } = await supabase
-    .from("access_links")
-    .insert({ label, token: nanoid(24) });
-  if (error) throw new Error(error.message);
-  revalidatePath("/admin/accesos");
-}
-
-export async function toggleAccessLink(id: string, revoked: boolean) {
-  await requireAdmin();
-  const supabase = createAdminClient();
-  const { error } = await supabase
-    .from("access_links")
-    .update({ revoked })
-    .eq("id", id);
-  if (error) throw new Error(error.message);
-  revalidatePath("/admin/accesos");
-}
-
-export async function deleteAccessLink(id: string) {
-  await requireAdmin();
-  const supabase = createAdminClient();
-  const { error } = await supabase.from("access_links").delete().eq("id", id);
-  if (error) throw new Error(error.message);
-  revalidatePath("/admin/accesos");
-}
-
-// ---------------------------------------------------------------
 // Contact messages
 // ---------------------------------------------------------------
 export async function markMessageRead(id: string, read: boolean) {

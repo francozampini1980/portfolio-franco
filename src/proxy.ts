@@ -3,7 +3,6 @@ import { createServerClient } from "@supabase/ssr";
 
 /**
  * Keeps the Supabase auth session fresh for the admin area.
- * Content protection for /casos lives in the route segments themselves.
  */
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });

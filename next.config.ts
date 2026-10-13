@@ -14,6 +14,11 @@ const supabaseHost = (() => {
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ["@react-pdf/renderer"],
+  // Los casos son públicos: los enlaces viejos del sistema de accesos (/acceso/<token>)
+  // y la pantalla de contraseña llevan directo al listado.
+  async redirects() {
+    return [{ source: "/acceso/:path*", destination: "/casos", permanent: false }];
+  },
   images: {
     remotePatterns: supabaseHost
       ? [

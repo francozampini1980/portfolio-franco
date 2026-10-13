@@ -13,10 +13,9 @@ export async function GET() {
   try {
     const supabase = createAdminClient();
     const { error } = await supabase
-      .from("site_settings")
-      .select("id")
-      .eq("id", 1)
-      .single();
+      .from("site_content")
+      .select("key")
+      .limit(1);
     if (error) throw error;
     return NextResponse.json(
       { status: "ok", db: "up", ms: Date.now() - startedAt },
