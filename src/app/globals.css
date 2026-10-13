@@ -119,35 +119,8 @@ body {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Logo row (home, "empresas donde trabajé")                           */
-/* ------------------------------------------------------------------ */
-.logo-hover img {
-  filter: grayscale(1);
-  opacity: 0.6;
-  transition: filter 300ms ease, opacity 300ms ease, transform 300ms ease;
-}
-
-.logo-hover:hover img {
-  filter: grayscale(0);
-  opacity: 1;
-  transform: scale(1.08) translateY(-2px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .logo-hover img { transition: filter 300ms ease, opacity 300ms ease; }
-  .logo-hover:hover img { transform: none; }
-}
-
-/* ------------------------------------------------------------------ */
 /*  Typography helpers                                                  */
 /* ------------------------------------------------------------------ */
-.display {
-  font-family: var(--font-serif);
-  font-weight: 900;
-  line-height: 0.98;
-  letter-spacing: -0.02em;
-}
-
 .eyebrow {
   font-size: 12px;
   line-height: 18px;

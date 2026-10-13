@@ -47,9 +47,3 @@ export function TextInput(
 ) {
   return <input {...props} className={cn(inputClass, props.className)} />;
 }
-
-export function TextArea(
-  props: React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-) {
-  return <textarea {...props} className={cn(inputClass, props.className)} />;
-}

@@ -106,8 +106,6 @@ export const uiCopy = {
     },
   },
   lab: {
-    estadoHecho: "Hecho",
-    estadoProximo: "Próximo",
   },
 } as const;
 

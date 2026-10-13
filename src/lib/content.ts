@@ -15,7 +15,7 @@ const FALLBACK: SiteContentMap = {
     subtitle: "Lidero equipos de UX con impacto de negocio.",
     primary_cta_label: "Ver casos",
     primary_cta_href: "/casos",
-    secondary_cta_label: "Escribirme",
+    secondary_cta_label: "Escribime",
     secondary_cta_href: "/contacto",
     availability: "",
     stats: [],
