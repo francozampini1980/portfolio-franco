@@ -221,7 +221,7 @@ body {
 /* Cuerpo de las secciones del caso: Body/Base en mobile, Body/Large en desktop */
 .prose-case { font-size: 16px; line-height: 26px; }
 @media (min-width: 768px) { .prose-case { font-size: 20px; line-height: 32px; } }
-@media (min-width: 1024px) { .prose-case { font-size: 24px; line-height: 39px; } }
+@media (min-width: 1024px) { .prose-case { font-size: 20px; line-height: 32px; } }
 
 /* Focus ring: 3px, outside the element, follows the element's own radius */
 :where(a, button, input, textarea, select, [tabindex]):focus-visible {
