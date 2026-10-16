@@ -51,7 +51,7 @@ export const uiCopy = {
     eyebrow: "Trabajo seleccionado",
     titulo: "Casos de liderazgo",
     bajada:
-      "Cuatro decisiones de liderazgo con su contexto, mi rol y los resultados.",
+      "Seis decisiones de liderazgo con su contexto, mi rol y los resultados.",
   },
   caso: {
     volver: "← Todos los casos",
