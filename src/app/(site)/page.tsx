@@ -19,6 +19,7 @@ import { AvailabilityPill } from "@/components/site/AvailabilityPill";
 import { CaseCard } from "@/components/site/CaseCard";
 import { InfoCard } from "@/components/site/InfoCard";
 import { LabSteps } from "@/components/site/LabSteps";
+import { LAB_VISIBLE } from "@/lib/features";
 import { LogoTile } from "@/components/site/LogoTile";
 import { StatGrid } from "@/components/site/Stat";
 
@@ -144,8 +145,8 @@ export default async function HomePage() {
         </Section>
       ) : null}
 
-      {/* Lab */}
-      {lab.title ? (
+      {/* Lab (oculto mientras LAB_VISIBLE sea false) */}
+      {LAB_VISIBLE && lab.title ? (
         <Section tone="alt">
           <Container className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
             <div>

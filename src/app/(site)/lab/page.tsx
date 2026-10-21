@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { getSiteContent } from "@/lib/content";
 import { metaCopy } from "@/lib/ui-copy";
+import { LAB_VISIBLE } from "@/lib/features";
 import { Container, Eyebrow, Section } from "@/components/site/ui";
 import { AgentCard } from "@/components/site/AgentCard";
 import { InfoCard } from "@/components/site/InfoCard";
 import { TrackedAnchor } from "@/components/site/TrackedLink";
 
 export async function generateMetadata(): Promise<Metadata> {
+  if (!LAB_VISIBLE) return {};
   const lab = await getSiteContent("lab_page");
   return {
     title: metaCopy.lab.title,
@@ -15,6 +18,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function LabPage() {
+  // Oculto hasta que el contenido esté listo; se reactiva en lib/features.ts.
+  if (!LAB_VISIBLE) notFound();
   const lab = await getSiteContent("lab_page");
 
   return (

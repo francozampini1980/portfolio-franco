@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 import { uiCopy } from "@/lib/ui-copy";
+import { HIDDEN_PATHS } from "@/lib/features";
 import { ButtonLink } from "@/components/site/buttons";
 
 const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -18,6 +19,7 @@ export function SiteNav() {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const nav = uiCopy.nav;
+  const links = nav.links.filter((l) => !HIDDEN_PATHS.includes(l.href));
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -101,7 +103,7 @@ export function SiteNav() {
 
         <div className="hidden items-center gap-1 md:flex">
           <ul className="flex items-center gap-1">
-            {nav.links.map((l) => {
+            {links.map((l) => {
               const active = pathname === l.href || pathname.startsWith(l.href + "/");
               return (
                 <li key={l.href}>
@@ -139,7 +141,7 @@ export function SiteNav() {
       >
         <div className="flex flex-col px-6 pb-10 pt-6">
           <ul>
-            {nav.links.map((l) => {
+            {links.map((l) => {
               const active = pathname === l.href || pathname.startsWith(l.href + "/");
               return (
                 <li key={l.href}>
