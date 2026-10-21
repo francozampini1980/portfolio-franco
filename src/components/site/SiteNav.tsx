@@ -82,7 +82,7 @@ export function SiteNav() {
         <Link
           href="/"
           aria-label={nav.logoAriaLabel}
-          className="inline-flex min-h-11 min-w-11 items-center font-serif text-[1.35rem] font-black leading-none tracking-tight text-fg"
+          className="inline-flex min-h-11 min-w-11 items-center font-serif text-[1.62rem] font-black leading-none tracking-tight text-fg"
         >
           F/.
         </Link>
