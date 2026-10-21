@@ -76,7 +76,7 @@ export const uiCopy = {
     },
     indice: { titulo: "En este caso" },
     navegacion: { anterior: "Caso anterior", siguiente: "Caso siguiente" },
-    galeria: { titulo: "Galería" },
+    galeria: { titulo: "Galería", ampliar: "Ampliar imagen", cerrar: "Cerrar" },
   },
   experiencia: {
     eyebrow: "Trayectoria",

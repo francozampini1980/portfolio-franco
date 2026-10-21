@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { Lightbox } from "@/components/site/Lightbox";
 
 type Img = { src: string; alt: string };
 
 export function CaseGallery({ images }: { images: Img[] }) {
   const [active, setActive] = useState<number | null>(null);
+  const close = useCallback(() => setActive(null), []);
 
   return (
     <>
@@ -28,28 +30,7 @@ export function CaseGallery({ images }: { images: Img[] }) {
         ))}
       </div>
 
-      {active !== null ? (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-ink/90 p-6 backdrop-blur-sm"
-          onClick={() => setActive(null)}
-          role="dialog"
-          aria-modal
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={images[active].src}
-            alt={images[active].alt}
-            className="max-h-[90vh] max-w-5xl rounded-lg object-contain"
-          />
-          <button
-            type="button"
-            aria-label="Cerrar"
-            className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full border border-line-strong text-fg"
-          >
-            ×
-          </button>
-        </div>
-      ) : null}
+      {active !== null ? <Lightbox image={images[active]} onClose={close} /> : null}
     </>
   );
 }

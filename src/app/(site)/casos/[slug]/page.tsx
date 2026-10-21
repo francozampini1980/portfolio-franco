@@ -10,6 +10,7 @@ import { CaseGallery } from "@/components/site/CaseGallery";
 import { CaseIndex } from "@/components/site/CaseIndex";
 import { CaseNav } from "@/components/site/CaseNav";
 import { CaseSummary } from "@/components/site/CaseSummary";
+import { ZoomableImages } from "@/components/site/ZoomableImages";
 import { StatGrid } from "@/components/site/Stat";
 
 // Imágenes firmadas por request (bucket privado): no se cachea la página (P-11).
@@ -102,14 +103,18 @@ export default async function CasePage({
       <Section className="pb-16 pt-0 sm:pb-24 sm:pt-0">
         <Container className="lg:grid lg:grid-cols-[minmax(0,720px)_160px] lg:justify-between lg:gap-12">
           <div className="space-y-12 sm:space-y-14">
-            {sections.map((s) => (
-              <section key={s.id} id={s.id} className="scroll-mt-24">
-                <h2 tabIndex={-1} className="type-section text-fg">
-                  {s.title}
-                </h2>
-                <Prose html={s.body} className="prose-case mt-4" />
-              </section>
-            ))}
+            <ZoomableImages>
+              <div className="space-y-12 sm:space-y-14">
+                {sections.map((s) => (
+                  <section key={s.id} id={s.id} className="scroll-mt-24">
+                    <h2 tabIndex={-1} className="type-section text-fg">
+                      {s.title}
+                    </h2>
+                    <Prose html={s.body} className="prose-case mt-4" />
+                  </section>
+                ))}
+              </div>
+            </ZoomableImages>
 
             {gallery.length > 0 ? (
               <div>
