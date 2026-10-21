@@ -44,6 +44,12 @@ export function SiteFooter({
           <Link href="/casos" className={link}>
             {f.casos}
           </Link>
+          <Link href="/experiencia" className={link}>
+            {f.experiencia}
+          </Link>
+          <Link href="/sobre" className={link}>
+            {f.sobre}
+          </Link>
         </div>
       </div>
     </footer>

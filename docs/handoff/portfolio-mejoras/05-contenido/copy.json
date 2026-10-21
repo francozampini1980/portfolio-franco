@@ -67,10 +67,12 @@
     },
     "footer": {
       "_origen": "CONTENT",
-      "nombre": "Franco Zampini · UX Manager",
+      "nombre": "Franco Zampini",
       "email": "francozampini@gmail.com",
       "linkedin": "LinkedIn",
       "casos": "Casos",
+      "experiencia": "Experiencia",
+      "sobre": "Sobre",
       "legal": "© 2026 Franco Zampini. Hecho con Next.js."
     },
     "home": {
@@ -101,7 +103,7 @@
         "_origen": "CONTENT",
         "eyebrow": "Cómo lidero",
         "titulo": "Cuatro principios",
-        "enlace": "Ver los principios con ejemplos",
+        "enlace": "Ver los principios",
         "_enlace_origen": "DISEÑO (Content no definió el texto del enlace de esta sección; ver P-03)"
       },
       "cierre": {
@@ -167,7 +169,7 @@
       "_origen": "CONTENT",
       "eyebrow": "Trayectoria",
       "titulo": "Experiencia",
-      "bajada": "12 años liderando equipos de UX y 16 en productos digitales. Acá están mis últimos roles; la trayectoria completa está en LinkedIn.",
+      "bajada": "12 años liderando equipos de UX y 16 en productos digitales. Aquí están mis últimos roles.",
       "cv": "Descargar CV (PDF)",
       "linkedin": "Ver LinkedIn"
     },

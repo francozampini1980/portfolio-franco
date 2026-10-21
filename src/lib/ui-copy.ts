@@ -16,10 +16,12 @@ export const uiCopy = {
     menuCerrarAria: "Cerrar menú",
   },
   footer: {
-    nombre: "Franco Zampini · UX Manager",
+    nombre: "Franco Zampini",
     email: "francozampini@gmail.com",
     linkedin: "LinkedIn",
     casos: "Casos",
+    experiencia: "Experiencia",
+    sobre: "Sobre",
     legal: "© 2026 Franco Zampini. Hecho con Next.js.",
   },
   home: {
@@ -39,7 +41,7 @@ export const uiCopy = {
     principios: {
       eyebrow: "Cómo lidero",
       titulo: "Cuatro principios",
-      enlace: "Ver los principios con ejemplos",
+      enlace: "Ver los principios",
     },
     cierre: { titulo: "Conversemos", boton: "Escribime" },
   },
@@ -82,7 +84,7 @@ export const uiCopy = {
     eyebrow: "Trayectoria",
     titulo: "Experiencia",
     bajada:
-      "12 años liderando equipos de UX y 16 en productos digitales. Acá están mis últimos roles; la trayectoria completa está en LinkedIn.",
+      "12 años liderando equipos de UX y 16 en productos digitales. Aquí están mis últimos roles.",
     cv: "Descargar CV (PDF)",
     linkedin: "Ver LinkedIn",
   },
