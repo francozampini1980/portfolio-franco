@@ -27,6 +27,9 @@ const nextConfig: NextConfig = {
       // Rutas internas del árbol app/[lang]: nunca se publican con /es ni con secciones en español bajo /en.
       { source: "/es", destination: "/", permanent: true },
       { source: "/es/:path*", destination: "/:path*", permanent: true },
+      // Enlaces viejos del selector de idioma (versión del 26/10): /en/es/… → /en/…
+      { source: "/en/es", destination: "/en", permanent: true },
+      { source: "/en/es/:path*", destination: "/en/:path*", permanent: true },
       ...Object.entries(EN_SECTIONS)
         .filter(([es, en]) => es !== en)
         .map(([es, en]) => ({

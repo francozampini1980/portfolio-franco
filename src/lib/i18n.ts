@@ -51,20 +51,23 @@ export function localizePath(href: string, lang: Lang): string {
   return `/${["en", section, ...rest].join("/")}${suffix}`;
 }
 
-/** Ruta pública (en cualquier idioma) → la misma página en el otro idioma. */
-export function switchLangPath(pathname: string, to: Lang): string {
-  const parts = pathname.split("/").filter(Boolean);
-  if (parts[0] === "en") {
-    const [, first, ...rest] = parts;
-    const esPath = first
-      ? `/${[ES_SECTIONS[first] ?? first, ...rest].join("/")}`
-      : "/";
-    return localizePath(esPath, to);
+/**
+ * Cualquier forma de una ruta → su ruta en español: la pública ("/casos"), la interna
+ * del árbol app/[lang] ("/es/casos", "/en/casos") o la pública en inglés ("/en/cases").
+ * Las páginas pre-renderizadas ven la ruta interna, por eso hay que aceptar todas.
+ */
+export function toEsPath(pathname: string): string {
+  const [first, second, ...rest] = pathname.split("/").filter(Boolean);
+  if (first === "es") return `/${[second, ...rest].filter(Boolean).join("/")}`;
+  if (first === "en") {
+    if (!second) return "/";
+    const section = ES_SECTIONS[second] ?? second;
+    return `/${[section, ...rest].join("/")}`;
   }
-  return localizePath(pathname || "/", to);
+  return pathname || "/";
 }
 
-/** Idioma de una ruta pública. */
-export function langOfPath(pathname: string): Lang {
-  return pathname === "/en" || pathname.startsWith("/en/") ? "en" : "es";
+/** Ruta (pública o interna) → la misma página en el idioma pedido, con su URL pública. */
+export function switchLangPath(pathname: string, to: Lang): string {
+  return localizePath(toEsPath(pathname), to);
 }

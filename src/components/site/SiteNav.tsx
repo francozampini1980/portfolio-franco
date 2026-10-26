@@ -56,6 +56,8 @@ export function SiteNav() {
     .filter((l) => !HIDDEN_PATHS.includes(l.href))
     .map((l) => ({ ...l, href: localizePath(l.href, lang) }));
   const otherLang: Lang = lang === "es" ? "en" : "es";
+  // usePathname puede devolver la ruta interna (/es/casos) en las páginas pre-renderizadas.
+  const current = switchLangPath(pathname, lang);
   const switchHref = switchLangPath(pathname, otherLang);
 
   useEffect(() => {
@@ -144,7 +146,7 @@ export function SiteNav() {
         <div className="hidden items-center gap-1 md:flex">
           <ul className="flex items-center gap-1">
             {links.map((l) => {
-              const active = pathname === l.href || pathname.startsWith(l.href + "/");
+              const active = current === l.href || current.startsWith(l.href + "/");
               return (
                 <li key={l.href}>
                   <Link
@@ -188,7 +190,7 @@ export function SiteNav() {
         <div className="flex flex-col px-6 pb-10 pt-6">
           <ul>
             {links.map((l) => {
-              const active = pathname === l.href || pathname.startsWith(l.href + "/");
+              const active = current === l.href || current.startsWith(l.href + "/");
               return (
                 <li key={l.href}>
                   <Link
