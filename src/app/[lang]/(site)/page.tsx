@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { cn } from "@/lib/cn";
 import {
   getAllSiteContent,
@@ -6,7 +7,8 @@ import {
   getPublishedCases,
 } from "@/lib/content";
 import { teamLabelShort, yearRange } from "@/lib/experience-format";
-import { uiCopy } from "@/lib/ui-copy";
+import { getCopy } from "@/lib/lang-server";
+import { pageAlternates } from "@/lib/seo";
 import {
   ButtonLink,
   Container,
@@ -23,15 +25,21 @@ import { LAB_VISIBLE } from "@/lib/features";
 import { LogoTile } from "@/components/site/LogoTile";
 import { StatGrid } from "@/components/site/Stat";
 
+export async function generateMetadata(): Promise<Metadata> {
+  const { lang } = await getCopy();
+  return { alternates: pageAlternates("/", lang) };
+}
+
 export default async function HomePage() {
+  const { lang, copy: ui } = await getCopy();
   const [content, cases, experiences, logos] = await Promise.all([
-    getAllSiteContent(),
-    getPublishedCases(),
-    getExperiences(),
+    getAllSiteContent(lang),
+    getPublishedCases(lang),
+    getExperiences(lang),
     getCompanyLogos(),
   ]);
   const { home_hero: hero, home_lab: lab, philosophy, contact } = content;
-  const copy = uiCopy.home;
+  const copy = ui.home;
   const logoItems = logos.filter((l) => l.logo_url);
 
   return (
@@ -179,7 +187,7 @@ export default async function HomePage() {
             </div>
             <ul className="mt-10 divide-y divide-line border-y border-line sm:mt-12">
               {experiences.slice(0, 4).map((e) => {
-                const years = yearRange(e.date_from, e.date_to);
+                const years = yearRange(e.date_from, e.date_to, copy.experiencia.actualidad);
                 const team = teamLabelShort(e.team_label);
                 return (
                   <li

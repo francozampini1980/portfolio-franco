@@ -1,17 +1,23 @@
 import type { Metadata } from "next";
 import { getPublishedCases } from "@/lib/content";
-import { metaCopy, uiCopy } from "@/lib/ui-copy";
+import { getCopy } from "@/lib/lang-server";
+import { pageAlternates } from "@/lib/seo";
 import { Container, Eyebrow, Section } from "@/components/site/ui";
 import { CaseCard } from "@/components/site/CaseCard";
 
-export const metadata: Metadata = {
-  title: metaCopy.casos.title,
-  description: metaCopy.casos.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { lang, meta } = await getCopy();
+  return {
+    title: meta.casos.title,
+    description: meta.casos.description,
+    alternates: pageAlternates("/casos", lang),
+  };
+}
 
 export default async function CasosPage() {
-  const cases = await getPublishedCases();
-  const copy = uiCopy.casosListado;
+  const { lang, copy: ui } = await getCopy();
+  const cases = await getPublishedCases(lang);
+  const copy = ui.casosListado;
 
   return (
     <Section className="pt-12 sm:pt-20">
@@ -27,7 +33,7 @@ export default async function CasosPage() {
         </div>
 
         {cases.length === 0 ? (
-          <p className="mt-12 text-fg-subtle">Todavía no hay casos publicados.</p>
+          <p className="mt-12 text-fg-subtle">{ui.vacio.casos}</p>
         ) : null}
       </Container>
     </Section>

@@ -1,13 +1,13 @@
-import { uiCopy } from "@/lib/ui-copy";
+import { getCopy } from "@/lib/lang-server";
 import type { CaseStudy } from "@/lib/types";
 
 /** Resumen del caso: El problema / Lo que decidí / El resultado. */
-export function CaseSummary({
+export async function CaseSummary({
   study,
 }: {
   study: Pick<CaseStudy, "summary_problem" | "summary_decision" | "summary_result">;
 }) {
-  const labels = uiCopy.caso.resumen;
+  const labels = (await getCopy()).copy.caso.resumen;
   const blocks = [
     { label: labels.problema, text: study.summary_problem },
     { label: labels.decision, text: study.summary_decision },

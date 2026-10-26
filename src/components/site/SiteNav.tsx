@@ -4,9 +4,41 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
-import { uiCopy } from "@/lib/ui-copy";
 import { HIDDEN_PATHS } from "@/lib/features";
+import { localizePath, switchLangPath, type Lang } from "@/lib/i18n";
 import { ButtonLink } from "@/components/site/buttons";
+import { useLang, useUiCopy } from "@/components/site/LangProvider";
+
+/**
+ * Selector de idioma: lleva a la misma página en el otro idioma. Es un <a> común
+ * porque cambiar de idioma cambia el layout raíz (carga completa de la página).
+ */
+function LangSwitch({
+  href,
+  lang,
+  copy,
+  className,
+}: {
+  href: string;
+  lang: Lang;
+  copy: { label: string; aria: string };
+  className?: string;
+}) {
+  return (
+    <a
+      href={href}
+      hrefLang={lang}
+      lang={lang}
+      aria-label={copy.aria}
+      className={cn(
+        "inline-flex h-11 min-w-11 items-center justify-center rounded-full border border-line px-3 text-xs font-semibold tracking-wide text-fg-muted transition-colors hover:border-line-strong hover:text-fg",
+        className,
+      )}
+    >
+      {copy.label}
+    </a>
+  );
+}
 
 const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
@@ -18,8 +50,13 @@ export function SiteNav() {
   const open = openOn === pathname;
   const buttonRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
-  const nav = uiCopy.nav;
-  const links = nav.links.filter((l) => !HIDDEN_PATHS.includes(l.href));
+  const lang = useLang();
+  const nav = useUiCopy().nav;
+  const links = nav.links
+    .filter((l) => !HIDDEN_PATHS.includes(l.href))
+    .map((l) => ({ ...l, href: localizePath(l.href, lang) }));
+  const otherLang: Lang = lang === "es" ? "en" : "es";
+  const switchHref = switchLangPath(pathname, otherLang);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -80,26 +117,29 @@ export function SiteNav() {
     >
       <nav className="mx-auto flex h-[72px] max-w-6xl items-center justify-between px-6">
         <Link
-          href="/"
+          href={localizePath("/", lang)}
           aria-label={nav.logoAriaLabel}
           className="inline-flex min-h-11 min-w-11 items-center font-serif text-[1.62rem] font-black leading-none tracking-tight text-fg"
         >
           F/.
         </Link>
 
-        <button
-          ref={buttonRef}
-          type="button"
-          aria-label={open ? nav.menuCerrarAria : nav.menuAbrirAria}
-          aria-expanded={open}
-          aria-controls="site-menu"
-          onClick={() => setOpenOn(open ? null : pathname)}
-          className="flex h-11 w-11 items-center justify-center rounded-full border border-line text-fg-muted md:hidden"
-        >
-          <span aria-hidden className="text-lg leading-none">
-            {open ? "×" : "≡"}
-          </span>
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <LangSwitch href={switchHref} lang={otherLang} copy={nav.idioma} />
+          <button
+            ref={buttonRef}
+            type="button"
+            aria-label={open ? nav.menuCerrarAria : nav.menuAbrirAria}
+            aria-expanded={open}
+            aria-controls="site-menu"
+            onClick={() => setOpenOn(open ? null : pathname)}
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-line text-fg-muted"
+          >
+            <span aria-hidden className="text-lg leading-none">
+              {open ? "×" : "≡"}
+            </span>
+          </button>
+        </div>
 
         <div className="hidden items-center gap-1 md:flex">
           <ul className="flex items-center gap-1">
@@ -130,6 +170,12 @@ export function SiteNav() {
           >
             {nav.cta}
           </ButtonLink>
+          <LangSwitch
+            href={switchHref}
+            lang={otherLang}
+            copy={nav.idioma}
+            className="ml-2"
+          />
         </div>
       </nav>
 

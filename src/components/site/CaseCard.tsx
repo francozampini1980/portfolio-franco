@@ -3,11 +3,11 @@ import type { CaseStudy } from "@/lib/types";
 import { cn } from "@/lib/cn";
 import { readingTime } from "@/lib/reading-time";
 import { thumbUrl } from "@/lib/thumbs";
-import { uiCopy } from "@/lib/ui-copy";
+import { getCopy } from "@/lib/lang-server";
 import { MetricChip } from "@/components/site/MetricChip";
 import { TrackedLink } from "@/components/site/TrackedLink";
 
-export function CaseCard({
+export async function CaseCard({
   study,
   origin,
   position,
@@ -19,7 +19,8 @@ export function CaseCard({
   position: number;
   className?: string;
 }) {
-  const eyebrow = [study.client_label, uiCopy.cardCaso.lectura(readingTime(study))]
+  const { copy } = await getCopy();
+  const eyebrow = [study.client_label, copy.cardCaso.lectura(readingTime(study))]
     .filter(Boolean)
     .join(" · ");
   const metrics = study.highlights.slice(0, 2);
@@ -62,7 +63,7 @@ export function CaseCard({
           </div>
         ) : null}
         <span className="text-sm font-semibold text-violet-300">
-          {uiCopy.cardCaso.boton}{" "}
+          {copy.cardCaso.boton}{" "}
           <span
             aria-hidden
             className="inline-block transition-transform motion-safe:group-hover:translate-x-1 motion-safe:group-focus-visible:translate-x-1"

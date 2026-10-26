@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Lightbox } from "@/components/site/Lightbox";
-import { uiCopy } from "@/lib/ui-copy";
+import { useUiCopy } from "@/components/site/LangProvider";
 
 type Img = { src: string; alt: string };
 
@@ -14,6 +14,7 @@ export function ZoomableImages({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<Img | null>(null);
   const close = useCallback(() => setActive(null), []);
+  const ampliar = useUiCopy().caso.galeria.ampliar;
 
   useEffect(() => {
     const root = ref.current;
@@ -22,7 +23,7 @@ export function ZoomableImages({ children }: { children: ReactNode }) {
     for (const img of root.querySelectorAll<HTMLImageElement>(".prose-cms img")) {
       img.tabIndex = 0;
       img.setAttribute("role", "button");
-      if (!img.alt) img.setAttribute("aria-label", uiCopy.caso.galeria.ampliar);
+      if (!img.alt) img.setAttribute("aria-label", ampliar);
     }
 
     const target = (e: Event) => {
@@ -50,7 +51,7 @@ export function ZoomableImages({ children }: { children: ReactNode }) {
       root.removeEventListener("click", onClick);
       root.removeEventListener("keydown", onKey);
     };
-  }, []);
+  }, [ampliar]);
 
   return (
     <div ref={ref}>

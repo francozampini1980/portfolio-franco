@@ -1,8 +1,10 @@
 import { cn } from "@/lib/cn";
 import type { LabAgent } from "@/lib/types";
+import { getCopy } from "@/lib/lang-server";
 
 /** Tarjeta de agente del Lab. El estado siempre se dice con texto, no solo con color. */
-export function AgentCard({ agent }: { agent: LabAgent }) {
+export async function AgentCard({ agent }: { agent: LabAgent }) {
+  const estado = (await getCopy()).copy.lab.estado;
   const done = agent.status === "Hecho";
   return (
     <div
@@ -19,7 +21,7 @@ export function AgentCard({ agent }: { agent: LabAgent }) {
             done ? "text-green-400" : "text-fg-muted",
           )}
         >
-          {agent.status}
+          {estado[agent.status] ?? agent.status}
         </p>
       </div>
       <h3 className="mt-4 font-serif text-xl font-black leading-[26px] text-fg">

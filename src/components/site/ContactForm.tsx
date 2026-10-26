@@ -3,13 +3,14 @@
 import { useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 import { trackEvent } from "@/lib/analytics";
-import { uiCopy } from "@/lib/ui-copy";
+import type { UiCopy } from "@/lib/ui-copy.en";
+import { useUiCopy } from "@/components/site/LangProvider";
 
 type FieldName = "name" | "email" | "message";
 type Errors = Partial<Record<FieldName, string>>;
 type Status = "idle" | "sending" | "sent" | "error" | "rate_limited";
 
-const copy = uiCopy.contacto.form;
+type FormCopy = UiCopy["contacto"]["form"];
 const FIELD_LABEL: Record<FieldName, "nombre" | "correo" | "mensaje"> = {
   name: "nombre",
   email: "correo",
@@ -18,7 +19,7 @@ const FIELD_LABEL: Record<FieldName, "nombre" | "correo" | "mensaje"> = {
 const FIELD_ORDER: FieldName[] = ["name", "email", "message"];
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function validate(field: FieldName, value: string): string | undefined {
+function validate(copy: FormCopy, field: FieldName, value: string): string | undefined {
   const v = value.trim();
   if (!v) return copy.errorVacio(FIELD_LABEL[field]);
   if (field === "email" && !EMAIL_RE.test(v)) return copy.errorCorreo;
@@ -29,6 +30,7 @@ const fieldClass =
   "w-full rounded-xl border bg-ink/40 px-4 py-3 text-fg focus:border-violet-400";
 
 export function ContactForm() {
+  const copy = useUiCopy().contacto.form;
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Errors>({});
   const formRef = useRef<HTMLFormElement>(null);
@@ -43,7 +45,7 @@ export function ContactForm() {
   };
 
   function onBlur(field: FieldName, value: string) {
-    setErrors((prev) => ({ ...prev, [field]: validate(field, value) }));
+    setErrors((prev) => ({ ...prev, [field]: validate(copy, field, value) }));
   }
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -52,7 +54,7 @@ export function ContactForm() {
 
     const values = read();
     const next: Errors = {};
-    for (const f of FIELD_ORDER) next[f] = validate(f, values[f]);
+    for (const f of FIELD_ORDER) next[f] = validate(copy, f, values[f]);
     setErrors(next);
 
     const firstInvalid = FIELD_ORDER.find((f) => next[f]);

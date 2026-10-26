@@ -1,19 +1,17 @@
-import { uiCopy } from "@/lib/ui-copy";
-
 const YEAR = /\d{4}/;
 
-/** "Enero 2025" / "actualidad" → "2025 — actualidad" (home). */
-export function yearRange(from: string, to: string | null): string {
+/** "Enero 2025" / "actualidad" → "2025 — actualidad" (home). `present`: texto de "actualidad" del idioma. */
+export function yearRange(from: string, to: string | null, present: string): string {
   const start = from.match(YEAR)?.[0] ?? from;
   const end = !to || !to.trim() || to.trim().toLowerCase() === "actualidad"
-    ? uiCopy.home.experiencia.actualidad
+    ? present
     : (to.match(YEAR)?.[0] ?? to);
   return `${start} — ${end}`;
 }
 
 /** "Mes AAAA - Mes AAAA" o "- actualidad" (página de experiencia). */
-export function monthRange(from: string, to: string | null): string {
-  const end = !to || !to.trim() ? uiCopy.home.experiencia.actualidad : to;
+export function monthRange(from: string, to: string | null, present: string): string {
+  const end = !to || !to.trim() ? present : to;
   return `${from} - ${end}`;
 }
 

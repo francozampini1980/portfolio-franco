@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCaseBySlug, getPublishedCases, signImageUrls } from "@/lib/content";
 import { readingTime } from "@/lib/reading-time";
-import { uiCopy } from "@/lib/ui-copy";
+import { getCopy } from "@/lib/lang-server";
+import { pageAlternates } from "@/lib/seo";
+import { LocalizedLink } from "@/components/site/LangProvider";
 import { Container, Eyebrow, Prose, Section } from "@/components/site/ui";
 import { CaseFacts } from "@/components/site/CaseFacts";
 import { CaseGallery } from "@/components/site/CaseGallery";
@@ -24,12 +25,14 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const data = await getCaseBySlug(slug);
-  if (!data || !data.study.published) return { title: "Caso" };
+  const { lang } = await getCopy();
+  const data = await getCaseBySlug(slug, lang);
+  if (!data || !data.study.published) return {};
   return {
     title: data.study.title,
     description: data.study.summary_problem || undefined,
     robots: { index: true, follow: true },
+    alternates: pageAlternates(`/casos/${slug}`, lang),
   };
 }
 
@@ -39,10 +42,11 @@ export default async function CasePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const { lang, copy: ui } = await getCopy();
 
   const [data, published] = await Promise.all([
-    getCaseBySlug(slug),
-    getPublishedCases(),
+    getCaseBySlug(slug, lang),
+    getPublishedCases(lang),
   ]);
   if (!data || !data.study.published) notFound();
   const { study, images } = data;
@@ -52,7 +56,7 @@ export default async function CasePage({
     .map((img, i) => ({ src: urls[i], alt: img.alt }))
     .filter((g) => g.src);
 
-  const copy = uiCopy.caso;
+  const copy = ui.caso;
   const sections = [
     { id: "desafio", title: study.challenge_title || copy.secciones.desafio, body: study.challenge_body },
     { id: "aporte", title: study.role_title || copy.secciones.aporte, body: study.role_body },
@@ -74,12 +78,12 @@ export default async function CasePage({
     <>
       <Section className="pb-12 pt-10 sm:pb-16 sm:pt-14">
         <Container>
-          <Link
+          <LocalizedLink
             href="/casos"
             className="inline-flex min-h-11 items-center text-sm font-semibold text-fg-subtle hover:text-fg"
           >
             {copy.volver}
-          </Link>
+          </LocalizedLink>
 
           <header className="mt-4">
             <Eyebrow>{eyebrow}</Eyebrow>

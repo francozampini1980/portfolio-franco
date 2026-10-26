@@ -3,21 +3,24 @@
 import Link from "next/link";
 import type { ComponentProps } from "react";
 import { trackEvent, type EventName } from "@/lib/analytics";
+import { useLocalizedHref } from "@/components/site/LangProvider";
 
 export type TrackSpec = {
   event: EventName;
   props?: Record<string, string | number>;
 };
 
-/** Link interno que dispara un evento en onClick, sin bloquear la navegación. */
+/** Link interno (traducido al idioma actual) que dispara un evento en onClick, sin bloquear la navegación. */
 export function TrackedLink({
   track,
   onClick,
+  href,
   ...props
 }: ComponentProps<typeof Link> & { track: TrackSpec }) {
   return (
     <Link
       {...props}
+      href={useLocalizedHref(href)}
       onClick={(e) => {
         trackEvent(track.event, track.props);
         onClick?.(e);

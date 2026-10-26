@@ -1,5 +1,5 @@
 import { cn } from "@/lib/cn";
-import { uiCopy } from "@/lib/ui-copy";
+import { getCopy } from "@/lib/lang-server";
 import { TrackedLink } from "@/components/site/TrackedLink";
 
 type Neighbor = { slug: string; title: string };
@@ -8,12 +8,13 @@ function NavCard({
   direction,
   target,
   fromSlug,
+  nav,
 }: {
   direction: "prev" | "next";
   target: Neighbor;
   fromSlug: string;
+  nav: { anterior: string; siguiente: string };
 }) {
-  const nav = uiCopy.caso.navegacion;
   const label = direction === "prev" ? nav.anterior : nav.siguiente;
   return (
     <TrackedLink
@@ -39,7 +40,7 @@ function NavCard({
 }
 
 /** Tarjetas de caso anterior / siguiente. Sin vuelta circular: la tarjeta presente ocupa su mitad. */
-export function CaseNav({
+export async function CaseNav({
   fromSlug,
   prev,
   next,
@@ -49,10 +50,11 @@ export function CaseNav({
   next: Neighbor | null;
 }) {
   if (!prev && !next) return null;
+  const nav = (await getCopy()).copy.caso.navegacion;
   return (
     <div className="grid gap-4 md:grid-cols-2">
-      {prev ? <NavCard direction="prev" target={prev} fromSlug={fromSlug} /> : null}
-      {next ? <NavCard direction="next" target={next} fromSlug={fromSlug} /> : null}
+      {prev ? <NavCard direction="prev" target={prev} fromSlug={fromSlug} nav={nav} /> : null}
+      {next ? <NavCard direction="next" target={next} fromSlug={fromSlug} nav={nav} /> : null}
     </div>
   );
 }

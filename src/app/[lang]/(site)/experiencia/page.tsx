@@ -1,23 +1,29 @@
 import type { Metadata } from "next";
 import { getExperiences, getSiteContent } from "@/lib/content";
 import { experienceAnchors, monthRange } from "@/lib/experience-format";
-import { metaCopy, uiCopy } from "@/lib/ui-copy";
+import { getCopy } from "@/lib/lang-server";
+import { pageAlternates } from "@/lib/seo";
 import { ButtonLink, Container, Eyebrow, Prose, Section } from "@/components/site/ui";
 import { ExperienceTimeline } from "@/components/site/ExperienceTimeline";
 import { TrackedAnchor } from "@/components/site/TrackedLink";
 
-export const metadata: Metadata = {
-  title: metaCopy.experiencia.title,
-  description: metaCopy.experiencia.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { lang, meta } = await getCopy();
+  return {
+    title: meta.experiencia.title,
+    description: meta.experiencia.description,
+    alternates: pageAlternates("/experiencia", lang),
+  };
+}
 
 export default async function ExperienciaPage() {
+  const { lang, copy: ui } = await getCopy();
   const [experiences, profile, contact] = await Promise.all([
-    getExperiences(),
+    getExperiences(lang),
     getSiteContent("cv_profile"),
-    getSiteContent("contact"),
+    getSiteContent("contact", lang),
   ]);
-  const copy = uiCopy.experiencia;
+  const copy = ui.experiencia;
   const anchors = experienceAnchors(experiences);
 
   const cvHref = profile.cv_file_url
@@ -69,7 +75,7 @@ export default async function ExperienciaPage() {
                   aria-hidden
                 />
                 <p className="text-sm leading-[22px] text-fg-subtle">
-                  {monthRange(e.date_from, e.date_to)}
+                  {monthRange(e.date_from, e.date_to, ui.home.experiencia.actualidad)}
                 </p>
                 <h2 className="mt-1 font-serif text-xl font-black leading-[26px] text-fg">
                   {e.company}
@@ -84,9 +90,7 @@ export default async function ExperienciaPage() {
           </ol>
 
           {experiences.length === 0 ? (
-            <p className="mt-10 text-fg-subtle">
-              Todavía no hay experiencia cargada.
-            </p>
+            <p className="mt-10 text-fg-subtle">{ui.vacio.experiencia}</p>
           ) : null}
         </div>
       </Container>

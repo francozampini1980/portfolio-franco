@@ -1,15 +1,18 @@
-import { uiCopy } from "@/lib/ui-copy";
 import Link from "next/link";
+import { localizePath } from "@/lib/i18n";
+import { getCopy } from "@/lib/lang-server";
+import { uiCopy } from "@/lib/ui-copy";
 import { TrackedAnchor } from "@/components/site/TrackedLink";
 
-export function SiteFooter({
+export async function SiteFooter({
   email = uiCopy.footer.email,
   linkedin = "https://www.linkedin.com/in/francozampini/",
 }: {
   email?: string;
   linkedin?: string;
 }) {
-  const f = uiCopy.footer;
+  const { lang, copy } = await getCopy();
+  const f = copy.footer;
   const link = "inline-flex min-h-11 min-w-11 items-center hover:text-fg";
   return (
     <footer className="border-t border-line">
@@ -41,13 +44,13 @@ export function SiteFooter({
           >
             {f.linkedin}
           </TrackedAnchor>
-          <Link href="/casos" className={link}>
+          <Link href={localizePath("/casos", lang)} className={link}>
             {f.casos}
           </Link>
-          <Link href="/experiencia" className={link}>
+          <Link href={localizePath("/experiencia", lang)} className={link}>
             {f.experiencia}
           </Link>
-          <Link href="/sobre" className={link}>
+          <Link href={localizePath("/sobre", lang)} className={link}>
             {f.sobre}
           </Link>
         </div>

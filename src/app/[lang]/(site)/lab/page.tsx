@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getSiteContent } from "@/lib/content";
-import { metaCopy } from "@/lib/ui-copy";
+import { getCopy } from "@/lib/lang-server";
+import { pageAlternates } from "@/lib/seo";
 import { LAB_VISIBLE } from "@/lib/features";
 import { Container, Eyebrow, Section } from "@/components/site/ui";
 import { AgentCard } from "@/components/site/AgentCard";
@@ -10,17 +11,20 @@ import { TrackedAnchor } from "@/components/site/TrackedLink";
 
 export async function generateMetadata(): Promise<Metadata> {
   if (!LAB_VISIBLE) return {};
-  const lab = await getSiteContent("lab_page");
+  const { lang, meta } = await getCopy();
+  const lab = await getSiteContent("lab_page", lang);
   return {
-    title: metaCopy.lab.title,
+    title: meta.lab.title,
     description: lab.subtitle || undefined,
+    alternates: pageAlternates("/lab", lang),
   };
 }
 
 export default async function LabPage() {
   // Oculto hasta que el contenido esté listo; se reactiva en lib/features.ts.
   if (!LAB_VISIBLE) notFound();
-  const lab = await getSiteContent("lab_page");
+  const { lang } = await getCopy();
+  const lab = await getSiteContent("lab_page", lang);
 
   return (
     <>

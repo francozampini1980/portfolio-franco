@@ -1,54 +1,64 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Merriweather, Plus_Jakarta_Sans } from "next/font/google";
+import { notFound } from "next/navigation";
 import { Analytics } from "@vercel/analytics/next";
 import { getSiteUrl } from "@/lib/site-url";
-import { metaCopy } from "@/lib/ui-copy";
-import "./globals.css";
+import { LANGS, isLang } from "@/lib/i18n";
+import { getMetaCopy } from "@/lib/copy";
+import { getLang } from "@/lib/lang-server";
+import { fontVars } from "@/app/fonts";
+import { LangProvider } from "@/components/site/LangProvider";
+import "../globals.css";
 
 const GA_MEASUREMENT_ID = "G-9VJNFLH7WE";
 const CLARITY_PROJECT_ID = "yr1egwjk6w";
 
-const serif = Merriweather({
-  variable: "--font-merriweather",
-  subsets: ["latin"],
-  weight: ["400", "700", "900"],
-  display: "swap",
-});
-
-const sans = Plus_Jakarta_Sans({
-  variable: "--font-jakarta",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  display: "swap",
-});
-
 const SITE_URL = getSiteUrl();
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: metaCopy.home.title,
-    template: metaCopy.templateTitulo,
-  },
-  description: metaCopy.home.description,
-  openGraph: {
-    type: "website",
-    locale: "es_AR",
-    title: metaCopy.home.title,
-    description: metaCopy.home.description,
-    url: SITE_URL,
-  },
-  robots: { index: true, follow: true },
-};
+// Solo existen /es (interno, servido en las URLs sin prefijo) y /en.
+export const dynamicParams = false;
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export function generateStaticParams() {
+  return LANGS.map((lang) => ({ lang }));
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await getLang();
+  const meta = getMetaCopy(lang);
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: meta.home.title,
+      template: meta.templateTitulo,
+    },
+    description: meta.home.description,
+    openGraph: {
+      type: "website",
+      locale: lang === "en" ? "en_US" : "es_AR",
+      alternateLocale: lang === "en" ? "es_AR" : "en_US",
+      title: meta.home.title,
+      description: meta.home.description,
+      url: lang === "en" ? `${SITE_URL}/en` : SITE_URL,
+    },
+    robots: { index: true, follow: true },
+  };
+}
+
+export default async function RootLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+  if (!isLang(lang)) notFound();
   return (
-    <html lang="es" className={`${serif.variable} ${sans.variable}`}>
+    <html lang={lang} className={fontVars}>
       <body className="min-h-dvh">
         <div className="bg-aurora" aria-hidden />
         <div className="bg-grain" aria-hidden />
-        {children}
+        <LangProvider lang={lang}>{children}</LangProvider>
         <Analytics />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}

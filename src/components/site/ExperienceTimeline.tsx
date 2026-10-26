@@ -1,13 +1,14 @@
 import type { CSSProperties } from "react";
 import type { Experience } from "@/lib/types";
 import { yearRange } from "@/lib/experience-format";
+import { getCopy } from "@/lib/lang-server";
 
 /**
  * Línea de tiempo de los trabajos cargados. Cada ítem es un ancla a su detalle
  * en la lista de abajo. Vertical hasta `lg`, horizontal desde `lg`.
  * Mismo orden que la lista (más reciente primero).
  */
-export function ExperienceTimeline({
+export async function ExperienceTimeline({
   items,
   anchors,
 }: {
@@ -15,6 +16,7 @@ export function ExperienceTimeline({
   anchors: string[];
 }) {
   if (items.length === 0) return null;
+  const present = (await getCopy()).copy.home.experiencia.actualidad;
   return (
     <ol
       style={{ "--n": items.length } as CSSProperties}
@@ -31,7 +33,7 @@ export function ExperienceTimeline({
             className="group block min-w-0 rounded-lg py-2 lg:pt-5"
           >
             <span className="block text-sm leading-[22px] text-fg-subtle">
-              {yearRange(e.date_from, e.date_to)}
+              {yearRange(e.date_from, e.date_to, present)}
             </span>
             <span className="block break-words font-serif text-base font-black leading-[24px] text-fg transition-colors group-hover:text-violet-300">
               {e.company}

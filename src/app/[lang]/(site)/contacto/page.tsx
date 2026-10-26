@@ -1,14 +1,19 @@
 import type { Metadata } from "next";
 import { getSiteContent } from "@/lib/content";
-import { metaCopy, uiCopy } from "@/lib/ui-copy";
+import { getCopy } from "@/lib/lang-server";
+import { pageAlternates } from "@/lib/seo";
 import { Container, Eyebrow, Section } from "@/components/site/ui";
 import { ContactForm } from "@/components/site/ContactForm";
 import { TrackedAnchor } from "@/components/site/TrackedLink";
 
-export const metadata: Metadata = {
-  title: metaCopy.contacto.title,
-  description: metaCopy.contacto.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { lang, meta } = await getCopy();
+  return {
+    title: meta.contacto.title,
+    description: meta.contacto.description,
+    alternates: pageAlternates("/contacto", lang),
+  };
+}
 
 function linkedinHandle(url: string): string {
   try {
@@ -19,8 +24,9 @@ function linkedinHandle(url: string): string {
 }
 
 export default async function ContactoPage() {
-  const contact = await getSiteContent("contact");
-  const canales = uiCopy.contacto.canales;
+  const { lang, copy } = await getCopy();
+  const contact = await getSiteContent("contact", lang);
+  const canales = copy.contacto.canales;
   const row =
     "flex min-h-11 items-center gap-3 text-fg-muted hover:text-fg";
 

@@ -1,19 +1,25 @@
 import type { Metadata } from "next";
 import { getSiteContent } from "@/lib/content";
-import { metaCopy } from "@/lib/ui-copy";
+import { getCopy } from "@/lib/lang-server";
+import { pageAlternates } from "@/lib/seo";
 import { Container, Eyebrow, Prose, Section } from "@/components/site/ui";
 
-export const metadata: Metadata = {
-  title: metaCopy.sobre.title,
-  description: metaCopy.sobre.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { lang, meta } = await getCopy();
+  return {
+    title: meta.sobre.title,
+    description: meta.sobre.description,
+    alternates: pageAlternates("/sobre", lang),
+  };
+}
 
 const hasTags = (s: string) => /<[a-z][\s\S]*>/i.test(s);
 
 export default async function SobrePage() {
+  const { lang } = await getCopy();
   const [about, philosophy] = await Promise.all([
-    getSiteContent("about"),
-    getSiteContent("philosophy"),
+    getSiteContent("about", lang),
+    getSiteContent("philosophy", lang),
   ]);
 
   return (

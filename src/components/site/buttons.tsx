@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/cn";
 import { TrackedLink, type TrackSpec } from "@/components/site/TrackedLink";
+import { LocalizedLink } from "@/components/site/LangProvider";
 
 type ButtonLinkProps = ComponentProps<typeof Link> & {
   variant?: "solid" | "outline";
@@ -28,7 +29,7 @@ export function ButtonLink({
   return track ? (
     <TrackedLink {...props} track={track} className={classes} />
   ) : (
-    <Link {...props} className={classes} />
+    <LocalizedLink {...props} className={classes} />
   );
 }
 
@@ -45,6 +46,6 @@ export function TextLink({
   return track ? (
     <TrackedLink {...props} track={track} className={classes} />
   ) : (
-    <Link {...props} className={classes} />
+    <LocalizedLink {...props} className={classes} />
   );
 }

@@ -1,6 +1,7 @@
 import { SiteNav } from "@/components/site/SiteNav";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { getSiteContent } from "@/lib/content";
+import { getLang } from "@/lib/lang-server";
 
 // Public pages are statically generated and revalidated hourly; the CMS
 // also revalidates on demand after every save.
@@ -11,7 +12,7 @@ export default async function SiteLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const contact = await getSiteContent("contact");
+  const contact = await getSiteContent("contact", await getLang());
   return (
     <div className="flex min-h-dvh flex-col">
       <SiteNav />

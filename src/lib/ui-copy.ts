@@ -14,6 +14,7 @@ export const uiCopy = {
     cta: "Escribime",
     menuAbrirAria: "Abrir menú",
     menuCerrarAria: "Cerrar menú",
+    idioma: { label: "EN", aria: "Ver el sitio en inglés" },
   },
   footer: {
     nombre: "Franco Zampini",
@@ -108,6 +109,11 @@ export const uiCopy = {
     },
   },
   lab: {
+    estado: { Hecho: "Hecho", Próximo: "Próximo" },
+  },
+  vacio: {
+    casos: "Todavía no hay casos publicados.",
+    experiencia: "Todavía no hay experiencia cargada.",
   },
 } as const;
 

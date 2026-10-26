@@ -1,8 +1,8 @@
-import { uiCopy } from "@/lib/ui-copy";
+import { getCopy } from "@/lib/lang-server";
 import type { CaseStudy } from "@/lib/types";
 
 /** Ficha del caso: Rol, Empresa, Período, Equipo. Un campo vacío o null se oculta y las columnas se redistribuyen. */
-export function CaseFacts({
+export async function CaseFacts({
   study,
 }: {
   study: Pick<
@@ -10,7 +10,7 @@ export function CaseFacts({
     "summary_role" | "summary_company" | "summary_period" | "summary_team"
   >;
 }) {
-  const labels = uiCopy.caso.ficha;
+  const labels = (await getCopy()).copy.caso.ficha;
   const all: { label: string; value: string | null }[] = [
     { label: labels.rol, value: study.summary_role },
     { label: labels.empresa, value: study.summary_company },

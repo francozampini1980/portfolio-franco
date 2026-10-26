@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { uiCopy } from "@/lib/ui-copy";
+import { useUiCopy } from "@/components/site/LangProvider";
 
 type Img = { src: string; alt: string };
 
@@ -11,6 +11,7 @@ type Img = { src: string; alt: string };
  */
 export function Lightbox({ image, onClose }: { image: Img; onClose: () => void }) {
   const closeRef = useRef<HTMLButtonElement>(null);
+  const copy = useUiCopy();
 
   useEffect(() => {
     const opener = document.activeElement as HTMLElement | null;
@@ -42,7 +43,7 @@ export function Lightbox({ image, onClose }: { image: Img; onClose: () => void }
       <button
         ref={closeRef}
         type="button"
-        aria-label={uiCopy.caso.galeria.cerrar}
+        aria-label={copy.caso.galeria.cerrar}
         className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full border border-line-strong text-fg"
       >
         ×
