@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { Card } from "@/components/admin/ui";
+import { TranslationsCard } from "@/components/admin/TranslationsCard";
+import { countPendingTranslations } from "@/lib/translate-sync";
 
 async function counts() {
   const supabase = createAdminClient();
@@ -22,7 +24,10 @@ async function counts() {
 }
 
 export default async function AdminHome() {
-  const c = await counts();
+  const [c, pendingTranslations] = await Promise.all([
+    counts(),
+    countPendingTranslations().catch(() => 0),
+  ]);
   const tiles = [
     { href: "/admin/textos", label: "Textos del sitio", meta: "Home · Sobre · Contacto" },
     { href: "/admin/casos", label: "Casos", meta: `${c.cases} cargados` },
@@ -47,6 +52,7 @@ export default async function AdminHome() {
             </Card>
           </Link>
         ))}
+        <TranslationsCard pending={pendingTranslations} />
       </div>
     </div>
   );

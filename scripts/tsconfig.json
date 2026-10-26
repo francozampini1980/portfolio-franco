@@ -1,0 +1,10 @@
+{
+  // Solo para scripts/*.mts (tsx): server-only lo resuelve Next en el sitio; acá apunta al módulo vacío.
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["../src/*"],
+      "server-only": ["../node_modules/next/dist/compiled/server-only/empty.js"]
+    }
+  }
+}

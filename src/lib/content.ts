@@ -7,6 +7,13 @@ import type {
   Experience,
   SiteContentMap,
 } from "@/lib/types";
+import type { Lang } from "@/lib/i18n";
+import {
+  localizeCase,
+  localizeContent,
+  localizeExperience,
+  localizeImage,
+} from "@/lib/translations";
 
 const FALLBACK: SiteContentMap = {
   home_hero: {
@@ -62,8 +69,11 @@ const FALLBACK: SiteContentMap = {
   },
 };
 
+// Los getters reciben el idioma opcional: sin `lang` (admin, CV) devuelven el español del CMS.
+
 export async function getSiteContent<K extends keyof SiteContentMap>(
   key: K,
+  lang: Lang = "es",
 ): Promise<SiteContentMap[K]> {
   const supabase = createAdminClient();
   const { data } = await supabase
@@ -71,10 +81,11 @@ export async function getSiteContent<K extends keyof SiteContentMap>(
     .select("data")
     .eq("key", key)
     .single();
-  return { ...FALLBACK[key], ...(data?.data ?? {}) } as SiteContentMap[K];
+  const value = { ...FALLBACK[key], ...(data?.data ?? {}) } as SiteContentMap[K];
+  return localizeContent(key, value, lang);
 }
 
-export async function getAllSiteContent(): Promise<SiteContentMap> {
+export async function getAllSiteContent(lang: Lang = "es"): Promise<SiteContentMap> {
   const supabase = createAdminClient();
   const { data } = await supabase.from("site_content").select("key, data");
   const map = { ...FALLBACK };
@@ -82,17 +93,22 @@ export async function getAllSiteContent(): Promise<SiteContentMap> {
     // @ts-expect-error indexed assignment across the union
     map[row.key] = { ...FALLBACK[row.key as keyof SiteContentMap], ...row.data };
   }
-  return map;
+  if (lang === "es") return map;
+  const keys = Object.keys(map) as (keyof SiteContentMap)[];
+  const localized = await Promise.all(
+    keys.map((k) => localizeContent(k, map[k], lang)),
+  );
+  return Object.fromEntries(keys.map((k, i) => [k, localized[i]])) as SiteContentMap;
 }
 
-export async function getPublishedCases(): Promise<CaseStudy[]> {
+export async function getPublishedCases(lang: Lang = "es"): Promise<CaseStudy[]> {
   const supabase = createAdminClient();
   const { data } = await supabase
     .from("case_studies")
     .select("*")
     .eq("published", true)
     .order("order_index", { ascending: true });
-  return (data as CaseStudy[]) ?? [];
+  return Promise.all(((data as CaseStudy[]) ?? []).map((c) => localizeCase(c, lang)));
 }
 
 export async function getAllCases(): Promise<CaseStudy[]> {
@@ -106,6 +122,7 @@ export async function getAllCases(): Promise<CaseStudy[]> {
 
 export async function getCaseBySlug(
   slug: string,
+  lang: Lang = "es",
 ): Promise<{ study: CaseStudy; images: CaseImage[] } | null> {
   const supabase = createAdminClient();
   const { data: study } = await supabase
@@ -119,16 +136,23 @@ export async function getCaseBySlug(
     .select("*")
     .eq("case_id", study.id)
     .order("order_index", { ascending: true });
-  return { study: study as CaseStudy, images: (images as CaseImage[]) ?? [] };
+  return {
+    study: await localizeCase(study as CaseStudy, lang),
+    images: await Promise.all(
+      ((images as CaseImage[]) ?? []).map((img) => localizeImage(img, lang)),
+    ),
+  };
 }
 
-export async function getExperiences(): Promise<Experience[]> {
+export async function getExperiences(lang: Lang = "es"): Promise<Experience[]> {
   const supabase = createAdminClient();
   const { data } = await supabase
     .from("experiences")
     .select("*")
     .order("order_index", { ascending: true });
-  return (data as Experience[]) ?? [];
+  return Promise.all(
+    ((data as Experience[]) ?? []).map((e) => localizeExperience(e, lang)),
+  );
 }
 
 export async function getCompanyLogos(): Promise<CompanyLogo[]> {
